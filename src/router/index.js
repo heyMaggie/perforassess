@@ -16,70 +16,63 @@ export default new Router({
             children: [
                 {
                     path: '/dashboard',
-                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/dashboard/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },
                 {
-                    path: '/icon',
-                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
-                    meta: { title: '自定义图标' }
+                    path: '/algoDynamic',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/algoEvaluate/AlgoDynamic.vue'),
+                    meta: { title: '算法动态' }
                 },
                 {
-                    path: '/table',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                    meta: { title: '基础表格' }
+                    path: '/economy',
+                    component: () =>
+                        import(/* webpackChunkName: "table" */ '../components/page/algoEvaluate/algoPortraitTable/Economy.vue'),
+                    meta: { title: '经济性' }
                 },
                 {
-                    path: '/tabs',
-                    component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
-                    meta: { title: 'tab选项卡' }
+                    path: '/completeness',
+                    component: () =>
+                        import(/* webpackChunkName: "tabs" */ '../components/page/algoEvaluate/algoPortraitTable/Completeness.vue'),
+                    meta: { title: '完成度' }
                 },
                 {
-                    path: '/form',
-                    component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
-                    meta: { title: '基本表单' }
+                    path: '/riskDegree',
+                    component: () =>
+                        import(/* webpackChunkName: "form" */ '../components/page/algoEvaluate/algoPortraitTable/RiskDegree.vue'),
+                    meta: { title: '风险度' }
                 },
                 {
-                    // 富文本编辑器组件
-                    path: '/editor',
-                    component: () => import(/* webpackChunkName: "editor" */ '../components/page/VueEditor.vue'),
-                    meta: { title: '富文本编辑器' }
+                    path: '/performance',
+                    component: () =>
+                        import(/* webpackChunkName: "editor" */ '../components/page/algoEvaluate/algoPortraitTable/Performance.vue'),
+                    meta: { title: '绩效' }
                 },
                 {
-                    // markdown组件
-                    path: '/markdown',
-                    component: () => import(/* webpackChunkName: "markdown" */ '../components/page/Markdown.vue'),
-                    meta: { title: 'markdown编辑器' }
+                    path: '/stability',
+                    component: (Stability) =>
+                        import(/* webpackChunkName: "markdown" */ '../components/page/algoEvaluate/algoPortraitTable/Stability.vue'),
+                    meta: { title: '稳定性' }
                 },
                 {
-                    // 图片上传组件
-                    path: '/upload',
-                    component: () => import(/* webpackChunkName: "upload" */ '../components/page/Upload.vue'),
-                    meta: { title: '文件上传' }
+                    path: '/manyDays',
+                    component: () => import(/* webpackChunkName: "upload" */ '../components/page/algoEvaluate/ManyDays.vue'),
+                    meta: { title: '多日分析' }
                 },
                 {
-                    // vue-schart组件
-                    path: '/charts',
-                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/BaseCharts.vue'),
-                    meta: { title: 'schart图表' }
+                    path: '/contrastive',
+                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/algoEvaluate/Contrastive.vue'),
+                    meta: { title: '对比分析' }
                 },
                 {
-                    // 拖拽列表组件
-                    path: '/drag',
-                    component: () => import(/* webpackChunkName: "drag" */ '../components/page/DragList.vue'),
-                    meta: { title: '拖拽列表' }
+                    path: '/userPortrait',
+                    component: () => import(/* webpackChunkName: "dragdialog" */ '../components/page/highOrder/UserPortrait.vue'),
+                    meta: { title: '排行榜' }
                 },
                 {
-                    // 拖拽Dialog组件
-                    path: '/dialog',
-                    component: () => import(/* webpackChunkName: "dragdialog" */ '../components/page/DragDialog.vue'),
-                    meta: { title: '拖拽弹框' }
-                },
-                {
-                    // 国际化组件
-                    path: '/i18n',
-                    component: () => import(/* webpackChunkName: "i18n" */ '../components/page/I18n.vue'),
-                    meta: { title: '国际化' }
+                    path: '/rankingList',
+                    component: () => import(/* webpackChunkName: "drag" */ '../components/page/highOrder/RankingList.vue'),
+                    meta: { title: '用户画像' }
                 },
                 {
                     // 权限页面
@@ -96,11 +89,6 @@ export default new Router({
                     path: '/403',
                     component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
                     meta: { title: '403' }
-                },
-                {
-                    path: '/donate',
-                    component: () => import(/* webpackChunkName: "donate" */ '../components/page/Donate.vue'),
-                    meta: { title: '支持作者' }
                 }
             ]
         },

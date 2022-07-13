@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar">
-        <el-menu class="sidebar-el-menu apiview" :default-active="onRoutes" unique-opened router>
+        <el-menu class="sidebar-el-menu apiview" :default-active="onRoutes" router>
             <template v-for="item in items">
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
@@ -15,7 +15,7 @@
                                     threeItem.title
                                 }}</el-menu-item>
                             </el-submenu>
-                            <el-menu-item v-else :index="subItem.index" :key="subItem.index + i">{{ subItem.title }}</el-menu-item>
+                            <el-menu-item v-else :index="subItem.index" :key="subItem.index + 'i'">{{ subItem.title }}</el-menu-item>
                         </template>
                     </el-submenu>
                 </template>
@@ -39,96 +39,67 @@ export default {
                 {
                     icon: 'el-icon-lx-home',
                     index: 'dashboard',
-                    title: '系统首页'
-                },
-                {
-                    icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '基础表格'
-                },
-                {
-                    icon: 'el-icon-lx-copy',
-                    index: 'tabs',
-                    title: 'tab选项卡'
+                    title: 'Dashboard'
                 },
                 {
                     icon: 'el-icon-lx-calendar',
                     index: '3',
-                    title: '表单相关',
+                    title: '算法评估',
                     subs: [
                         {
-                            index: 'form',
-                            title: '基本表单'
+                            index: 'algoDynamic',
+                            title: '算法动态'
                         },
                         {
                             index: '3-2',
-                            title: '三级菜单',
+                            title: '算法画像',
                             subs: [
                                 {
-                                    index: 'editor',
-                                    title: '富文本编辑器'
+                                    index: 'economy',
+                                    title: '经济性'
                                 },
                                 {
-                                    index: 'markdown',
-                                    title: 'markdown编辑器'
+                                    index: 'completeness',
+                                    title: '完成度'
+                                },
+                                {
+                                    index: 'riskDegree',
+                                    title: '风险度'
+                                },
+                                {
+                                    index: 'performance',
+                                    title: '绩效'
+                                },
+                                {
+                                    index: 'stability',
+                                    title: '稳定性'
                                 }
                             ]
                         },
                         {
-                            index: 'upload',
-                            title: '文件上传'
+                            index: 'manyDays',
+                            title: '多日分析'
+                        },
+                        {
+                            index: 'contrastive',
+                            title: '对比分析'
                         }
                     ]
-                },
-                {
-                    icon: 'el-icon-lx-emoji',
-                    index: 'icon',
-                    title: '自定义图标'
-                },
-                {
-                    icon: 'el-icon-pie-chart',
-                    index: 'charts',
-                    title: 'schart图表'
                 },
                 {
                     icon: 'el-icon-rank',
                     index: '6',
-                    title: '拖拽组件',
+                    title: '高阶评估',
                     subs: [
                         {
-                            index: 'drag',
-                            title: '拖拽列表'
+                            index: 'userPortrait',
+                            title: '用户画像'
                         },
                         {
-                            index: 'dialog',
-                            title: '拖拽弹框'
+                            index: 'rankingList',
+                            title: '排行榜'
                         }
                     ]
-                },
-                {
-                    icon: 'el-icon-lx-global',
-                    index: 'i18n',
-                    title: '国际化功能'
-                },
-                {
-                    icon: 'el-icon-lx-warn',
-                    index: '7',
-                    title: '错误处理',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-lx-redpacket_fill',
-                    index: '/donate',
-                    title: '支持作者'
                 }
             ]
         };
