@@ -6,9 +6,12 @@ import VueI18n from 'vue-i18n';
 import { messages } from './components/common/i18n';
 import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 // import './assets/css/theme-green/index.css'; // 浅绿色主题
+import './assets/css/color-dark.css'; //深色主题
+// import './assets/css/theme-green/color-green.css'; //浅绿色主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
+import './assets/css/main.less';
 
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
@@ -44,5 +47,5 @@ router.beforeEach((to, from, next) => {
 new Vue({
     router,
     i18n,
-    render: h => h(App)
+    render: (h) => h(App)
 }).$mount('#app');
