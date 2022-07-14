@@ -5,7 +5,7 @@
                 <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> Dashboard</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="container">Dashboard</div>
+        <div class="table-container">Dashboard</div>
     </div>
 </template>
 

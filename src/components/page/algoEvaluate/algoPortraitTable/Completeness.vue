@@ -34,7 +34,6 @@
                 </el-form-item>
                 <el-form-item>
                     <el-date-picker
-                        v-if="searchForm.timeRange === null ? (searchForm.timeRange = []) : (searchForm.timeRange = searchForm.timeRange)"
                         v-model="searchForm.timeRange"
                         type="daterange"
                         range-separator="-"
@@ -45,11 +44,10 @@
                 </el-form-item>
             </div>
             <div class="button-right">
-                <el-button type="primary" @click="onSubmit">查询</el-button
-                ><el-button type="plain" @click="onSubmit"><i class="el-icon-upload el-icon--right"></i>下载报告</el-button>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
             </div>
         </el-form>
-        <div class="container">
+        <div class="table-container">
             <el-table :data="tableData" size="medium " :row-style="{ height: '56px' }" height="695px">
                 <el-table-column prop="date" label="母单ID"> </el-table-column>
                 <el-table-column prop="name" label="用户ID"> </el-table-column>
