@@ -48,7 +48,27 @@
                 ><el-button type="plain" @click="onSubmit"><i class="el-icon-upload el-icon--right"></i>下载报告</el-button>
             </div>
         </el-form>
-        <div class="table-container">用户画像</div>
+        <div class="echart-container">
+            <div class="showBorder">
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+            </div>
+            <div class="showPortrait">
+                <div class="card"></div>
+                <div class="card"></div>
+            </div>
+            <div class="showDate">
+                <div class="card"></div>
+                <div class="card"></div>
+            </div>
+            <div class="showClounm">
+                <div class="card"></div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -100,3 +120,27 @@ export default {
     }
 };
 </script>
+
+<style lang="less" scoped>
+.echart-container {
+    .card {
+        display: inline-block;
+    }
+    .showBorder {
+        .card {
+            margin-right: 12px;
+            width: 265px;
+            height: 248px;
+            &:nth-child(6) {
+                margin-right: 0px;
+            }
+        }
+    }
+    .showPortrait {
+    }
+    .showDate {
+    }
+    .showClounm {
+    }
+}
+</style>

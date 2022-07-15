@@ -49,14 +49,15 @@
             </div>
         </el-form>
         <div class="container">
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
+            <div class="card" id="main1"></div>
+            <div class="card" id="main2"></div>
+            <div class="card" id="main3"></div>
         </div>
     </div>
 </template>
 
 <script>
+import * as echarts from 'echarts';
 export default {
     name: 'manyDays',
     data() {
@@ -97,9 +98,170 @@ export default {
             currentPage: 5
         };
     },
+    mounted() {
+        let list = [
+            { x: 1, y: '1' },
+            { x: 2, y: '2' },
+            { x: 3, y: '3' },
+            { x: 4, y: '4' },
+            { x: 5, y: '5' },
+            { x: 6, y: '6' },
+            { x: 7, y: '7' },
+            { x: 8, y: '8' },
+            { x: 9, y: '9' },
+            { x: 10, y: '10' },
+            { x: 11, y: '11' },
+            { x: 12, y: '12' }
+        ];
+        this.generateChart(list, 'main1');
+        this.generateChart(list, 'main2');
+        this.generateChart(list, 'main3');
+    },
     methods: {
         onSubmit() {
             console.log('submit!');
+        },
+        generateChart(list, type) {
+            if (list.length == 1) {
+                list.push({ x: '', y: list[0].y });
+            }
+            let lineObj = {
+                main1: { name: '算法绩效', color: '#83BDFF' },
+                main2: { name: '算法贴合度', color: '#59CC7F' },
+                main3: { name: '算法完成度', color: '#FCE75F' }
+            };
+            let isNull = list.length ? false : true;
+            let option = {
+                title: {
+                    top: '4px',
+                    // left: '32px',
+                    text: lineObj[type].name,
+                    textStyle: {
+                        color: '#333333',
+                        fontSize: 20,
+                        fontWeight: 500
+                    }
+                },
+                textStyle: {
+                    color: '#333'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: '#1F2329',
+                    boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.15)',
+                    borderColor: '#1F2329',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                dataset: {
+                    dimensions: ['x', 'y'],
+                    source: list
+                },
+                grid: {
+                    left: '5px',
+                    right: '10px',
+                    bottom: '24px',
+                    top: '75px',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#E9E9E9',
+                            type: 'dashed'
+                        }
+                    },
+                    axisLabel: {
+                        // interval: 0,
+                        // rotate: 30,
+                    },
+                    axisTick: {
+                        show: true, //显示X轴刻度
+                        lineStyle: {
+                            color: '#E9E9E9'
+                        }
+                    },
+                    axisLine: {
+                        // 刻度线的颜色
+                        show: false
+                    },
+                    axisPointer: {
+                        type: 'line',
+                        lineStyle: { color: '#BDBEBF' }
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: `单位：（%）`,
+                        // nameLocation: 'start',
+                        axisLine: {
+                            show: false
+                        },
+                        nameTextStyle: {
+                            color: '#666'
+                        },
+                        axisTick: {
+                            show: false //隐藏X轴刻度
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: '#E9E9E9',
+                                type: 'dashed'
+                            }
+                        },
+                        nameTextStyle: {
+                            padding: [0, 0, 0, 25]
+                        },
+                        min: isNull ? 0 : null,
+                        max: isNull ? 100 : null
+                    }
+                ],
+                series: [
+                    {
+                        name: '算法单数',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        itemStyle: {
+                            normal: {
+                                color: lineObj[type].color
+                            }
+                        },
+                        areaStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(
+                                    0,
+                                    0,
+                                    0,
+                                    1,
+                                    [
+                                        {
+                                            offset: 0,
+                                            color: lineObj[type].color
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: 'rgba(255,255,255,0)'
+                                        }
+                                    ],
+                                    false
+                                ),
+                                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                shadowBlur: 10
+                            }
+                        }
+                    }
+                ]
+            };
+            var myChart = echarts.init(document.getElementById(type));
+            myChart.setOption(option);
+            myChart.resize();
         }
     }
 };
