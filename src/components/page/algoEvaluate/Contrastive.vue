@@ -64,7 +64,7 @@
                             </div>
                             <div class="dimensionality">
                                 <div class="title">算法绩效分析</div>
-                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈算法亏绩效成算绩</div>
                             </div>
                             <div class="dimensionality">
                                 <div class="title">算法绩效分析</div>
