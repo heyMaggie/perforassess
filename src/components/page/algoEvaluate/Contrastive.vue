@@ -55,35 +55,37 @@
                 <div class="right-row">
                     <div class="bulue-card radar" id="main2"></div>
                     <div class="bulue-card grade">
-                        <!-- <div class="grade-lump">
+                        <div class="grade-lump" v-for="i in 6" :key="i">
                             <div class="score">
-                                <div class="number">92</div>
-                                <div class="text">综合评分</div>
-                                <el-rate v-model="startValue" disabled> </el-rate>
-                                <div class="rank-icon"></div>
-                            </div>
-                            <div class=""></div>
-                            <div class=""></div>
-                        </div>
-                        <div class="grade-lump">
-                            <div class="score">
-                                <div class="number">92</div>
-                                <div class="text">综合评分</div>
-                                <el-rate v-model="startValue" disabled> </el-rate>
-                                <div class="rank-icon"></div>
-                            </div>
-                            <div class=""></div>
-                            <div class=""></div>
-                        </div> -->
-                        <div class="grade-lump">
-                            <div class="score">
-                                <div class="number">92</div>
+                                <div class="number">9{{ 6 - i }}</div>
                                 <div class="text">综合评分</div>
                                 <el-rate class="rate" v-model="startValue" disabled> </el-rate>
-                                <div class="rank-icon"></div>
+                                <div class="rank-icon">{{ i }}</div>
                             </div>
-                            <div class=""></div>
-                            <div class=""></div>
+                            <div class="dimensionality">
+                                <div class="title">算法绩效分析</div>
+                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                            </div>
+                            <div class="dimensionality">
+                                <div class="title">算法绩效分析</div>
+                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                            </div>
+                            <div class="dimensionality">
+                                <div class="title">算法绩效分析</div>
+                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                            </div>
+                            <div class="dimensionality">
+                                <div class="title">算法绩效分析</div>
+                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                            </div>
+                            <div class="dimensionality">
+                                <div class="title">算法绩效分析</div>
+                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                            </div>
+                            <div class="present">
+                                <span class="left">当前算法</span>
+                                <span class="right">算法11</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -301,7 +303,7 @@ export default {
                 legend: {
                     show: true,
                     // icon: 'circle',//图例形状
-                    bottom: 0,
+                    bottom: 18,
                     center: 0,
                     itemWidth: 7, // 图例标记的图形宽度。[ default: 25 ]
                     itemHeight: 7, // 图例标记的图形高度。[ default: 14 ]
@@ -474,7 +476,7 @@ export default {
             height: 320px;
         }
         &:nth-child(2) {
-            height: 455px;
+            height: 450px;
         }
     }
     .p-bottom {
@@ -494,18 +496,23 @@ export default {
                 border-radius: 12px;
             }
             .grade {
-                width: 70%;
+                width: 80%;
                 overflow-x: auto;
+                overflow-y: hidden;
                 display: flex;
                 flex-wrap: nowrap;
                 .grade-lump {
                     width: 287px;
-                    padding: 29px 20px 26px;
+                    padding: 20px;
+                    padding-right: 0px;
                     display: inline-block;
+                    // border-right: 1px red solid;
+                    margin-right: 35px;
                     .score {
                         display: flex;
                         width: 287px;
                         align-items: center;
+                        margin-bottom: -2px;
                         .number {
                             font-size: 36px;
                             color: #333333;
@@ -514,7 +521,6 @@ export default {
                         }
                         .text {
                             font-size: 12px;
-                            font-family: SourceHanSansSC-Regular, SourceHanSansSC;
                             font-weight: 400;
                             color: #666666;
                             line-height: 18px;
@@ -532,6 +538,46 @@ export default {
                             background-size: 34px 44px;
                             align-self: flex-end;
                             margin-left: 25px;
+                            text-align: center;
+                            line-height: 48px;
+                            font-size: 20px;
+                            font-family: DINAlternate-Bold, DINAlternate;
+                            font-weight: bold;
+                            color: #ffffff;
+                            text-shadow: 0px -2px 9px #3a8159;
+                        }
+                    }
+                    .dimensionality {
+                        margin-top: 10px;
+                        .title {
+                            font-size: 14px;
+                            color: #333333;
+                            line-height: 20px;
+                            margin-bottom: 2px;
+                        }
+                        .explain {
+                            font-size: 12px;
+                            color: #999999;
+                            line-height: 18px;
+                        }
+                    }
+                    .present {
+                        // width: 284px;
+                        height: 32px;
+                        background: rgba(214, 226, 246, 0.24);
+                        border-radius: 6px;
+                        line-height: 32px;
+                        margin-top: 15px;
+                        padding-left: 15px;
+                        padding-right: 20px;
+                        .left {
+                            font-size: 12px;
+                            color: #999999;
+                        }
+                        .right {
+                            font-size: 12px;
+                            color: #333333;
+                            float: right;
                         }
                     }
                 }
