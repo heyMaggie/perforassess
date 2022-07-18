@@ -133,7 +133,7 @@ export default {
             let isNull = list.length ? false : true;
             let option = {
                 title: {
-                    top: '4px',
+                    // top: '4px',
                     // left: '32px',
                     text: lineObj[type].name,
                     textStyle: {
@@ -161,8 +161,8 @@ export default {
                 grid: {
                     left: '5px',
                     right: '10px',
-                    bottom: '24px',
-                    top: '75px',
+                    bottom: '0px',
+                    // top: '75px',
                     containLabel: true
                 },
                 xAxis: {
