@@ -894,7 +894,8 @@ export default {
 
             var spNum = 5,
                 _max = 100;
-            var legendData = ['类型1', '类型2', '类型3', '类型4', '类型5', '类型6', '类型7'];
+            // var legendData = ['类型1', '类型2', '类型3', '类型4', '类型5', '类型6', '类型7'];
+            var legendData = ['类型1', '类型2', '类型3', '类型4', '类型5'];
             let _data1 = [10];
             let _data2 = [19];
             let _data3 = [21];
@@ -904,18 +905,33 @@ export default {
             let _data7 = [5];
             var _label = {};
             option = {
-                legend: {
-                    orient: 'horizontal',
-                    // type: 'scroll',
-                    data: legendData,
-                    icon: 'circle',
-                    itemWidth: 6,
-                    itemGap: 20,
-                    y: 'bottom',
-                    textStyle: {
-                        color: '#999'
+                legend: [
+                    {
+                        orient: 'horizontal',
+                        // type: 'scroll',
+                        data: legendData,
+                        icon: 'circle',
+                        itemWidth: 6,
+                        itemGap: 20,
+                        y: 'bottom',
+                        top: '80px',
+                        // x: 'center',
+                        textStyle: {
+                            color: '#999'
+                        }
+                    },
+                    {
+                        data: ['类型6', '类型7'],
+                        icon: 'circle',
+                        itemWidth: 6,
+                        itemGap: 20,
+                        y: 'bottom',
+                        x: 'center',
+                        textStyle: {
+                            color: '#999'
+                        }
                     }
-                },
+                ],
                 grid: {
                     containLabel: true,
                     left: 0,
