@@ -129,7 +129,7 @@
                 </div>
                 <div class="card" id="main2"></div>
             </div>
-            <div class="showClounm card" id="histogram">111</div>
+            <div class="showClounm card" id="histogram"></div>
         </div>
     </div>
 </template>
@@ -196,6 +196,7 @@ export default {
         ];
         this.generateChart(list, 'main1');
         this.generateChart(list, 'main2');
+        this.getHistogramChart();
     },
     methods: {
         onSubmit() {
@@ -558,7 +559,116 @@ export default {
             myChart.resize();
         },
         getHistogramChart() {
-            // histogram
+            var chartDom = document.getElementById('histogram');
+            var myChart = echarts.init(chartDom);
+            var option;
+            // 指定图表的配置项和数据
+            var data3 = [20, 30, 20, 30, 20, 30, 20, 30, 20, 30];
+            var data4 = [9, 30, 9, 60, 70, 20, 59, 20, 49, 20];
+            var datacity = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+            var option = {
+                title: {
+                    text: '持仓市值与成本',
+                    textStyle: {
+                        color: '#333333',
+                        fontSize: 20,
+                        fontWeight: 500
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+
+                legend: {
+                    data: ['拆除', '整改'],
+                    icon: 'circle',
+                    itemWidth: 6,
+                    itemGap: 24,
+                    y: 'bottom',
+                    // top: '80px',
+                    // x: 'center',
+                    textStyle: {
+                        color: '#999'
+                    }
+                },
+                grid: {
+                    left: '5px',
+                    right: '10px',
+                    bottom: '45px',
+                    // top: '75px',
+                    containLabel: true
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        type: 'value',
+                        name: `单位：（万元）`,
+                        axisLabel: {
+                            show: true,
+                            interval: 'auto',
+                            formatter: '{value} '
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed'
+                            }
+                        },
+                        axisTick: {
+                            show: false //隐藏X轴刻度
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        nameTextStyle: {
+                            padding: [0, 0, 0, 20]
+                        }
+                    }
+                ],
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisLabel: {
+                            interval: 0,
+                            show: false,
+                            splitNumber: 15
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#E9E9E9'
+                            }
+                        },
+                        axisTick: {
+                            show: false //隐藏X轴刻度
+                        },
+                        data: datacity
+                    }
+                ],
+                series: [
+                    {
+                        name: '拆除',
+                        type: 'bar',
+                        color: '#4DCB73',
+                        stack: 'sum1',
+                        barWidth: '20px',
+                        data: data3
+                    },
+                    {
+                        name: '整改',
+                        type: 'bar',
+                        color: '#F78B7F',
+                        stack: 'sum1',
+                        barWidth: '20px',
+                        data: data4,
+                        itemStyle: {
+                            normal: {
+                                barBorderRadius: [4, 4, 0, 0]
+                            }
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
         }
     }
 };
