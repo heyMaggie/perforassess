@@ -129,7 +129,7 @@
                 </div>
                 <div class="card" id="main2"></div>
             </div>
-            <div class="showClounm card" id="histogram"></div>
+            <div class="showClounm card" id="histogram">111</div>
         </div>
     </div>
 </template>
