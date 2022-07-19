@@ -73,19 +73,19 @@
                 </div>
                 <div class="card">
                     <div class="card-title line">用户级别</div>
-                    <img class="query-icon" src="../../../assets/icon/query.png" />
+                    <img class="query-icon" src="../../assets/icon/query.png" />
                     <div class="circular">
                         <span class="number">A<span class="unit">级</span></span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-title line">完成度</div>
-                    <img class="query-icon" src="../../../assets/icon/query.png" />
+                    <img class="query-icon" src="../../assets/icon/query.png" />
                     <div id="water-polo" class="water-polo"></div>
                 </div>
                 <div class="card">
                     <div class="card-title line">当天滚动持仓</div>
-                    <img class="query-icon" src="../../../assets/icon/query.png" />
+                    <img class="query-icon" src="../../assets/icon/query.png" />
                     <div class="blue-card">
                         <span class="number">
                             128,321,6.00
@@ -706,7 +706,7 @@ export default {
                 .rank-icon {
                     width: 34px;
                     height: 44px;
-                    background-image: url('../../../assets/icon/rank-icon.png');
+                    background-image: url('../../assets/icon/rank-icon.png');
                     background-repeat: no-repeat;
                     background-size: 34px 44px;
                     align-self: flex-end;
