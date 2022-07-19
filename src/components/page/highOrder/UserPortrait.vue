@@ -65,9 +65,7 @@
                 <div class="card"></div>
                 <div class="card"></div>
             </div>
-            <div class="showClounm">
-                <div class="card"></div>
-            </div>
+            <div class="showClounm card"></div>
         </div>
     </div>
 </template>
@@ -137,10 +135,37 @@ export default {
         }
     }
     .showPortrait {
+        height: 315px;
+        margin-top: 8px;
+        .card {
+            height: 100%;
+            &:nth-child(1) {
+                margin-right: 12px;
+                width: 405px;
+            }
+            &:nth-child(2) {
+                width: calc(100% - 418px);
+            }
+        }
     }
     .showDate {
+        margin-top: 12px;
+        height: 315px;
+        .card {
+            height: 100%;
+            &:nth-child(1) {
+                margin-right: 12px;
+                width: 405px;
+            }
+            &:nth-child(2) {
+                width: calc(100% - 418px);
+            }
+        }
     }
     .showClounm {
+        margin-top: 8px;
+        height: 355px;
+        width: 100%;
     }
 }
 </style>
