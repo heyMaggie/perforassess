@@ -1165,8 +1165,6 @@ export default {
         padding-bottom: 0;
     }
     .grade-lump {
-        // width: 100%;
-        // display: inline-block;
         .score {
             display: flex;
             align-items: center;
