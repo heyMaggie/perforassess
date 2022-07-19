@@ -129,7 +129,7 @@
                 </div>
                 <div class="card" id="main2"></div>
             </div>
-            <div class="showClounm card"></div>
+            <div class="showClounm card" id="histogram"></div>
         </div>
     </div>
 </template>
@@ -556,6 +556,9 @@ export default {
             var myChart = echarts.init(document.getElementById(type));
             myChart.setOption(option);
             myChart.resize();
+        },
+        getHistogramChart() {
+            // histogram
         }
     }
 };
