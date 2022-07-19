@@ -1191,7 +1191,7 @@ export default {
             .rank-icon {
                 width: 34px;
                 height: 44px;
-                background-image: url('../../../assets/icon/rank-icon.png');
+                background-image: url('../../assets/icon/rank-icon.png');
                 background-repeat: no-repeat;
                 background-size: 34px 44px;
                 align-self: flex-end;
