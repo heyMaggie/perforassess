@@ -580,7 +580,7 @@ export default {
                 },
 
                 legend: {
-                    data: ['拆除', '整改'],
+                    data: ['市值', '成本'],
                     icon: 'circle',
                     itemWidth: 6,
                     itemGap: 24,
@@ -646,7 +646,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '拆除',
+                        name: '市值',
                         type: 'bar',
                         color: '#4DCB73',
                         stack: 'sum1',
@@ -654,7 +654,7 @@ export default {
                         data: data3
                     },
                     {
-                        name: '整改',
+                        name: '成本',
                         type: 'bar',
                         color: '#F78B7F',
                         stack: 'sum1',
