@@ -11,87 +11,96 @@ export default new Router({
         },
         {
             path: '/',
-            // component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
-            component: () => import(/* webpackChunkName: "home" */ '../page/home/Home.vue'),
+            // component: () => import( '../components/common/Home.vue'),
+            component: () => import('../page/home/Home.vue'),
             meta: { title: '自述文件' },
             children: [
                 {
                     path: '/dashboard',
-                    component: () => import(/* webpackChunkName: "dashboard" */ '../page/dashboard/Dashboard.vue'),
+                    component: () => import('../page/dashboard/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/algoMoreEchart',
+                    component: () => import('../page/dashboard/detail/AlgoMoreEchart.vue'),
+                    meta: { title: '算法绩效列表详情页' }
+                },
+                {
+                    path: '/algoGrade',
+                    component: () => import('../page/dashboard/detail/AlgoGrade.vue'),
+                    meta: { title: '算法总体评分排行榜详情页' }
+                },
+                {
                     path: '/algoDynamic',
-                    component: () => import(/* webpackChunkName: "icon" */ '../page/algoEvaluate/AlgoDynamic.vue'),
+                    component: () => import('../page/algoEvaluate/AlgoDynamic.vue'),
                     meta: { title: '算法动态' }
                 },
                 {
                     path: '/economy',
-                    component: () => import(/* webpackChunkName: "table" */ '../page/algoEvaluate/algoPortraitTable/Economy.vue'),
+                    component: () => import('../page/algoEvaluate/algoPortraitTable/Economy.vue'),
                     meta: { title: '经济性' }
                 },
                 {
                     path: '/completeness',
-                    component: () => import(/* webpackChunkName: "tabs" */ '../page/algoEvaluate/algoPortraitTable/Completeness.vue'),
+                    component: () => import('../page/algoEvaluate/algoPortraitTable/Completeness.vue'),
                     meta: { title: '完成度' }
                 },
                 {
                     path: '/riskDegree',
-                    component: () => import(/* webpackChunkName: "form" */ '../page/algoEvaluate/algoPortraitTable/RiskDegree.vue'),
+                    component: () => import('../page/algoEvaluate/algoPortraitTable/RiskDegree.vue'),
                     meta: { title: '风险度' }
                 },
                 {
                     path: '/performance',
-                    component: () => import(/* webpackChunkName: "editor" */ '../page/algoEvaluate/algoPortraitTable/Performance.vue'),
+                    component: () => import('../page/algoEvaluate/algoPortraitTable/Performance.vue'),
                     meta: { title: '绩效' }
                 },
                 {
                     path: '/stability',
-                    component: (Stability) =>
-                        import(/* webpackChunkName: "markdown" */ '../page/algoEvaluate/algoPortraitTable/Stability.vue'),
+                    component: (Stability) => import('../page/algoEvaluate/algoPortraitTable/Stability.vue'),
                     meta: { title: '稳定性' }
                 },
                 {
                     path: '/manyDays',
-                    component: () => import(/* webpackChunkName: "upload" */ '../page/algoEvaluate/ManyDays.vue'),
+                    component: () => import('../page/algoEvaluate/ManyDays.vue'),
                     meta: { title: '多日分析' }
                 },
                 {
                     path: '/contrastive',
-                    component: () => import(/* webpackChunkName: "chart" */ '../page/algoEvaluate/Contrastive.vue'),
+                    component: () => import('../page/algoEvaluate/Contrastive.vue'),
                     meta: { title: '对比分析' }
                 },
                 {
                     path: '/userPortrait',
-                    component: () => import(/* webpackChunkName: "dragdialog" */ '../page/highOrder/UserPortrait.vue'),
+                    component: () => import('../page/highOrder/UserPortrait.vue'),
                     meta: { title: '排行榜' }
                 },
                 {
                     path: '/rankingList',
-                    component: () => import(/* webpackChunkName: "drag" */ '../page/highOrder/RankingList.vue'),
+                    component: () => import('../page/highOrder/RankingList.vue'),
                     meta: { title: '用户画像' }
                 },
                 {
                     // 权限页面
                     path: '/permission',
-                    component: () => import(/* webpackChunkName: "permission" */ '../page/Permission.vue'),
+                    component: () => import('../page/Permission.vue'),
                     meta: { title: '权限测试', permission: true }
                 },
                 {
                     path: '/404',
-                    component: () => import(/* webpackChunkName: "404" */ '../page/404.vue'),
+                    component: () => import('../page/404.vue'),
                     meta: { title: '404' }
                 },
                 {
                     path: '/403',
-                    component: () => import(/* webpackChunkName: "403" */ '../page/403.vue'),
+                    component: () => import('../page/403.vue'),
                     meta: { title: '403' }
                 }
             ]
         },
         {
             path: '/login',
-            component: () => import(/* webpackChunkName: "login" */ '../page/Login.vue'),
+            component: () => import('../page/Login.vue'),
             meta: { title: '登录' }
         },
         {

@@ -122,14 +122,14 @@
                 <div class="card">
                     <div class="card-title">
                         <span>算法绩效</span>
-                        <span class="more">查看更多<span class="icon el-icon-arrow-right"></span></span>
+                        <span class="more" @click="goMoreAlgo">查看更多<span class="icon el-icon-arrow-right"></span></span>
                     </div>
                     <div class="main1" id="main1"></div>
                 </div>
                 <div class="card">
                     <div class="card-title">
                         <span>算法总体评分</span>
-                        <span class="more">查看更多<span class="icon el-icon-arrow-right"></span></span>
+                        <span class="more" @click="goMoreGrade">查看更多<span class="icon el-icon-arrow-right"></span></span>
                     </div>
                     <div id="radar" class="radarCard"></div>
                 </div>
@@ -141,7 +141,7 @@
 <script>
 import * as echarts from 'echarts';
 export default {
-    name: 'baseform',
+    name: 'dashBoard',
     data() {
         return {
             startValue: 3.5,
@@ -823,6 +823,12 @@ export default {
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+        goMoreAlgo() {
+            this.$router.push('/algoMoreEchart');
+        },
+        goMoreGrade() {
+            this.$router.push('/algoGrade');
         }
     }
 };
