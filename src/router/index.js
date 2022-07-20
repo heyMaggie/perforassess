@@ -11,7 +11,8 @@ export default new Router({
         },
         {
             path: '/',
-            component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
+            // component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
+            component: () => import(/* webpackChunkName: "home" */ '../page/home/Home.vue'),
             meta: { title: '自述文件' },
             children: [
                 {
@@ -26,26 +27,22 @@ export default new Router({
                 },
                 {
                     path: '/economy',
-                    component: () =>
-                        import(/* webpackChunkName: "table" */ '../page/algoEvaluate/algoPortraitTable/Economy.vue'),
+                    component: () => import(/* webpackChunkName: "table" */ '../page/algoEvaluate/algoPortraitTable/Economy.vue'),
                     meta: { title: '经济性' }
                 },
                 {
                     path: '/completeness',
-                    component: () =>
-                        import(/* webpackChunkName: "tabs" */ '../page/algoEvaluate/algoPortraitTable/Completeness.vue'),
+                    component: () => import(/* webpackChunkName: "tabs" */ '../page/algoEvaluate/algoPortraitTable/Completeness.vue'),
                     meta: { title: '完成度' }
                 },
                 {
                     path: '/riskDegree',
-                    component: () =>
-                        import(/* webpackChunkName: "form" */ '../page/algoEvaluate/algoPortraitTable/RiskDegree.vue'),
+                    component: () => import(/* webpackChunkName: "form" */ '../page/algoEvaluate/algoPortraitTable/RiskDegree.vue'),
                     meta: { title: '风险度' }
                 },
                 {
                     path: '/performance',
-                    component: () =>
-                        import(/* webpackChunkName: "editor" */ '../page/algoEvaluate/algoPortraitTable/Performance.vue'),
+                    component: () => import(/* webpackChunkName: "editor" */ '../page/algoEvaluate/algoPortraitTable/Performance.vue'),
                     meta: { title: '绩效' }
                 },
                 {
