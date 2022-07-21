@@ -8,7 +8,7 @@
         <div class="card">
             <div class="main-content">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane label="用户管理" name="first">
+                    <el-tab-pane label="股票排行" name="first">
                         <div class="big-blue-card">
                             <table border="0">
                                 <tr>
@@ -44,7 +44,7 @@
                         >
                         </el-pagination
                     ></el-tab-pane>
-                    <el-tab-pane label="用户管理" name="second">222</el-tab-pane>
+                    <el-tab-pane label="用户排行" name="second">222</el-tab-pane>
                 </el-tabs>
             </div>
         </div>
