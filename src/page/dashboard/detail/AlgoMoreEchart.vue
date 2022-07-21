@@ -9,12 +9,12 @@
             <div @click="goBack" class="backRow"><span class="backIcon icon el-icon-arrow-left"></span>返回</div>
             <div class="main1" id="main1"></div>
             <div class="blue-card">
-                <div class="minW-card" v-for="j in 8" :key="j">
+                <a class="minW-card" v-for="j in 14" :key="j">
                     <div v-for="i in 4" :key="i">
                         <div class="dot" style="background: red"></div>
-                        <span class="algoName">算法1</span>
+                        <span class="algoName">算法{{ i }}</span>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
@@ -183,7 +183,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .card {
-    height: 89vh;
+    height: 88vh;
     .backRow {
         font-size: 14px;
         font-family: SourceHanSansSC-Regular, SourceHanSansSC;
@@ -195,8 +195,6 @@ export default {
         .backIcon {
             color: #91a2bd;
             margin-right: 10px;
-        }
-        .divider {
         }
     }
     .main1 {
@@ -219,12 +217,17 @@ export default {
             margin-right: 8px;
             margin-bottom: 4px;
             overflow: hidden;
-            padding-left: 14px;
+            padding-left: 10px;
+            // padding-right: 10px;
             line-height: 28px;
-            margin-right: 15px;
+            box-sizing: border-box;
+            cursor: pointer;
+            &:active {
+                background: #e3f1ff;
+            }
             div {
                 display: inline-block;
-                margin-right: 21px;
+                margin-right: 18px;
                 &:nth-child(4) {
                     margin-right: 0px;
                 }
