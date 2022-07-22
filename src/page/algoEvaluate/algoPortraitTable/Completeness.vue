@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import { fiveDimensionsApi } from '@/api/index';
 export default {
     name: 'completeness',
     data() {
@@ -111,6 +112,13 @@ export default {
             ],
             currentPage: 5
         };
+    },
+    created() {
+        let query = { profile_type: 2, start_time: 1658194200, end_time: 1658244600, page: 1, limit: 10 };
+        fiveDimensionsApi(query).then((res) => {
+            tableData.value = res.list;
+            pageTotal.value = res.pageTotal || 50;
+        });
     },
     methods: {
         onSubmit() {

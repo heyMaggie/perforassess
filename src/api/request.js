@@ -2,31 +2,40 @@ import axios from 'axios';
 
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
-    // easy-mock服务挂了，暂时不使用了
-    // baseURL: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
-    timeout: 5000
+    baseURL: '/api',
+    // BASE_URL: '/api',
+    timeout: 5000,
+    withCredentials: true,
+    headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+    }
 });
 
+// 文档中的统一设置post请求头。下面会说到post请求的几种'Content-Type'
 service.interceptors.request.use(
-    config => {
+    (config) => {
         return config;
     },
-    error => {
+    (error) => {
         console.log(error);
-        return Promise.reject();
+        return Promise.reject(error);
     }
 );
 
 service.interceptors.response.use(
-    response => {
+    (response) => {
         if (response.status === 200) {
             return response.data;
         } else {
             Promise.reject();
         }
     },
-    error => {
+    (error) => {
         console.log(error);
+        // Message({
+        //     message: response.data.msg,
+        //     type: 'error'
+        // });
         return Promise.reject();
     }
 );

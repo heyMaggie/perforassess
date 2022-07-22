@@ -12,7 +12,7 @@ import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
 import './assets/css/main.less';
-import echarts from 'echarts'; //引入echarts
+// import echarts from 'echarts'; //引入echarts
 import 'echarts-liquidfill';
 
 Vue.config.productionTip = false;

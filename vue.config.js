@@ -7,16 +7,16 @@ module.exports = {
     productionSourceMap: false,
     chainWebpack: (config) => {
         config.resolve.alias.set('@', resolve('src'));
+    },
+    devServer: {
+        proxy: {
+            '/api': {
+                target: 'http://192.168.2.204:20080',
+                changeOrigin: true,
+                pathRewrite: {
+                    '/api': ''
+                }
+            }
+        }
     }
-    // devServer: {
-    //     proxy: {
-    //         '/api':{
-    //             target:'http://jsonplaceholder.typicode.com',
-    //             changeOrigin:true,
-    //             pathRewrite:{
-    //                 '/api':''
-    //             }
-    //         }
-    //     }
-    // }
 };

@@ -1,9 +1,9 @@
-import request from '../utils/request';
+import request from './request';
 
-export const fetchData = query => {
+export const fiveDimensionsApi = (query) => {
     return request({
-        url: './table.json',
-        method: 'get',
-        params: query
+        url: '/algo-assess/v1/assess/profile',
+        method: 'post',
+        data: query
     });
 };
