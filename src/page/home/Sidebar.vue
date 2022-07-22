@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar">
-        <el-menu class="sidebar-el-menu apiview" :default-active="onRoutes" router :default-openeds="['3', '6']">
+        <el-menu class="sidebar-el-menu apiview" :default-active="onRoutes" router :default-openeds="['2', '3', '2-2']">
             <template v-for="item in items">
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
@@ -9,7 +9,7 @@
                             <span slot="title" class="span4">{{ item.title }}</span>
                         </template>
                         <template v-for="subItem in item.subs">
-                            <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index">
+                            <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index" :default-openeds="['economy']">
                                 <template slot="title">{{ subItem.title }}</template>
                                 <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.index">{{
                                     threeItem.title
@@ -37,13 +37,13 @@ export default {
         return {
             items: [
                 {
-                    icon: 'el-icon-lx-home',
+                    icon: 'icon1',
                     index: 'dashboard',
                     title: 'Dashboard'
                 },
                 {
-                    icon: 'el-icon-lx-calendar',
-                    index: '3',
+                    icon: 'icon2',
+                    index: '2',
                     title: '算法评估',
                     subs: [
                         {
@@ -51,7 +51,7 @@ export default {
                             title: '算法动态'
                         },
                         {
-                            index: '3-2',
+                            index: '2-2',
                             title: '算法画像',
                             subs: [
                                 {
@@ -87,8 +87,8 @@ export default {
                     ]
                 },
                 {
-                    icon: 'el-icon-rank',
-                    index: '6',
+                    icon: 'icon3',
+                    index: '3',
                     title: '高阶评估',
                     subs: [
                         {
@@ -183,5 +183,40 @@ export default {
             }
         }
     }
+}
+
+.icon1 {
+    background: url(../../assets/icon/dash.png);
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+}
+.icon2 {
+    background: url(../../assets/icon/algo.png);
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+}
+.icon3 {
+    background: url(../../assets/icon/high.png);
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+}
+.el-menu-item *,
+.span4 {
+    line-height: 0;
+}
+.apiview .el-menu-item,
+/deep/.el-submenu__title {
+    display: flex !important;
+    align-items: center !important;
+    // align-content: center;
 }
 </style>
