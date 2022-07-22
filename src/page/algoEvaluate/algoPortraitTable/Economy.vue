@@ -44,7 +44,7 @@
                 </el-form-item>
             </div>
             <div class="button-right">
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-button type="primary" @click="onSubmit">确定</el-button>
             </div>
         </el-form>
         <div class="table-container">

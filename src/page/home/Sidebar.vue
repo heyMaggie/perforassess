@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar">
-        <el-menu class="sidebar-el-menu apiview" :default-active="onRoutes" router>
+        <el-menu class="sidebar-el-menu apiview" :default-active="onRoutes" router :default-openeds="['3', '6']">
             <template v-for="item in items">
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">

@@ -11,7 +11,7 @@
             <div class="blue-card">
                 <a class="minW-card" v-for="j in 14" :key="j">
                     <div v-for="i in 4" :key="i">
-                        <div class="dot" style="background: red"></div>
+                        <div class="dot" :style="{ background: colorList[i] }"></div>
                         <span class="algoName">算法{{ i }}</span>
                     </div>
                 </a>
@@ -22,6 +22,11 @@
 <script>
 import * as echarts from 'echarts';
 export default {
+    data() {
+        return {
+            colorList: ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337']
+        };
+    },
     mounted() {
         let list = {
             x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],

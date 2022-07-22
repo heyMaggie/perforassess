@@ -44,8 +44,13 @@
                 </el-form-item>
             </div>
             <div class="button-right">
-                <el-button type="primary" @click="onSubmit">查询</el-button
-                ><el-button type="plain" @click="onSubmit"><i class="el-icon-upload el-icon--right"></i>下载报告</el-button>
+                <div class="box1">
+                    <span class="capital">资金：</span>
+                    <span class="treasure">￥18271982190</span>
+                    <span class="capital">盈亏：</span>
+                    <span class="profit-loss">-121121</span><span class="icon">亏损</span>
+                </div>
+                <el-button type="primary" @click="onSubmit">确定</el-button>
             </div>
         </el-form>
         <div class="echart-container">
@@ -853,6 +858,54 @@ export default {
         margin-top: 12px;
         height: 355px;
         width: 100%;
+    }
+}
+.button-right {
+    // display: flex;
+    // align-items: center;
+    // line-height: 36px;
+}
+.box1 {
+    display: inline-block;
+    .capital {
+        display: inline-block;
+        font-size: 14px;
+        font-family: SourceHanSansSC-Regular, SourceHanSansSC;
+        font-weight: 400;
+        color: #666666;
+    }
+    .treasure {
+        // display: inline-block;
+        font-size: 24px;
+        font-family: PingFangSC-Semibold, PingFang SC;
+        font-weight: 600;
+        color: #333333;
+        margin-right: 20px;
+        line-height: 0px;
+        // padding-top: 10px;
+    }
+    .profit-loss {
+        // display: inline-block;
+        font-size: 24px;
+        // font-family: DINAlternate-Bold, DINAlternate;
+        font-weight: bold;
+        color: #4dcb73;
+        line-height: 0;
+    }
+    .icon {
+        display: inline-block;
+        text-align: center;
+        font-size: 10px;
+        // font-family: SourceHanSansSC-Regular, SourceHanSansSC;
+        font-weight: 400;
+        color: #4dcb73;
+        width: 32px;
+        height: 18px;
+        // line-height: 16px;
+        background: rgba(77, 203, 115, 0.24);
+        border-radius: 4px;
+        margin-right: 20px;
+        // margin-bottom: 10px;
     }
 }
 </style>

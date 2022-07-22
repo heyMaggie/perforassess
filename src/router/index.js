@@ -36,6 +36,11 @@ export default new Router({
                     meta: { title: '算法动态' }
                 },
                 {
+                    path: '/algoDynamicDetail',
+                    component: () => import('../page/algoEvaluate/detail/AlgoDynamicDetail.vue'),
+                    meta: { title: '算法动态查看历史' }
+                },
+                {
                     path: '/economy',
                     component: () => import('../page/algoEvaluate/algoPortraitTable/Economy.vue'),
                     meta: { title: '经济性' }

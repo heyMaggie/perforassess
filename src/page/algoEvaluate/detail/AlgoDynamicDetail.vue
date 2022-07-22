@@ -2,36 +2,50 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> 算法评估</el-breadcrumb-item>
-                <el-breadcrumb-item>算法动态</el-breadcrumb-item>
+                <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> 算法评估 / 算法动态 / 查看历史</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
-            <div class="input-area">
-                <el-form-item>
-                    <el-select v-model="searchForm.firm" clearable placeholder="厂商">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-select v-model="searchForm.algoType" clearable placeholder="算法类型">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-select v-model="searchForm.algoId" clearable placeholder="算法">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-            </div>
-            <div class="button-right">
-                <el-button type="primary" @click="onSubmit">确定</el-button
-                ><el-button type="plain" @click="onGoHistory">查看历史</el-button>
-            </div>
-        </el-form>
+        <!-- 
+            <div @click="goBack" class="backRow"><span class="backIcon icon el-icon-arrow-left"></span>返回</div>
+        </div> -->
+        <div class="card special">
+            <div @click="goBack" class="backRow"><span class="backIcon icon el-icon-arrow-left"></span>返回</div>
+            <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
+                <div class="input-area">
+                    <el-form-item>
+                        <el-select v-model="searchForm.firm" clearable placeholder="厂商">
+                            <el-option label="区域一" value="shanghai"></el-option>
+                            <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="searchForm.algoType" clearable placeholder="算法类型">
+                            <el-option label="区域一" value="shanghai"></el-option>
+                            <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="searchForm.algoId" clearable placeholder="算法">
+                            <el-option label="区域一" value="shanghai"></el-option>
+                            <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-date-picker
+                            v-model="searchForm.timeRange"
+                            type="daterange"
+                            range-separator="-"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                        >
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
+                <div class="button-right">
+                    <el-button type="primary" @click="onSubmit">确定</el-button>
+                </div>
+            </el-form>
+        </div>
         <div class="container">
             <div class="card radarCard" id="radar"></div>
             <div class="card" id="main1"></div>
@@ -83,11 +97,9 @@
         </div>
     </div>
 </template>
-
 <script>
 import * as echarts from 'echarts';
 export default {
-    name: 'baseform',
     data() {
         return {
             searchForm: {
@@ -125,8 +137,8 @@ export default {
         this.getPieChart5('pie4');
     },
     methods: {
-        onGoHistory() {
-            this.$router.push('/algoDynamicDetail');
+        goBack() {
+            this.$router.push('/algoDynamic');
         },
         onSubmit() {
             console.log(this.searchForm);
@@ -965,7 +977,29 @@ export default {
     }
 };
 </script>
-<style scoped lang="less">
+<style lang="less" scoped>
+.special {
+    padding-bottom: 0;
+    .search-row {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .backRow {
+        font-size: 14px;
+        font-family: SourceHanSansSC-Regular, SourceHanSansSC;
+        color: #666666;
+        cursor: pointer;
+        margin: 0 -24px -0px;
+        padding: 0 24px 16px;
+        border-bottom: #ececec 1px solid;
+        .backIcon {
+            color: #91a2bd;
+            margin-right: 10px;
+        }
+        background: #ffffff;
+    }
+}
+
 .container {
     .card {
         margin-bottom: 12px;
@@ -1038,7 +1072,7 @@ export default {
             .rank-icon {
                 width: 34px;
                 height: 44px;
-                background-image: url('../../assets/icon/rank-icon.png');
+                background-image: url('../../../assets/icon/rank-icon.png');
                 background-repeat: no-repeat;
                 background-size: 34px 44px;
                 align-self: flex-end;

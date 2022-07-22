@@ -88,7 +88,8 @@
                                 </div>
                                 <div class="blue-mincard">
                                     <div class="tit"><img src="../../assets/icon/3cc.png" />收益率</div>
-                                    <el-badge value="盈利" class="item" type="success">
+                                    <!-- <el-badge value="亏损" class="item" type="success"> -->
+                                    <el-badge value="盈利" class="item" type="danger">
                                         <!-- primary  -->
                                         <div class="number"><span class="symbol">+ </span>45<span class="unit">%</span></div>
                                     </el-badge>
@@ -1081,6 +1082,11 @@ export default {
         /deep/.el-badge__content.is-fixed {
             top: 10px;
             right: 10px;
+        }
+        /deep/.el-tabs__item {
+            font-size: 16px;
+            padding-right: 40px;
+            // padding: 0 40px;
         }
     }
     .showPortrait {

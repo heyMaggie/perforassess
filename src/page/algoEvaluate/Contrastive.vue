@@ -9,25 +9,13 @@
         <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
             <div class="input-area">
                 <el-form-item>
-                    <el-select v-model="searchForm.firm" clearable placeholder="厂商">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
                     <el-select v-model="searchForm.algoType" clearable placeholder="算法类型">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item>
-                    <el-select v-model="searchForm.algoId" clearable placeholder="算法">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-select v-model="searchForm.userId" clearable placeholder="用户ID">
+                <el-form-item label="选择对比算法">
+                    <el-select v-model="searchForm.algoId" clearable placeholder="选择算法">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
@@ -44,8 +32,8 @@
                 </el-form-item>
             </div>
             <div class="button-right">
-                <el-button type="primary" @click="onSubmit">查询</el-button
-                ><el-button type="plain" @click="onSubmit"><i class="el-icon-upload el-icon--right"></i>下载报告</el-button>
+                <el-button type="primary" @click="onSubmit">确定</el-button
+                ><el-button type="plain" @click="onSubmit"><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button>
             </div>
         </el-form>
         <div class="container">
@@ -216,7 +204,11 @@ export default {
                 },
                 legend: {
                     data: ['算法1', '算法2', '算法3', '算法4'],
-                    bottom: 0
+                    bottom: 0,
+                    icon: 'circle',
+                    itemWidth: 8,
+                    x: 'center',
+                    textStyle: { color: ' #999' }
                 },
                 tooltip: {
                     trigger: 'axis',
