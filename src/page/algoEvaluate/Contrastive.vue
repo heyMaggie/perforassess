@@ -9,13 +9,13 @@
         <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
             <div class="input-area">
                 <el-form-item>
-                    <el-select v-model="searchForm.algoType" clearable placeholder="算法类型">
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="选择对比算法">
-                    <el-select v-model="searchForm.algoId" clearable placeholder="选择算法">
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="选择算法">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
@@ -89,10 +89,10 @@ export default {
     data() {
         return {
             searchForm: {
-                firm: '',
-                algoType: '',
-                algoId: '',
-                userId: '',
+                provider: '',
+                algo_type: '',
+                algo_id: '',
+                user_id: '',
                 timeRange: []
             },
             tableData: [
@@ -121,7 +121,7 @@ export default {
                     tag: '公司'
                 }
             ],
-            currentPage: 5,
+            currentPage: 1,
             startValue: 5
         };
     },
@@ -140,7 +140,7 @@ export default {
     },
     methods: {
         onSubmit() {
-            console.log('submit!');
+            console.log('submit!', this.searchForm);
         },
         generateChart(list, type) {
             if (list.length == 1) {

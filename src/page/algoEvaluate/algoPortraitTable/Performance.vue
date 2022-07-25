@@ -9,25 +9,25 @@
         <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
             <div class="input-area">
                 <el-form-item>
-                    <el-select v-model="searchForm.firm" clearable placeholder="厂商">
+                    <el-select v-model="searchForm.provider" clearable placeholder="厂商">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algoType" clearable placeholder="算法类型">
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algoId" clearable placeholder="算法">
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.userId" clearable placeholder="用户ID">
+                    <el-select v-model="searchForm.user_id" clearable placeholder="用户ID">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
@@ -49,13 +49,17 @@
         </el-form>
         <div class="table-container">
             <el-table :data="tableData" size="medium " :row-style="{ height: '56px' }" height="695px">
-                <el-table-column prop="date" label="母单ID"> </el-table-column>
-                <el-table-column prop="name" label="用户ID"> </el-table-column>
-                <el-table-column prop="date" label="算法名称"> </el-table-column>
-                <el-table-column prop="name" label="证券代码"> </el-table-column>
-                <el-table-column prop="date" label="VWAP滑点值"> </el-table-column>
-                <el-table-column prop="name" label="绩效收益率"> </el-table-column>
-                <el-table-column prop="address" label="创建时间"> </el-table-column>
+                <el-table-column prop="user_id" label="用户ID"> </el-table-column>
+                <el-table-column prop="algo_name" label="算法名称"> </el-table-column>
+                <el-table-column prop="vwap_dev" label="VWAP滑点值">
+                    <template slot-scope="scope"> {{ scope.row.vwap_dev }}% </template>
+                </el-table-column>
+                <el-table-column prop="profit_rate" label="绩效收益率">
+                    <template slot-scope="scope"> {{ scope.row.profit_rate }}% </template>
+                </el-table-column>
+                <el-table-column prop="create_time" label="创建时间">
+                    <template slot-scope="scope">{{ scope.row.create_time | formatDate }}</template>
+                </el-table-column>
             </el-table>
             <el-pagination
                 background
@@ -63,9 +67,9 @@
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
                 :page-sizes="[10, 20, 30, 40]"
-                :page-size="100"
+                :page-size="10"
                 layout=" ->, prev, pager, next, total, jumper"
-                :total="1000"
+                :total="pageTotal"
             >
             </el-pagination>
         </div>
@@ -73,49 +77,45 @@
 </template>
 
 <script>
+import { fiveDimensionsApi } from '@/api/index';
 export default {
     name: 'Performance',
     data() {
         return {
             searchForm: {
-                firm: '',
-                algoType: '',
-                algoId: '',
-                userId: '',
-                timeRange: []
+                provider: '',
+                algo_type: '',
+                algo_id: '',
+                user_id: ''
             },
-            tableData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    tag: '家'
-                },
-                {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄',
-                    tag: '家'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄',
-                    tag: '公司'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄',
-                    tag: '公司'
-                }
-            ],
-            currentPage: 5
+            timeRange: [], //筛选时间范围
+            tableData: [],
+            currentPage: 1,
+            pageTotal: 0
         };
     },
+    created() {
+        this.getTableData();
+    },
     methods: {
+        getTableData() {
+            let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
+            let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
+            // let query = { profile_type: 1, page: 1, limit: 10, start_time, end_time, ...this.searchForm };
+            let query = { profile_type: 4, start_time: 1658194200, end_time: 1658244600, page: 1, limit: 10 };
+            console.log(query);
+            fiveDimensionsApi(query).then((res) => {
+                if (res.code == 0) {
+                    this.tableData = res.assess;
+                    this.pageTotal = res.total;
+                } else {
+                    this.$message.error('查询失败！');
+                }
+            });
+        },
         onSubmit() {
-            console.log('submit!');
+            console.log('submit!', this.searchForm);
+            this.getTableData();
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);

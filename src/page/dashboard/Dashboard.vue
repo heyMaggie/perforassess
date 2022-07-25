@@ -110,9 +110,9 @@
                             @current-change="handleCurrentChange"
                             :current-page="currentPage"
                             :page-sizes="[10, 20, 30, 40]"
-                            :page-size="100"
+                            :page-size="10"
                             layout=" ->, prev, pager, next, total, jumper"
-                            :total="1000"
+                            :total="pageTotal"
                         >
                         </el-pagination>
                     </el-tab-pane>
@@ -147,7 +147,7 @@ export default {
         return {
             startValue: 3.5,
             activeName: 'first',
-            currentPage: 5
+            currentPage: 1
         };
     },
     mounted() {
@@ -170,7 +170,7 @@ export default {
     },
     methods: {
         onSubmit() {
-            console.log('submit!');
+            console.log('submit!', this.searchForm);
         },
         getWaterEchart() {
             var chartDom = document.getElementById('water-polo');

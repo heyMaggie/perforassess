@@ -9,25 +9,25 @@
         <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
             <div class="input-area">
                 <el-form-item>
-                    <el-select v-model="searchForm.firm" clearable placeholder="厂商">
+                    <el-select v-model="searchForm.provider" clearable placeholder="厂商">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algoType" clearable placeholder="算法类型">
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algoId" clearable placeholder="算法">
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.userId" clearable placeholder="用户ID">
+                    <el-select v-model="searchForm.user_id" clearable placeholder="用户ID">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
@@ -146,10 +146,10 @@ export default {
     data() {
         return {
             searchForm: {
-                firm: '',
-                algoType: '',
-                algoId: '',
-                userId: '',
+                provider: '',
+                algo_type: '',
+                algo_id: '',
+                user_id: '',
                 timeRange: []
             },
             tableData: [
@@ -179,7 +179,7 @@ export default {
                 }
             ],
             startValue: 3.5,
-            currentPage: 5
+            currentPage: 1
         };
     },
     mounted() {
@@ -205,7 +205,7 @@ export default {
     },
     methods: {
         onSubmit() {
-            console.log('submit!');
+            console.log('submit!', this.searchForm);
         },
         getWaterEchart() {
             var chartDom = document.getElementById('water-polo');
