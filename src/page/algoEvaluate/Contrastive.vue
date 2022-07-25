@@ -161,32 +161,31 @@ export default {
                     item.smooth = true;
                     item.showSymbol = false;
                     item.itemStyle = {
-                        normal: {
-                            color: colorList[i]
-                        }
+                        color: colorList[i]
+                        // normal: {
+                        //     color: colorList[i]
+                        // }
                     };
                     item.areaStyle = {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(
-                                0,
-                                0,
-                                0,
-                                1,
-                                [
-                                    {
-                                        offset: 0,
-                                        color: colorList[i]
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: 'rgba(255,255,255,0)'
-                                    }
-                                ],
-                                false
-                            ),
-                            shadowColor: 'rgba(0, 0, 0, 0.1)',
-                            shadowBlur: 10
-                        }
+                        color: new echarts.graphic.LinearGradient(
+                            0,
+                            0,
+                            0,
+                            1,
+                            [
+                                {
+                                    offset: 0,
+                                    color: colorList[i]
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgba(255,255,255,0)'
+                                }
+                            ],
+                            false
+                        ),
+                        shadowColor: 'rgba(0, 0, 0, 0.1)',
+                        shadowBlur: 10
                     };
                 });
             }
@@ -310,23 +309,23 @@ export default {
                     {
                         indicator: [
                             {
-                                text: '完成度',
+                                name: '完成度',
                                 max: 100
                             },
                             {
-                                text: '算法绩效',
+                                name: '算法绩效',
                                 max: 100
                             },
                             {
-                                text: '贴合度',
+                                name: '贴合度',
                                 max: 100
                             },
                             {
-                                text: '风险度',
+                                name: '风险度',
                                 max: 100
                             },
                             {
-                                text: '绩效稳定性',
+                                name: '绩效稳定性',
                                 max: 100
                             }
                         ],
@@ -339,12 +338,10 @@ export default {
                         // backgroundColor: {
                         //     image:imgPath[0]
                         // },
-                        name: {
+                        axisName: {
                             formatter: '{value}',
-                            textStyle: {
-                                fontSize: 14, //外圈标签字体大小
-                                color: '#333333' //外圈标签字体颜色
-                            }
+                            fontSize: 14, //外圈标签字体大小
+                            color: '#333333' //外圈标签字体颜色
                         },
                         splitArea: {
                             // 坐标轴在 grid 区域中的分隔区域，默认不显示。
@@ -377,11 +374,9 @@ export default {
                     {
                         name: '雷达图',
                         type: 'radar',
-                        itemStyle: {
-                            emphasis: {
-                                lineStyle: {
-                                    width: 4
-                                }
+                        emphasis: {
+                            lineStyle: {
+                                width: 4
                             }
                         },
                         data: [
@@ -389,30 +384,29 @@ export default {
                                 name: '算法1',
                                 value: [85, 65, 55, 90, 82],
                                 areaStyle: {
-                                    normal: {
-                                        opacity: 0.02 // 区域透明度
-                                    }
+                                    opacity: 0.02 // 区域透明度
                                 },
                                 symbolSize: 2.5, // 单个数据标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
                                 label: {
                                     // 单个拐点文本的样式设置
-                                    normal: {
-                                        show: true, // 单个拐点文本的样式设置。[ default: false ]
-                                        position: 'top', // 标签的位置。[ default: top ]
-                                        distance: 2, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。[ default: 5 ]
-                                        color: '#333333', // 文字的颜色。如果设置为 'auto'，则为视觉映射得到的颜色，如系列色。[ default: "#fff" ]
-                                        fontSize: 12, // 文字的字体大小
-                                        formatter: function (params) {
-                                            return params.value;
-                                        }
+                                    show: true, // 单个拐点文本的样式设置。[ default: false ]
+                                    position: 'top', // 标签的位置。[ default: top ]
+                                    distance: 2, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。[ default: 5 ]
+                                    color: '#333333', // 文字的颜色。如果设置为 'auto'，则为视觉映射得到的颜色，如系列色。[ default: "#fff" ]
+                                    fontSize: 12, // 文字的字体大小
+                                    formatter: function (params) {
+                                        return params.value;
                                     }
                                 },
                                 itemStyle: {
-                                    normal: {
-                                        //图形悬浮效果
-                                        borderColor: '#1890FF',
-                                        borderWidth: 3.5
-                                    }
+                                    //图形悬浮效果
+                                    borderColor: '#1890FF',
+                                    borderWidth: 3.5
+                                    // normal: {
+                                    //     //图形悬浮效果
+                                    //     borderColor: '#1890FF',
+                                    //     borderWidth: 3.5
+                                    // }
                                 }
                             },
                             {
@@ -420,15 +414,15 @@ export default {
                                 value: [50, 20, 45, 30, 75],
                                 symbolSize: 2.5,
                                 itemStyle: {
-                                    normal: {
-                                        borderColor: '#f9cf67',
-                                        borderWidth: 3.5
-                                    }
+                                    borderColor: '#f9cf67',
+                                    borderWidth: 3.5
+                                    // normal: {
+                                    //     borderColor: '#f9cf67',
+                                    //     borderWidth: 3.5
+                                    // }
                                 },
                                 areaStyle: {
-                                    normal: {
-                                        opacity: 0.02 // 区域透明度
-                                    }
+                                    opacity: 0.02 // 区域透明度
                                 }
                             },
                             {
@@ -436,15 +430,15 @@ export default {
                                 value: [37, 80, 12, 50, 25],
                                 symbolSize: 2.5,
                                 itemStyle: {
-                                    normal: {
-                                        borderColor: '#2FC25B',
-                                        borderWidth: 3.5
-                                    }
+                                    borderColor: '#2FC25B',
+                                    borderWidth: 3.5
+                                    // normal: {
+                                    //     borderColor: '#2FC25B',
+                                    //     borderWidth: 3.5
+                                    // }
                                 },
                                 areaStyle: {
-                                    normal: {
-                                        opacity: 0.02 // 区域透明度
-                                    }
+                                    opacity: 0.02 // 区域透明度
                                 }
                             }
                         ]

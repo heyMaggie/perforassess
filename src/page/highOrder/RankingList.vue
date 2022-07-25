@@ -76,7 +76,9 @@ export default {
                     address: '上海市普陀区金沙江路 1516 弄'
                 }
             ],
-            activeName: 'first'
+            activeName: 'first',
+            currentPage: 1,
+            pageTotal: 5
         };
     },
     mounted() {},

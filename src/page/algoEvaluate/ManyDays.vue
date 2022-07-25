@@ -229,32 +229,31 @@ export default {
                         smooth: true,
                         showSymbol: false,
                         itemStyle: {
-                            normal: {
-                                color: lineObj[type].color
-                            }
+                            color: lineObj[type].color
+                            // normal: {
+                            //     color: lineObj[type].color
+                            // }
                         },
                         areaStyle: {
-                            normal: {
-                                color: new echarts.graphic.LinearGradient(
-                                    0,
-                                    0,
-                                    0,
-                                    1,
-                                    [
-                                        {
-                                            offset: 0,
-                                            color: lineObj[type].color
-                                        },
-                                        {
-                                            offset: 1,
-                                            color: 'rgba(255,255,255,0)'
-                                        }
-                                    ],
-                                    false
-                                ),
-                                shadowColor: 'rgba(0, 0, 0, 0.1)',
-                                shadowBlur: 10
-                            }
+                            color: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1,
+                                [
+                                    {
+                                        offset: 0,
+                                        color: lineObj[type].color
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(255,255,255,0)'
+                                    }
+                                ],
+                                false
+                            ),
+                            shadowColor: 'rgba(0, 0, 0, 0.1)',
+                            shadowBlur: 10
                         }
                     }
                 ]

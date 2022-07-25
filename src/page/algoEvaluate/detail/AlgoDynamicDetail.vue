@@ -150,23 +150,23 @@ export default {
                     {
                         indicator: [
                             {
-                                text: '完成度',
+                                name: '完成度',
                                 max: 100
                             },
                             {
-                                text: '算法绩效',
+                                name: '算法绩效',
                                 max: 100
                             },
                             {
-                                text: '贴合度',
+                                name: '贴合度',
                                 max: 100
                             },
                             {
-                                text: '风险度',
+                                name: '风险度',
                                 max: 100
                             },
                             {
-                                text: '绩效稳定性',
+                                name: '绩效稳定性',
                                 max: 100
                             }
                         ],
@@ -179,12 +179,10 @@ export default {
                         // backgroundColor: {
                         //     image:imgPath[0]
                         // },
-                        name: {
+                        axisName: {
                             formatter: '{value}',
-                            textStyle: {
-                                fontSize: 14, //外圈标签字体大小
-                                color: '#333333' //外圈标签字体颜色
-                            }
+                            fontSize: 14, //外圈标签字体大小
+                            color: '#333333' //外圈标签字体颜色
                         },
                         splitArea: {
                             // 坐标轴在 grid 区域中的分隔区域，默认不显示。
@@ -218,11 +216,9 @@ export default {
                     {
                         name: '雷达图',
                         type: 'radar',
-                        itemStyle: {
-                            emphasis: {
-                                lineStyle: {
-                                    width: 4
-                                }
+                        emphasis: {
+                            lineStyle: {
+                                width: 4
                             }
                         },
                         data: [
@@ -230,53 +226,52 @@ export default {
                                 name: '算法',
                                 value: [85, 65, 55, 90, 82],
                                 areaStyle: {
-                                    normal: {
-                                        // 单项区域填充样式
-                                        color: {
-                                            type: 'linear',
-                                            x: 0, //右
-                                            y: 0, //下
-                                            x2: 1, //左
-                                            y2: 1, //上
-                                            colorStops: [
-                                                {
-                                                    offset: 0,
-                                                    color: '#E4F1FF'
-                                                },
-                                                {
-                                                    offset: 0.5,
-                                                    color: '#E4F1FF'
-                                                },
-                                                {
-                                                    offset: 1,
-                                                    color: '#E4F1FF'
-                                                }
-                                            ],
-                                            globalCoord: false
-                                        },
-                                        opacity: 0.4 // 区域透明度
-                                    }
+                                    // 单项区域填充样式
+                                    color: {
+                                        type: 'linear',
+                                        x: 0, //右
+                                        y: 0, //下
+                                        x2: 1, //左
+                                        y2: 1, //上
+                                        colorStops: [
+                                            {
+                                                offset: 0,
+                                                color: '#E4F1FF'
+                                            },
+                                            {
+                                                offset: 0.5,
+                                                color: '#E4F1FF'
+                                            },
+                                            {
+                                                offset: 1,
+                                                color: '#E4F1FF'
+                                            }
+                                        ],
+                                        globalCoord: false
+                                    },
+                                    opacity: 0.4 // 区域透明度
                                 },
                                 symbolSize: 2.5, // 单个数据标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
                                 label: {
                                     // 单个拐点文本的样式设置
-                                    normal: {
-                                        show: true, // 单个拐点文本的样式设置。[ default: false ]
-                                        position: 'top', // 标签的位置。[ default: top ]
-                                        distance: 2, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。[ default: 5 ]
-                                        color: '#333333', // 文字的颜色。如果设置为 'auto'，则为视觉映射得到的颜色，如系列色。[ default: "#fff" ]
-                                        fontSize: 14, // 文字的字体大小
-                                        formatter: function (params) {
-                                            return params.value;
-                                        }
+                                    show: true, // 单个拐点文本的样式设置。[ default: false ]
+                                    position: 'top', // 标签的位置。[ default: top ]
+                                    distance: 2, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。[ default: 5 ]
+                                    color: '#333333', // 文字的颜色。如果设置为 'auto'，则为视觉映射得到的颜色，如系列色。[ default: "#fff" ]
+                                    fontSize: 14, // 文字的字体大小
+                                    formatter: function (params) {
+                                        return params.value;
                                     }
                                 },
                                 itemStyle: {
-                                    normal: {
-                                        //图形悬浮效果
-                                        borderColor: '#3281FF',
-                                        borderWidth: 3.5
-                                    }
+                                    //图形悬浮效果
+                                    borderColor: '#3281FF',
+                                    borderWidth: 3.5
+                                    // normal: {
+                                    //     //图形悬浮效果
+                                    //     borderColor: '#3281FF',
+                                    //     borderWidth: 3.5
+                                    // }
                                 }
                             }
                         ]
@@ -394,32 +389,31 @@ export default {
                         smooth: true,
                         showSymbol: false,
                         itemStyle: {
-                            normal: {
-                                color: lineObj[type].color
-                            }
+                            color: lineObj[type].color
+                            // normal: {
+                            //     color: lineObj[type].color
+                            // }
                         },
                         areaStyle: {
-                            normal: {
-                                color: new echarts.graphic.LinearGradient(
-                                    0,
-                                    0,
-                                    0,
-                                    1,
-                                    [
-                                        {
-                                            offset: 0,
-                                            color: lineObj[type].color
-                                        },
-                                        {
-                                            offset: 1,
-                                            color: 'rgba(255,255,255,0)'
-                                        }
-                                    ],
-                                    false
-                                ),
-                                shadowColor: 'rgba(0, 0, 0, 0.1)',
-                                shadowBlur: 10
-                            }
+                            color: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1,
+                                [
+                                    {
+                                        offset: 0,
+                                        color: lineObj[type].color
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(255,255,255,0)'
+                                    }
+                                ],
+                                false
+                            ),
+                            shadowColor: 'rgba(0, 0, 0, 0.1)',
+                            shadowBlur: 10
                         }
                     }
                 ]
@@ -856,10 +850,14 @@ export default {
                         legendHoverLink: false,
                         barWidth: 24,
                         itemStyle: {
-                            normal: {
-                                color: '#65A6FF',
-                                barBorderRadius: [4, 0, 0, 4]
-                            },
+                            color: '#65A6FF',
+                            borderRadius: [4, 0, 0, 4]
+                            // normal: {
+                            //     color: '#65A6FF',
+                            //     borderRadius: [4, 0, 0, 4]
+                            // },
+                        },
+                        itemStyle: {
                             emphasis: {
                                 color: '#65A6FF'
                             }
@@ -874,9 +872,12 @@ export default {
                         barWidth: 24,
                         label: _label,
                         itemStyle: {
-                            normal: {
-                                color: '#72E05A'
-                            },
+                            color: '#72E05A'
+                            // normal: {
+                            //     color: '#72E05A'
+                            // },
+                        },
+                        itemStyle: {
                             emphasis: {
                                 color: '#72E05A'
                             }
@@ -891,9 +892,12 @@ export default {
                         barWidth: 24,
                         label: _label,
                         itemStyle: {
-                            normal: {
-                                color: '#32B7FF'
-                            },
+                            color: '#32B7FF'
+                            // normal: {
+                            //     color: '#32B7FF'
+                            // },
+                        },
+                        itemStyle: {
                             emphasis: {
                                 color: '#32B7FF'
                             }
@@ -908,9 +912,12 @@ export default {
                         barWidth: 24,
                         label: _label,
                         itemStyle: {
-                            normal: {
-                                color: '#83BDFF'
-                            },
+                            color: '#83BDFF'
+                            // normal: {
+                            //     color: '#83BDFF'
+                            // },
+                        },
+                        itemStyle: {
                             emphasis: {
                                 color: '#83BDFF'
                             }
@@ -925,9 +932,12 @@ export default {
                         barWidth: 24,
                         label: _label,
                         itemStyle: {
-                            normal: {
-                                color: '#83E3FF'
-                            },
+                            color: '#83E3FF'
+                            // normal: {
+                            //     color: '#83E3FF'
+                            // },
+                        },
+                        itemStyle: {
                             emphasis: {
                                 color: '#83E3FF'
                             }
@@ -942,9 +952,12 @@ export default {
                         barWidth: 24,
                         label: _label,
                         itemStyle: {
-                            normal: {
-                                color: '#F78B7F'
-                            },
+                            color: '#F78B7F'
+                            // normal: {
+                            //     color: '#F78B7F'
+                            // },
+                        },
+                        itemStyle: {
                             emphasis: {
                                 color: '#2EDDCD'
                             }
@@ -959,10 +972,14 @@ export default {
                         barWidth: 24,
                         label: _label,
                         itemStyle: {
-                            normal: {
-                                color: '#FFD747',
-                                barBorderRadius: [0, 4, 4, 0]
-                            },
+                            color: '#FFD747',
+                            borderRadius: [0, 4, 4, 0]
+                            // normal: {
+                            //     color: '#FFD747',
+                            //     borderRadius: [0, 4, 4, 0]
+                            // },
+                        },
+                        itemStyle: {
                             emphasis: {
                                 color: '#FFD747'
                             }

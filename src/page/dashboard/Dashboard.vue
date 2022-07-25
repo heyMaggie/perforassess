@@ -46,7 +46,9 @@
                 </div>
                 <div class="card">
                     <div class="card-title line-img">资金占比</div>
-                    <img class="query-icon" src="../../assets/icon/query.png" />
+                    <el-tooltip content="说明：XXX" placement="top">
+                        <img class="query-icon" src="../../assets/icon/query.png"
+                    /></el-tooltip>
                     <div class="gather">
                         <div class="min-blue-card">
                             <span class="number">2<span class="unit">%</span></span>
@@ -112,7 +114,7 @@
                             :page-sizes="[10, 20, 30, 40]"
                             :page-size="10"
                             layout=" ->, prev, pager, next, total, jumper"
-                            :total="pageTotal"
+                            :total="10"
                         >
                         </el-pagination>
                     </el-tab-pane>
@@ -250,19 +252,19 @@ export default {
                     {
                         indicator: [
                             {
-                                text: '算法1',
+                                name: '算法1',
                                 max: 100
                             },
                             {
-                                text: '算法2',
+                                name: '算法2',
                                 max: 100
                             },
                             {
-                                text: '算法3',
+                                name: '算法3',
                                 max: 100
                             },
                             {
-                                text: '算法4',
+                                name: '算法4',
                                 max: 100
                             }
                         ],
@@ -275,12 +277,10 @@ export default {
                         // backgroundColor: {
                         //     image:imgPath[0]
                         // },
-                        name: {
+                        axisName: {
                             formatter: '{value}',
-                            textStyle: {
-                                fontSize: 14, //外圈标签字体大小
-                                color: '#333333' //外圈标签字体颜色
-                            }
+                            fontSize: 14, //外圈标签字体大小
+                            color: '#333333' //外圈标签字体颜色
                         },
                         splitArea: {
                             // 坐标轴在 grid 区域中的分隔区域，默认不显示。
@@ -314,11 +314,9 @@ export default {
                     {
                         name: '雷达图',
                         type: 'radar',
-                        itemStyle: {
-                            emphasis: {
-                                lineStyle: {
-                                    width: 3
-                                }
+                        emphasis: {
+                            lineStyle: {
+                                width: 3
                             }
                         },
                         data: [
@@ -326,53 +324,52 @@ export default {
                                 name: '算法',
                                 value: [85, 65, 55, 90, 82],
                                 areaStyle: {
-                                    normal: {
-                                        // 单项区域填充样式
-                                        color: {
-                                            type: 'linear',
-                                            x: 0, //右
-                                            y: 0, //下
-                                            x2: 1, //左
-                                            y2: 1, //上
-                                            colorStops: [
-                                                {
-                                                    offset: 0,
-                                                    color: '#E4F1FF'
-                                                },
-                                                {
-                                                    offset: 0.5,
-                                                    color: '#E4F1FF'
-                                                },
-                                                {
-                                                    offset: 1,
-                                                    color: '#E4F1FF'
-                                                }
-                                            ],
-                                            globalCoord: false
-                                        },
-                                        opacity: 0.4 // 区域透明度
-                                    }
+                                    // 单项区域填充样式
+                                    color: {
+                                        type: 'linear',
+                                        x: 0, //右
+                                        y: 0, //下
+                                        x2: 1, //左
+                                        y2: 1, //上
+                                        colorStops: [
+                                            {
+                                                offset: 0,
+                                                color: '#E4F1FF'
+                                            },
+                                            {
+                                                offset: 0.5,
+                                                color: '#E4F1FF'
+                                            },
+                                            {
+                                                offset: 1,
+                                                color: '#E4F1FF'
+                                            }
+                                        ],
+                                        globalCoord: false
+                                    },
+                                    opacity: 0.4 // 区域透明度
                                 },
                                 symbolSize: 2.5, // 单个数据标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
                                 label: {
                                     // 单个拐点文本的样式设置
-                                    normal: {
-                                        show: true, // 单个拐点文本的样式设置。[ default: false ]
-                                        position: 'top', // 标签的位置。[ default: top ]
-                                        distance: 2, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。[ default: 5 ]
-                                        color: '#333333', // 文字的颜色。如果设置为 'auto'，则为视觉映射得到的颜色，如系列色。[ default: "#fff" ]
-                                        fontSize: 14, // 文字的字体大小
-                                        formatter: function (params) {
-                                            return params.value;
-                                        }
+                                    show: true, // 单个拐点文本的样式设置。[ default: false ]
+                                    position: 'top', // 标签的位置。[ default: top ]
+                                    distance: 2, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。[ default: 5 ]
+                                    color: '#333333', // 文字的颜色。如果设置为 'auto'，则为视觉映射得到的颜色，如系列色。[ default: "#fff" ]
+                                    fontSize: 14, // 文字的字体大小
+                                    formatter: function (params) {
+                                        return params.value;
                                     }
                                 },
                                 itemStyle: {
-                                    normal: {
-                                        //图形悬浮效果
-                                        borderColor: '#3281FF',
-                                        borderWidth: 3.5
-                                    }
+                                    //图形悬浮效果
+                                    borderColor: '#3281FF',
+                                    borderWidth: 3.5
+                                    // normal: {
+                                    //     //图形悬浮效果
+                                    //     borderColor: '#3281FF',
+                                    //     borderWidth: 3.5
+                                    // }
                                 }
                             }
                         ]
@@ -402,32 +399,31 @@ export default {
                     item.smooth = true;
                     item.showSymbol = false;
                     item.itemStyle = {
-                        normal: {
-                            color: colorList[i]
-                        }
+                        color: colorList[i]
+                        // normal: {
+                        //     color: colorList[i]
+                        // }
                     };
                     item.areaStyle = {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(
-                                0,
-                                0,
-                                0,
-                                1,
-                                [
-                                    {
-                                        offset: 0,
-                                        color: colorList[i]
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: 'rgba(255,255,255,0)'
-                                    }
-                                ],
-                                false
-                            ),
-                            shadowColor: 'rgba(0, 0, 0, 0.1)',
-                            shadowBlur: 10
-                        }
+                        color: new echarts.graphic.LinearGradient(
+                            0,
+                            0,
+                            0,
+                            1,
+                            [
+                                {
+                                    offset: 0,
+                                    color: colorList[i]
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgba(255,255,255,0)'
+                                }
+                            ],
+                            false
+                        ),
+                        shadowColor: 'rgba(0, 0, 0, 0.1)',
+                        shadowBlur: 10
                     };
                 });
             }
@@ -960,6 +956,7 @@ export default {
         }
         .query-icon {
             margin-left: 10px;
+            cursor: pointer;
         }
         .blue-card {
             // width: 100%;
