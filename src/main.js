@@ -14,7 +14,7 @@ import 'babel-polyfill';
 import './assets/css/main.less';
 // import echarts from 'echarts'; //引入echarts
 import 'echarts-liquidfill';
-import './utils/dataFilter';
+import './utils/index';
 
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
