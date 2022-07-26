@@ -324,7 +324,7 @@ export default {
                             show: true,
                             areaStyle: {
                                 // 分隔区域的样式设置。
-                                color: ['#F5F9FF', '#F5F9FF'] // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
+                                color: ['RGBA(224, 239, 255, .6)', '#F5F9FF', '#F5F9FF', '#F5F9FF', '#F5F9FF'] // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
                             }
                         },
                         // axisLabel: {
@@ -430,7 +430,7 @@ export default {
                 title: {
                     // top: '4px',
                     // left: '32px',
-                    name: lineObj[type].name,
+                    text: lineObj[type].name,
                     textStyle: {
                         color: '#333333',
                         fontSize: 20,

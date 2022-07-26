@@ -10,20 +10,17 @@
             <div class="input-area">
                 <el-form-item>
                     <el-select v-model="searchForm.provider" clearable placeholder="厂商">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                        <el-option v-for="item in providerList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型" @focus="selectAlgoType">
+                        <el-option v-for="item in algoTypeList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList">
+                        <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -77,7 +74,7 @@
 </template>
 
 <script>
-import { fiveDimensionsApi } from '@/api/index';
+import { fiveDimensionsApi, optionListApi } from '@/api/index';
 export default {
     name: 'Performance',
     data() {
@@ -91,11 +88,19 @@ export default {
             timeRange: [], //筛选时间范围
             tableData: [],
             currentPage: 1,
-            pageTotal: 0
+            pageTotal: 0,
+            providerList: [],
+            algoTypeList: [],
+            algoList: []
         };
     },
     created() {
         this.getTableData();
+        // 获取厂商列表
+        let query = {
+            choose_type: 1
+        };
+        this.getOptionList(query, 'providerList', 'provider');
     },
     methods: {
         getTableData() {
@@ -112,6 +117,30 @@ export default {
                     this.$message.error('查询失败！');
                 }
             });
+        },
+        getOptionList(query, type, list) {
+            optionListApi(query).then((res) => {
+                if (res.code == 200) {
+                    this[type] = res[list];
+                }
+            });
+        },
+        selectAlgoType() {
+            // 获取算法类型
+            let query = {
+                choose_type: 2,
+                provider: this.searchForm.provider
+            };
+            this.getOptionList(query, 'algoTypeList', 'algo_type');
+        },
+        selectAlgoList() {
+            // 获取算法
+            let query = {
+                choose_type: 3,
+                provider: this.searchForm.provider,
+                algo_type: this.searchForm.algo_type
+            };
+            this.getOptionList(query, 'algoList', 'algo_name');
         },
         onSubmit() {
             console.log('submit!', this.searchForm);

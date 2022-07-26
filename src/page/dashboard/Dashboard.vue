@@ -287,7 +287,7 @@ export default {
                             show: true,
                             areaStyle: {
                                 // 分隔区域的样式设置。
-                                color: ['#F5F9FF', '#F5F9FF'] // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
+                                color: ['RGBA(224, 239, 255, .6)', '#F5F9FF', '#F5F9FF', '#F5F9FF', '#F5F9FF'] // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
                             }
                         },
                         // axisLabel: {
@@ -532,15 +532,24 @@ export default {
                         radius: '45%',
                         progress: {
                             show: true,
-                            width: 8,
+                            width: 6,
                             itemStyle: {
-                                color: '#3FAD60'
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(154, 223, 174, 1)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(63, 173, 96, 1)'
+                                    }
+                                ])
                             }
                         },
                         pointer: { show: false },
                         axisLine: {
                             lineStyle: {
-                                width: 8,
+                                width: 6,
                                 color: [[1, '#DEEFE4']]
                             }
                         },
@@ -608,15 +617,24 @@ export default {
                         radius: '45%',
                         progress: {
                             show: true,
-                            width: 8,
+                            width: 6,
                             itemStyle: {
-                                color: '#7CB3FF'
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(158, 199, 255, 1)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(109, 164, 239, 1)'
+                                    }
+                                ])
                             }
                         },
                         pointer: { show: false },
                         axisLine: {
                             lineStyle: {
-                                width: 8,
+                                width: 6,
                                 color: [[1, '#E6EEF9']]
                             }
                         },
@@ -690,7 +708,16 @@ export default {
                             show: true,
                             width: 8,
                             itemStyle: {
-                                color: '#4DCB73'
+                                color: echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(154, 223, 174, 1)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(63, 173, 96, 1)'
+                                    }
+                                ])
                             }
                         },
                         pointer: { show: false },
@@ -752,7 +779,16 @@ export default {
                             show: true,
                             width: 8,
                             itemStyle: {
-                                color: '#7CB3FF'
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(158, 199, 255, 1)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(109, 164, 239, 1)'
+                                    }
+                                ])
                             }
                         },
                         pointer: { show: false },

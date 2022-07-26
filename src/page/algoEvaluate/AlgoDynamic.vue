@@ -160,13 +160,9 @@ export default {
                         ],
                         center: ['50%', '50%'],
                         radius: 100,
-                        startAngle: 90,
-                        splitNumber: 3,
-                        orient: 'horizontal', // 图例列表的布局朝向,默认'horizontal'为横向,'c'为纵向.
-                        // shape: 'circle',
-                        // backgroundColor: {
-                        //     image:imgPath[0]
-                        // },
+                        // startAngle: 90,
+                        // splitNumber: 3,
+                        // orient: 'c', // 图例列表的布局朝向,默认'horizontal'为横向,'c'为纵向.
                         axisName: {
                             formatter: '{value}',
                             fontSize: 14, //外圈标签字体大小
@@ -177,13 +173,10 @@ export default {
                             show: true,
                             areaStyle: {
                                 // 分隔区域的样式设置。
-                                color: ['#F5F9FF', '#F5F9FF'] // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
+                                color: ['RGBA(224, 239, 255, .6)', '#F5F9FF', '#F5F9FF', '#F5F9FF', '#F5F9FF'] // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
                             }
                         },
-                        // axisLabel: {
-                        //     //展示刻度
-                        //     show: true
-                        // },
+
                         axisLine: {
                             //指向外圈文本的分隔线样式
                             lineStyle: {
@@ -580,7 +573,7 @@ export default {
                         radius: '100%',
                         progress: {
                             show: true,
-                            width: 15,
+                            width: 8,
                             itemStyle: {
                                 color: '#4DCB73'
                             }
@@ -588,7 +581,7 @@ export default {
                         pointer: { show: false },
                         axisLine: {
                             lineStyle: {
-                                width: 15,
+                                width: 8,
                                 color: [[1, '#DEEFE4']]
                             }
                         },
@@ -655,7 +648,7 @@ export default {
                         radius: '100%',
                         progress: {
                             show: true,
-                            width: 15,
+                            width: 8,
                             itemStyle: {
                                 color: '#7CB3FF'
                             }
@@ -663,7 +656,7 @@ export default {
                         pointer: { show: false },
                         axisLine: {
                             lineStyle: {
-                                width: 15,
+                                width: 8,
                                 color: [[1, '#E6EEF9']]
                             }
                         },
