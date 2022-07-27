@@ -37,30 +37,14 @@
             <div class="card" id="main1"></div>
             <div class="card grade-lump">
                 <div class="score">
-                    <div class="number">84</div>
+                    <div class="number">{{ compositeScore }}</div>
                     <div class="text">综合评分</div>
                     <el-rate class="rate" v-model="startValue" disabled> </el-rate>
-                    <div class="rank-icon">3</div>
+                    <div class="rank-icon">{{ ranking }}</div>
                 </div>
-                <div class="dimensionality">
-                    <div class="title">算法绩效分析</div>
-                    <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈算法亏绩效成算绩</div>
-                </div>
-                <div class="dimensionality">
-                    <div class="title">算法绩效分析</div>
-                    <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                </div>
-                <div class="dimensionality">
-                    <div class="title">算法绩效分析</div>
-                    <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                </div>
-                <div class="dimensionality">
-                    <div class="title">算法绩效分析</div>
-                    <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                </div>
-                <div class="dimensionality">
-                    <div class="title">算法绩效分析</div>
-                    <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                <div class="dimensionality" v-for="item in dimensionalityList" :key="item.title">
+                    <div class="title">{{ item.title }}</div>
+                    <div class="explain">{{ item.desc }}</div>
                 </div>
             </div>
             <div class="card" id="main2"></div>
@@ -86,6 +70,7 @@
 
 <script>
 import * as echarts from 'echarts';
+import { dynamicApi } from '@/api/index';
 export default {
     name: 'baseform',
     data() {
@@ -98,32 +83,84 @@ export default {
                 timeRange: []
             },
             currentPage: 1,
-            startValue: 3.5
+            startValue: 0, //星星
+            dimension: [], //五个维度
+            compositeScore: 0, // 综合评分数
+            dimensionalityList: [], // 综合评分列表
+            ranking: 0, //排名
+            marketRate: [], //买卖占比
+            side: [], //买卖方向
+            priceType: [], //股价类型
+            volType: [], //交易量
+            assessLine: [], //绩效
+            progressLine: [], //完成度
+            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法稳定性分析', '算法绩效分析']
         };
     },
-    mounted() {
-        this.getRadarChart();
-        let list = [
-            { x: 1, y: '1' },
-            { x: 2, y: '2' },
-            { x: 3, y: '3' },
-            { x: 4, y: '4' },
-            { x: 5, y: '5' },
-            { x: 6, y: '6' },
-            { x: 7, y: '7' },
-            { x: 8, y: '8' },
-            { x: 9, y: '9' },
-            { x: 10, y: '10' },
-            { x: 11, y: '11' },
-            { x: 12, y: '12' }
-        ];
-        this.generateChart(list, 'main1');
-        this.generateChart(list, 'main2');
-        this.getPieChart('pie1');
-        this.getSemicircle('pie2');
-        this.getStripChart();
-        this.getPieChart5('pie4');
+    created() {
+        let query = { algo_name: 'V-wap plus', user_id: 'aUser0000055', start_time: 1658194200, end_time: 1658244600 };
+        this.dimensionalityList = [];
+        let radarList = [];
+        let marketRateList = [];
+        let volTypeList = [];
+        dynamicApi(query).then((res) => {
+            if (res.code == 200) {
+                this.startValue = res.composite_score / 20;
+                this.compositeScore = res.composite_score;
+                this.ranking = res.ranking;
+                this.marketRate = res.market_rate;
+                this.side = res.side;
+                this.priceType = res.price_type;
+                this.volType = res.vol_type;
+                this.assessLine = res.assess_line;
+                this.progressLine = res.progress_line;
+                this.dimension = res.dimension.sort((a, b) => {
+                    return a.profile_type - b.profile_type;
+                }); //5个维度升序
+                this.dimension.forEach((item, i) => {
+                    this.dimensionalityList.push({
+                        title: this.titleList[i],
+                        desc: item.desc
+                    });
+                    radarList.push(item.score);
+                });
+                this.getRadarChart(radarList);
+                this.generateChart(res.assess_line.point, 'main1');
+                this.generateChart(res.progress_line.point, 'main2');
+                res.market_rate.forEach((item, i) => {
+                    marketRateList.push({ name: item.mk_name, value: item.rate.toFixed(1) });
+                });
+                res.vol_type.forEach((item, i) => {
+                    volTypeList.push({ name: item.vol_name, value: item.rate.toFixed(1) });
+                });
+                this.getPieChart('pie1', marketRateList);
+                this.getPieChart('pie4', volTypeList);
+                this.getSemicircle('pie2');
+                this.getStripChart();
+                console.log(
+                    this.dimension,
+                    '1',
+                    this.compositeScore,
+                    '2',
+                    this.ranking,
+                    '3',
+                    this.marketRate,
+                    '4',
+                    this.side,
+                    '5',
+                    this.priceType,
+                    '6',
+                    this.volType,
+                    '7',
+                    this.assessLine,
+                    '8',
+                    this.progressLine,
+                    '9'
+                );
+            }
+        });
     },
+    mounted() {},
     methods: {
         onGoHistory() {
             this.$router.push('/algoDynamicDetail');
@@ -131,31 +168,31 @@ export default {
         onSubmit() {
             console.log(this.searchForm);
         },
-        getRadarChart() {
+        getRadarChart(radarList) {
             let option = {
                 color: ['#3281FF', '#FACC14', '#2FC25B'],
                 radar: [
                     {
                         indicator: [
                             {
+                                name: '经济性',
+                                max: 10
+                            },
+                            {
                                 name: '完成度',
-                                max: 100
-                            },
-                            {
-                                name: '算法绩效',
-                                max: 100
-                            },
-                            {
-                                name: '贴合度',
-                                max: 100
+                                max: 10
                             },
                             {
                                 name: '风险度',
-                                max: 100
+                                max: 10
+                            },
+                            {
+                                name: '算法绩效',
+                                max: 10
                             },
                             {
                                 name: '绩效稳定性',
-                                max: 100
+                                max: 10
                             }
                         ],
                         center: ['50%', '50%'],
@@ -205,7 +242,7 @@ export default {
                         data: [
                             {
                                 name: '算法',
-                                value: [85, 65, 55, 90, 82],
+                                value: radarList,
                                 areaStyle: {
                                     // 单项区域填充样式
                                     color: {
@@ -274,8 +311,6 @@ export default {
             let isNull = list.length ? false : true;
             let option = {
                 title: {
-                    // top: '4px',
-                    // left: '32px',
                     text: lineObj[type].name,
                     textStyle: {
                         color: '#333333',
@@ -296,12 +331,12 @@ export default {
                     }
                 },
                 dataset: {
-                    dimensions: ['x', 'y'],
+                    dimensions: ['time_point', 'score'],
                     source: list
                 },
                 grid: {
                     left: '5px',
-                    right: '10px',
+                    right: '20px',
                     bottom: '0px',
                     // top: '75px',
                     containLabel: true
@@ -357,7 +392,7 @@ export default {
                             }
                         },
                         nameTextStyle: {
-                            padding: [0, 0, 0, 25]
+                            padding: [0, 0, 0, 30]
                         },
                         min: isNull ? 0 : null,
                         max: isNull ? 100 : null
@@ -403,88 +438,18 @@ export default {
             myChart.setOption(option);
             myChart.resize();
         },
-        getPieChart(type) {
+        getPieChart(type, rateList) {
             var chartDom = document.getElementById(type);
             var myChart = echarts.init(chartDom);
             var option;
-            option = {
-                title: [
-                    {
-                        text: '资金占比',
-                        x: '75px',
-                        top: '38%',
-                        textStyle: { color: '#333333', fontSize: 14, fontWeight: '100', fontWeight: '600', fontFamily: 'Lato' }
-                    },
-                    {
-                        text: '（%）',
-                        x: '80px',
-                        top: '50%',
-                        textStyle: {
-                            fontSize: '14',
-                            color: '#333333'
-                        }
-                    }
-                ],
-                tooltip: {
-                    trigger: 'item',
-                    backgroundColor: '#1F2329',
-                    boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.15)',
-                    borderColor: '#1F2329',
-                    textStyle: {
-                        color: '#fff'
-                    }
-                },
-                legend: {
-                    orient: 'vartical',
-                    icon: 'circle',
-                    itemWidth: 8,
-                    x: 'right',
-                    top: 'center',
-                    left: '200px',
-                    bottom: '0%',
-                    textStyle: { color: ' #999' }
-                },
-                grid: {
-                    left: '-100px'
-                },
-                series: [
-                    {
-                        name: '资金占比（%）',
-                        type: 'pie',
-                        radius: ['60%', '80%'],
-                        itemStyle: {
-                            borderRadius: 0,
-                            borderColor: '#fafbff',
-                            borderWidth: 5
-                        },
-                        label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        left: -140,
-                        selectedOffset: 20,
-                        labelLine: {
-                            show: true
-                        },
-                        data: [
-                            { value: 1048, name: '超大市值' },
-                            { value: 735, name: '大市值' },
-                            { value: 580, name: '中市值' },
-                            { value: 484, name: '小市值' }
-                        ]
-                    }
-                ]
+            let pieObj = {
+                pie1: { name1: '资 金 占 比', colorList: ['#F78B7F', '#FACC14', '#7CB3FF', '#2FC25B'] },
+                pie4: { name1: '交易量占比', colorList: ['#32B7FF', '#FACC14', '#32B7FF', '#83BDFF'] }
             };
-            option && myChart.setOption(option);
-        },
-        getPieChart5(type) {
-            var chartDom = document.getElementById(type);
-            var myChart = echarts.init(chartDom);
-            var option;
             option = {
                 title: [
                     {
-                        text: '交易量占比',
+                        text: pieObj[type].name1,
                         x: '19%',
                         top: '38%',
                         textStyle: {
@@ -529,13 +494,17 @@ export default {
                 },
                 series: [
                     {
-                        name: '交易量占比（%）',
+                        name: pieObj[type].name1 + '（%）',
                         type: 'pie',
                         radius: ['60%', '80%'],
                         itemStyle: {
                             borderRadius: 0,
                             borderColor: '#fafbff',
-                            borderWidth: 5
+                            borderWidth: 5,
+                            color: function (colors) {
+                                var colorList = pieObj[type].colorList;
+                                return colorList[colors.dataIndex];
+                            }
                         },
                         label: {
                             show: false,
@@ -546,12 +515,7 @@ export default {
                         labelLine: {
                             show: true
                         },
-                        data: [
-                            { value: 1048, name: '<百万' },
-                            { value: 735, name: '<千万' },
-                            { value: 580, name: '<亿' },
-                            { value: 484, name: '亿以上' }
-                        ]
+                        data: rateList
                     }
                 ]
             };
@@ -561,6 +525,8 @@ export default {
             var chartDom = document.getElementById('pie2');
             var myChart = echarts.init(chartDom);
             var option;
+            let sell_rate = (this.side.sell_rate / 1).toFixed(1);
+            let buy_rate = (this.side.buy_rate / 1).toFixed(1);
             option = {
                 series: [
                     {
@@ -633,7 +599,7 @@ export default {
                         },
                         data: [
                             {
-                                value: 27.8,
+                                value: buy_rate,
                                 name: ''
                             }
                         ]
@@ -708,7 +674,7 @@ export default {
                         },
                         data: [
                             {
-                                value: 35.8,
+                                value: sell_rate,
                                 name: ''
                             }
                         ]
@@ -722,24 +688,44 @@ export default {
             var myChart = echarts.init(chartDom);
             var option;
 
-            var spNum = 5,
-                _max = 100;
+            // var spNum = 5,
+            var _max = 100;
             // var legendData = ['类型1', '类型2', '类型3', '类型4', '类型5', '类型6', '类型7'];
-            var legendData = ['类型1', '类型2', '类型3', '类型4', '类型5'];
-            let _data1 = [10];
-            let _data2 = [19];
-            let _data3 = [21];
-            let _data4 = [5];
-            let _data5 = [15];
-            let _data6 = [15];
-            let _data7 = [5];
-            var _label = {};
+            var colorList = ['#65A6FF', '#72E05A', '#32B7FF', '#83BDFF', '#83E3FF', '#F78B7F', '#FFD747'];
+            let seriesList = [];
+            let borderRadius = [];
+            let priceTypeList = this.priceType;
+            console.log(priceTypeList, 'priceTypeList');
+            priceTypeList.forEach((item, i) => {
+                console.log(i);
+                borderRadius = i == 0 ? [4, 0, 0, 4] : i == priceTypeList.length - 1 ? [0, 4, 4, 0] : '';
+                seriesList.push({
+                    type: 'bar',
+                    name: item.type_name,
+                    stack: '2',
+                    label: {},
+                    legendHoverLink: false,
+                    barWidth: 24,
+                    itemStyle: {
+                        color: colorList[i],
+                        borderRadius: borderRadius
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            color: colorList[i]
+                        }
+                    },
+                    data: [item.rate.toFixed(1)]
+                });
+            });
+            console.log(seriesList, 'seriesList');
+
             option = {
                 legend: [
                     {
                         orient: 'horizontal',
                         // type: 'scroll',
-                        data: legendData,
+                        // data: legendData,
                         icon: 'circle',
                         itemWidth: 6,
                         itemGap: 20,
@@ -749,18 +735,18 @@ export default {
                         textStyle: {
                             color: '#999'
                         }
-                    },
-                    {
-                        data: ['类型6', '类型7'],
-                        icon: 'circle',
-                        itemWidth: 6,
-                        itemGap: 20,
-                        y: 'bottom',
-                        x: 'center',
-                        textStyle: {
-                            color: '#999'
-                        }
                     }
+                    // {
+                    //     data: ['类型6', '类型7'],
+                    //     icon: 'circle',
+                    //     itemWidth: 6,
+                    //     itemGap: 20,
+                    //     y: 'bottom',
+                    //     x: 'center',
+                    //     textStyle: {
+                    //         color: '#999'
+                    //     }
+                    // }
                 ],
                 grid: {
                     containLabel: true,
@@ -816,149 +802,7 @@ export default {
                         }
                     }
                 ],
-                series: [
-                    {
-                        type: 'bar',
-                        name: '类型1',
-                        stack: '2',
-                        label: _label,
-                        legendHoverLink: false,
-                        barWidth: 24,
-                        itemStyle: {
-                            color: '#65A6FF',
-                            borderRadius: [4, 0, 0, 4]
-                            // normal: {
-                            //     color: '#65A6FF',
-                            //     borderRadius: [4, 0, 0, 4]
-                            // },
-                        },
-                        emphasis: {
-                            itemStyle: {
-                                color: '#65A6FF'
-                            }
-                        },
-                        data: _data1
-                    },
-                    {
-                        type: 'bar',
-                        name: '类型2',
-                        stack: '2',
-                        legendHoverLink: false,
-                        barWidth: 24,
-                        label: _label,
-                        itemStyle: {
-                            // normal: {
-                            //     color: '#72E05A'
-                            // },
-                            color: '#72E05A'
-                        },
-                        emphasis: {
-                            itemStyle: {
-                                color: '#72E05A'
-                            }
-                        },
-                        data: _data2
-                    },
-                    {
-                        type: 'bar',
-                        stack: '2',
-                        name: '类型3',
-                        legendHoverLink: false,
-                        barWidth: 24,
-                        label: _label,
-                        itemStyle: {
-                            color: '#32B7FF'
-                            // normal: {
-                            //     color: '#32B7FF'
-                            // },
-                        },
-                        emphasis: {
-                            itemStyle: {
-                                color: '#32B7FF'
-                            }
-                        },
-                        data: _data3
-                    },
-                    {
-                        type: 'bar',
-                        stack: '2',
-                        name: '类型4',
-                        legendHoverLink: false,
-                        barWidth: 24,
-                        label: _label,
-                        itemStyle: {
-                            color: '#83BDFF'
-                        },
-                        emphasis: {
-                            itemStyle: {
-                                color: '#83BDFF'
-                            }
-                        },
-                        data: _data4
-                    },
-                    {
-                        type: 'bar',
-                        stack: '2',
-                        name: '类型5',
-                        legendHoverLink: false,
-                        barWidth: 24,
-                        label: _label,
-                        itemStyle: {
-                            color: '#83E3FF'
-                            // normal: {
-                            //     color: '#83E3FF'
-                            // },
-                        },
-                        emphasis: {
-                            itemStyle: {
-                                color: '#83E3FF'
-                            }
-                        },
-                        data: _data5
-                    },
-                    {
-                        type: 'bar',
-                        stack: '2',
-                        name: '类型6',
-                        legendHoverLink: false,
-                        barWidth: 24,
-                        label: _label,
-                        itemStyle: {
-                            color: '#F78B7F'
-                            // normal: {
-                            //     color: '#F78B7F'
-                            // },
-                        },
-                        emphasis: {
-                            itemStyle: {
-                                color: '#2EDDCD'
-                            }
-                        },
-                        data: _data6
-                    },
-                    {
-                        type: 'bar',
-                        stack: '2',
-                        name: '类型7',
-                        legendHoverLink: false,
-                        barWidth: 24,
-                        label: _label,
-                        itemStyle: {
-                            color: '#FFD747',
-                            borderRadius: [0, 4, 4, 0]
-                            // normal: {
-                            //     color: '#FFD747',
-                            //     borderRadius: [0, 4, 4, 0]
-                            // },
-                        },
-                        emphasis: {
-                            itemStyle: {
-                                color: '#FFD747'
-                            }
-                        },
-                        data: _data7
-                    }
-                ]
+                series: seriesList
             };
 
             myChart.setOption(option, true);
@@ -980,7 +824,7 @@ export default {
         &:nth-child(2) {
             height: 280px;
             width: 74.7%;
-            // width: 64.53%;
+            padding-right: 0;
         }
         &:nth-child(3) {
             height: 280px;
@@ -990,6 +834,7 @@ export default {
         &:nth-child(4) {
             height: 280px;
             width: 74.7%;
+            padding-right: 0;
         }
         &:nth-child(5) {
             height: 190px;

@@ -15,3 +15,12 @@ export const optionListApi = (query) => {
         data: query
     });
 };
+// 算法动态
+export const dynamicApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/dynamic',
+        method: 'post',
+        data: query
+    });
+};
+WS;
