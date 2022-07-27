@@ -23,4 +23,3 @@ export const dynamicApi = (query) => {
         data: query
     });
 };
-WS;

@@ -10,20 +10,17 @@
             <div class="input-area">
                 <el-form-item>
                     <el-select v-model="searchForm.provider" clearable placeholder="厂商">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                        <el-option v-for="item in providerList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型" @focus="selectAlgoType">
+                        <el-option v-for="item in algoTypeList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList">
+                        <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
             </div>
@@ -70,7 +67,8 @@
 
 <script>
 import * as echarts from 'echarts';
-import { dynamicApi } from '@/api/index';
+import { dynamicApi, optionListApi } from '@/api/index';
+const dayjs = require('dayjs');
 export default {
     name: 'baseform',
     data() {
@@ -78,10 +76,11 @@ export default {
             searchForm: {
                 provider: '',
                 algo_type: '',
-                algo_id: '',
-                user_id: '',
-                timeRange: []
+                algo_id: ''
             },
+            providerList: [],
+            algoTypeList: [],
+            algoList: [],
             currentPage: 1,
             startValue: 0, //星星
             dimension: [], //五个维度
@@ -98,67 +97,12 @@ export default {
         };
     },
     created() {
-        let query = { algo_name: 'V-wap plus', user_id: 'aUser0000055', start_time: 1658194200, end_time: 1658244600 };
-        this.dimensionalityList = [];
-        let radarList = [];
-        let marketRateList = [];
-        let volTypeList = [];
-        dynamicApi(query).then((res) => {
-            if (res.code == 200) {
-                this.startValue = res.composite_score / 20;
-                this.compositeScore = res.composite_score;
-                this.ranking = res.ranking;
-                this.marketRate = res.market_rate;
-                this.side = res.side;
-                this.priceType = res.price_type;
-                this.volType = res.vol_type;
-                this.assessLine = res.assess_line;
-                this.progressLine = res.progress_line;
-                this.dimension = res.dimension.sort((a, b) => {
-                    return a.profile_type - b.profile_type;
-                }); //5个维度升序
-                this.dimension.forEach((item, i) => {
-                    this.dimensionalityList.push({
-                        title: this.titleList[i],
-                        desc: item.desc
-                    });
-                    radarList.push(item.score);
-                });
-                this.getRadarChart(radarList);
-                this.generateChart(res.assess_line.point, 'main1');
-                this.generateChart(res.progress_line.point, 'main2');
-                res.market_rate.forEach((item, i) => {
-                    marketRateList.push({ name: item.mk_name, value: item.rate.toFixed(1) });
-                });
-                res.vol_type.forEach((item, i) => {
-                    volTypeList.push({ name: item.vol_name, value: item.rate.toFixed(1) });
-                });
-                this.getPieChart('pie1', marketRateList);
-                this.getPieChart('pie4', volTypeList);
-                this.getSemicircle('pie2');
-                this.getStripChart();
-                console.log(
-                    this.dimension,
-                    '1',
-                    this.compositeScore,
-                    '2',
-                    this.ranking,
-                    '3',
-                    this.marketRate,
-                    '4',
-                    this.side,
-                    '5',
-                    this.priceType,
-                    '6',
-                    this.volType,
-                    '7',
-                    this.assessLine,
-                    '8',
-                    this.progressLine,
-                    '9'
-                );
-            }
-        });
+        this.getDynamicData();
+        // 获取厂商列表
+        let query = {
+            choose_type: 1
+        };
+        this.getOptionList(query, 'providerList', 'provider');
     },
     mounted() {},
     methods: {
@@ -167,6 +111,7 @@ export default {
         },
         onSubmit() {
             console.log(this.searchForm);
+            this.getDynamicData();
         },
         getRadarChart(radarList) {
             let option = {
@@ -687,17 +632,13 @@ export default {
             var chartDom = document.getElementById('pie3');
             var myChart = echarts.init(chartDom);
             var option;
-
-            // var spNum = 5,
             var _max = 100;
-            // var legendData = ['类型1', '类型2', '类型3', '类型4', '类型5', '类型6', '类型7'];
             var colorList = ['#65A6FF', '#72E05A', '#32B7FF', '#83BDFF', '#83E3FF', '#F78B7F', '#FFD747'];
             let seriesList = [];
             let borderRadius = [];
             let priceTypeList = this.priceType;
             console.log(priceTypeList, 'priceTypeList');
             priceTypeList.forEach((item, i) => {
-                console.log(i);
                 borderRadius = i == 0 ? [4, 0, 0, 4] : i == priceTypeList.length - 1 ? [0, 4, 4, 0] : '';
                 seriesList.push({
                     type: 'bar',
@@ -806,6 +747,77 @@ export default {
             };
 
             myChart.setOption(option, true);
+        },
+        getDynamicData() {
+            let today = dayjs().format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            let end_time = new Date(`${today} 15:30`).getTime() / 1000;
+            // let query = { algo_name: this.searchForm.algo_id, user_id: 'aUser0000055', start_time, end_time };
+            let query = { algo_name: 'V-wap plus', user_id: 'aUser0000055', start_time: 1658194200, end_time: 1658244600 };
+            this.dimensionalityList = [];
+            let radarList = [];
+            let marketRateList = [];
+            let volTypeList = [];
+            dynamicApi(query).then((res) => {
+                if (res.code == 200) {
+                    this.startValue = res.composite_score / 20;
+                    this.compositeScore = res.composite_score;
+                    this.ranking = res.ranking;
+                    this.marketRate = res.market_rate;
+                    this.side = res.side;
+                    this.priceType = res.price_type;
+                    this.volType = res.vol_type;
+                    this.assessLine = res.assess_line;
+                    this.progressLine = res.progress_line;
+                    this.dimension = res.dimension.sort((a, b) => {
+                        return a.profile_type - b.profile_type;
+                    }); //5个维度升序
+                    this.dimension.forEach((item, i) => {
+                        this.dimensionalityList.push({
+                            title: this.titleList[i],
+                            desc: item.desc
+                        });
+                        radarList.push(item.score);
+                    });
+                    this.getRadarChart(radarList);
+                    this.generateChart(res.assess_line.point, 'main1');
+                    this.generateChart(res.progress_line.point, 'main2');
+                    res.market_rate.forEach((item, i) => {
+                        marketRateList.push({ name: item.mk_name, value: item.rate.toFixed(1) });
+                    });
+                    res.vol_type.forEach((item, i) => {
+                        volTypeList.push({ name: item.vol_name, value: item.rate.toFixed(1) });
+                    });
+                    this.getPieChart('pie1', marketRateList);
+                    this.getPieChart('pie4', volTypeList);
+                    this.getSemicircle('pie2');
+                    this.getStripChart();
+                }
+            });
+        },
+        getOptionList(query, type, list) {
+            optionListApi(query).then((res) => {
+                if (res.code == 200) {
+                    this[type] = res[list];
+                }
+            });
+        },
+        selectAlgoType() {
+            // 获取算法类型
+            let query = {
+                choose_type: 2,
+                provider: this.searchForm.provider
+            };
+            this.getOptionList(query, 'algoTypeList', 'algo_type');
+        },
+        selectAlgoList() {
+            // 获取算法
+            let query = {
+                choose_type: 3,
+                provider: this.searchForm.provider,
+                algo_type: this.searchForm.algo_type
+            };
+            this.getOptionList(query, 'algoList', 'algo_name');
         }
     }
 };
