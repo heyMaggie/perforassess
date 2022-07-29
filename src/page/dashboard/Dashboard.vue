@@ -10,20 +10,20 @@
                 <div class="card">
                     <div class="card-title">用户数量</div>
                     <div class="circular">
-                        <span class="number">12<span class="unit">(个)</span></span>
+                        <span class="number">{{ summaryObj.user_cnt }}<span class="unit">(个)</span></span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-title">算法数量</div>
                     <div class="circular special-green">
-                        <span class="number">12<span class="unit">(个)</span></span>
+                        <span class="number">{{ summaryObj.algo_cnt }}<span class="unit">(个)</span></span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-title">交易量</div>
                     <div class="blue-card">
-                        <span class="number">
-                            128,321,6.00
+                        <span class="number"
+                            >{{ summaryObj.trade_vol }}
                             <div class="unit">(万元)</div>
                         </span>
                     </div>
@@ -31,7 +31,7 @@
                 <div class="card">
                     <div class="card-title">订单数</div>
                     <div class="circular">
-                        <span class="number">12<span class="unit">(个)</span></span>
+                        <span class="number">{{ summaryObj.order_cnt }}<span class="unit">(个)</span></span>
                     </div>
                 </div>
                 <div class="card">
@@ -41,7 +41,7 @@
                 <div class="card">
                     <div class="card-title">厂商总数</div>
                     <div class="circular special-pink">
-                        <span class="number">12<span class="unit">(个)</span></span>
+                        <span class="number">{{ summaryObj.provider_cnt }}<span class="unit">(个)</span></span>
                     </div>
                 </div>
                 <div class="card">
@@ -51,19 +51,19 @@
                     /></el-tooltip>
                     <div class="gather">
                         <div class="min-blue-card">
-                            <span class="number">2<span class="unit">%</span></span>
+                            <span class="number">{{ Number(market_rate.huge).toFixed(1) }}<span class="unit">%</span></span>
                             <div class="explain">超大市值</div>
                         </div>
                         <div class="min-blue-card">
-                            <span class="number">10<span class="unit">%</span></span>
+                            <span class="number">{{ Number(market_rate.big).toFixed(1) }}<span class="unit">%</span></span>
                             <div class="explain">大市值</div>
                         </div>
                         <div class="min-blue-card">
-                            <span class="number">5<span class="unit">%</span></span>
+                            <span class="number">{{ Number(market_rate.middle).toFixed(1) }}<span class="unit">%</span></span>
                             <div class="explain">中市值</div>
                         </div>
                         <div class="min-blue-card">
-                            <span class="number">8<span class="unit">%</span></span>
+                            <span class="number">{{ Number(market_rate.small).toFixed(1) }}<span class="unit">%</span></span>
                             <div class="explain">小市值</div>
                         </div>
                     </div>
@@ -76,49 +76,55 @@
             </div>
             <div class="showClounm">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane label="T0算法" name="first">
-                        <div v-for="i in 4" :key="i">
-                            <div class="rowtitle">厂商A</div>
-                            <div class="rowlist">
-                                <div class="blue-mincard">
-                                    <div class="tit"><img src="../../assets/icon/1aa.png" />用户数量</div>
-                                    <div class="number">32</div>
-                                </div>
-                                <div class="blue-mincard">
-                                    <div class="tit"><img src="../../assets/icon/2bb.png" />交易量</div>
-                                    <div class="number"><span class="symbol">￥</span>18,321,621.00</div>
-                                </div>
-                                <div class="blue-mincard">
-                                    <div class="tit"><img src="../../assets/icon/3cc.png" />收益率</div>
-                                    <!-- <el-badge value="亏损" class="item" type="success"> -->
-                                    <el-badge value="盈利" class="item" type="danger">
-                                        <!-- primary  -->
-                                        <div class="number"><span class="symbol">+ </span>45<span class="unit">%</span></div>
-                                    </el-badge>
-                                </div>
-                                <div class="blue-mincard">
-                                    <div class="tit"><img src="../../assets/icon/4dd.png" />订单数量</div>
-                                    <div class="number">136</div>
-                                </div>
-                                <div class="blue-mincard">
-                                    <div class="tit"><img src="../../assets/icon/5ee.png" />买卖占比</div>
-                                    <div class="pieList" :id="'pieList' + i"></div>
+                    <el-tab-pane v-for="(item, i) in algo_nameList" :key="item" :label="item" :name="i + ''">
+                        <el-empty v-if="!assessList.length" description="暂无数据" class="empty-card"></el-empty>
+                        <template v-else class="pane-card">
+                            <div v-for="(sonItem, j) in assessList" :key="sonItem.provider" class="pane-card">
+                                <div class="rowtitle">{{ sonItem.provider }}</div>
+                                <div class="rowlist">
+                                    <div class="blue-mincard">
+                                        <div class="tit"><img src="../../assets/icon/1aa.png" />用户数量</div>
+                                        <div class="number">{{ sonItem.user_cnt }}</div>
+                                    </div>
+                                    <div class="blue-mincard">
+                                        <div class="tit"><img src="../../assets/icon/2bb.png" />交易量</div>
+                                        <div class="number"><span class="symbol">￥</span>{{ sonItem.trade_vol }}</div>
+                                    </div>
+                                    <div class="blue-mincard">
+                                        <div class="tit"><img src="../../assets/icon/3cc.png" />收益率</div>
+                                        <el-badge
+                                            :value="sonItem.profit_rate > 0 ? '盈利' : '亏损'"
+                                            class="item"
+                                            :type="sonItem.profit_rate > 0 ? 'danger' : 'success'"
+                                        >
+                                            <div class="number">
+                                                <span class="symbol">{{ sonItem.profit_rate > 0 ? '+' : '- ' }}</span
+                                                >{{ Number(sonItem.profit_rate).toFixed(1) }}<span class="unit">%</span>
+                                            </div>
+                                        </el-badge>
+                                    </div>
+                                    <div class="blue-mincard">
+                                        <div class="tit"><img src="../../assets/icon/4dd.png" />订单数量</div>
+                                        <div class="number">{{ sonItem.order_cnt }}</div>
+                                    </div>
+                                    <div class="blue-mincard">
+                                        <div class="tit"><img src="../../assets/icon/5ee.png" />买卖占比</div>
+                                        <div class="pieList" :id="'pieList' + j" :ref="'pieList' + j"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <el-pagination
-                            background
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage"
-                            :page-sizes="[10, 20, 30, 40]"
-                            :page-size="10"
-                            layout=" ->, prev, pager, next, total, jumper"
-                            :total="10"
-                        >
-                        </el-pagination>
-                    </el-tab-pane>
-                    <el-tab-pane label="拆单算法" name="second">拆单算法</el-tab-pane>
+                            <el-pagination
+                                background
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-sizes="[10, 20, 30, 40]"
+                                :page-size="10"
+                                layout=" ->, prev, pager, next, total, jumper"
+                                :total="pageTotal"
+                            >
+                            </el-pagination> </template
+                    ></el-tab-pane>
                 </el-tabs>
             </div>
             <div class="showPortrait">
@@ -143,38 +149,76 @@
 
 <script>
 import * as echarts from 'echarts';
+import { dashboardSummarydApi, optionListApi, dashboardAlgolistApi } from '@/api/index';
 export default {
     name: 'dashBoard',
     data() {
         return {
             startValue: 3.5,
-            activeName: 'first',
-            currentPage: 1
+            activeName: '0',
+            currentPage: 1,
+            summaryObj: {},
+            market_rate: {},
+            algo_nameList: [],
+            selectIndex: '0',
+            assessList: [],
+            pageTotal: 0
         };
     },
+    created() {
+        this.getSummarydata();
+        this.getOptionList();
+    },
     mounted() {
-        this.getWaterEchart();
         this.getRadarChart();
-        let list = {
-            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            series: [
-                { y: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] },
-                { y: ['21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32'] },
-                { y: ['31', '33', '33', '34', '35', '36', '37', '38', '39', '30', '31', '33'] },
-                { y: ['41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52'] }
-            ]
-        };
+        let list = [
+            {
+                algo_name: '智能委托(ZC)',
+                total_score: 77,
+                time_line: [
+                    {
+                        time_point: '13:10',
+                        score: 5
+                    },
+                    {
+                        time_point: '14:08',
+                        score: 3
+                    }
+                ]
+            },
+            {
+                algo_name: 'V-wap plus',
+                total_score: 83,
+                time_line: [
+                    {
+                        time_point: '10:36',
+                        score: 8
+                    },
+                    {
+                        time_point: '13:10',
+                        score: 6
+                    }
+                ]
+            }
+        ];
+
+        // let list = {
+        //     x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        //     series: [
+        //         { y: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] },
+        //         { y: ['21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32'] },
+        //         { y: ['31', '33', '33', '34', '35', '36', '37', '38', '39', '30', '31', '33'] },
+        //         { y: ['41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52'] }
+        //     ]
+        // };
         this.generateChart(list, 'main1');
-        this.getSemicircle('pie2');
-        for (let i = 1; i < 5; i++) {
-            this.getSemicircle('pieList' + i);
-        }
     },
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
         },
-        getWaterEchart() {
+        getWaterEchart(data) {
+            data = data / 100;
             var chartDom = document.getElementById('water-polo');
             var myChart = echarts.init(chartDom);
             var option;
@@ -183,7 +227,7 @@ export default {
                 series: [
                     {
                         type: 'liquidFill',
-                        data: [0.38],
+                        data: [data],
                         radius: '95%',
                         // 水球颜色
                         color: [
@@ -384,6 +428,7 @@ export default {
             if (list.length == 1) {
                 list.push({ x: '', y: list[0].y });
             }
+            let option;
             let isNull = list.length ? false : true;
             let seriesList = list.series;
             if (list.length == 0) {
@@ -400,9 +445,6 @@ export default {
                     item.showSymbol = false;
                     item.itemStyle = {
                         color: colorList[i]
-                        // normal: {
-                        //     color: colorList[i]
-                        // }
                     };
                     item.areaStyle = {
                         color: new echarts.graphic.LinearGradient(
@@ -427,9 +469,9 @@ export default {
                     };
                 });
             }
-            let option = {
+            option = {
                 legend: {
-                    data: ['算法1', '算法2', '算法3', '算法4'],
+                    // data: ['算法1', '算法2', '算法3', '算法4'],
                     bottom: 14,
                     icon: 'circle',
                     itemWidth: 8,
@@ -455,7 +497,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: list.x,
+                    data: Xdata,
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -515,7 +557,9 @@ export default {
             myChart.setOption(option);
             myChart.resize();
         },
-        getSemicircle(type) {
+        getSemicircle(type, data) {
+            data.buy = Number(data.buy).toFixed(1) / 1;
+            data.sell = Number(data.sell).toFixed(1) / 1;
             var chartDom = document.getElementById(type);
             var myChart = echarts.init(chartDom);
             var option;
@@ -602,7 +646,7 @@ export default {
                         },
                         data: [
                             {
-                                value: 27,
+                                value: data.buy,
                                 name: ''
                             }
                         ]
@@ -687,13 +731,16 @@ export default {
                         },
                         data: [
                             {
-                                value: 35,
+                                value: data.sell,
                                 name: ''
                             }
                         ]
                     }
                 ]
             };
+            // if (type != 'pie2') {
+
+            // }
             option2 = {
                 series: [
                     {
@@ -762,7 +809,7 @@ export default {
                         },
                         data: [
                             {
-                                value: 27,
+                                value: data.buy,
                                 name: ''
                             }
                         ]
@@ -837,7 +884,7 @@ export default {
                         },
                         data: [
                             {
-                                value: 35,
+                                value: data.sell,
                                 name: ''
                             }
                         ]
@@ -849,8 +896,13 @@ export default {
             } else {
                 myChart.setOption(option2);
             }
+            // myChart.setOption(option);
         },
-        handleClick() {},
+        handleClick(tab) {
+            console.log(tab.name);
+            this.selectIndex = tab.name;
+            this.getAlgolist();
+        },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
         },
@@ -862,6 +914,66 @@ export default {
         },
         goMoreGrade() {
             this.$router.push('/algoGrade');
+        },
+        getSummarydata() {
+            let query = { start_time: 1658194200, end_time: 1658244600 };
+            dashboardSummarydApi(query).then((res) => {
+                // if (res.code == 200) {
+                this.summaryObj = res;
+                this.market_rate = this.summaryObj.market_rate;
+                this.getSemicircle('pie2', this.summaryObj.side);
+                this.getWaterEchart(this.summaryObj.progress);
+                console.log(this.summaryObj);
+                console.log(this.market_rate);
+                // }
+            });
+        },
+        getOptionList() {
+            let query = {
+                choose_type: 5
+            };
+            optionListApi(query).then((res) => {
+                if (res.code == 200) {
+                    this.algo_nameList = res.algo_type;
+                    this.getAlgolist();
+                    // this.$nextTick(() => {
+                    //     for (let i = 1; i < this.algoContrastList.length; i++) {
+                    //         this.getSemicircle('pieList' + i, {
+                    //             buy: 39.96,
+                    //             sell: 60.03
+                    //         });
+                    //     }
+                    // });
+                }
+            });
+        },
+        getAlgolist() {
+            let query = {
+                start_time: 1658194200,
+                end_time: 1658244600,
+                algo_type_name: this.algo_nameList[this.activeName],
+                page: 1,
+                limit: 4
+            };
+            dashboardAlgolistApi(query).then((res) => {
+                if (res.code == 200) {
+                    this.assessList = res.list ? res.list : [];
+                    this.algoContrastList = res.assess;
+                    this.pageTotal = res.total;
+                    if (this.assessList.length) {
+                        this.$nextTick(() => {
+                            this.assessList.forEach((item, i) => {
+                                this.$refs['pieList' + i].height = '50px';
+                                this.$refs['pieList' + i].width = '300px';
+                                this.getSemicircle('pieList' + i, {
+                                    buy: item.side.buy,
+                                    sell: item.side.sell
+                                });
+                            });
+                        });
+                    }
+                }
+            });
         }
     }
 };
@@ -1021,6 +1133,14 @@ export default {
     .showClounm {
         margin-top: 8px;
         width: 100%;
+        // height: 615px;
+        // background-color: #fff;
+        .pane-card {
+            height: 532px;
+        }
+        .empty-card {
+            height: 564px;
+        }
         .rowtitle {
             height: 20px;
             font-size: 14px;
@@ -1108,6 +1228,7 @@ export default {
             background: #fff;
             padding: 16px 24px;
             border-radius: 12px;
+            // min-height: 615px;
         }
         /deep/.el-badge__content {
             border-radius: 10px 10px 10px 0;

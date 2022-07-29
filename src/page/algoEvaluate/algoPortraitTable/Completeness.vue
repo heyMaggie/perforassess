@@ -105,7 +105,7 @@ export default {
             let query = { profile_type: 2, start_time: 1658194200, end_time: 1658244600, page: 1, limit: 10 };
             console.log(query);
             fiveDimensionsApi(query).then((res) => {
-                if (res.code == 0) {
+                if (res.code == 200) {
                     this.tableData = res.progress;
                     this.pageTotal = res.total;
                 } else {
@@ -117,6 +117,7 @@ export default {
             optionListApi(query).then((res) => {
                 if (res.code == 200) {
                     this[type] = res[list];
+                    console.log(this[type], '9999');
                 }
             });
         },

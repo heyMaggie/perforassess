@@ -23,3 +23,19 @@ export const dynamicApi = (query) => {
         data: query
     });
 };
+// dashboard
+export const dashboardSummarydApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/dashboard/summary',
+        method: 'post',
+        data: query
+    });
+};
+// 算法动态
+export const dashboardAlgolistApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/dashboard/algolist',
+        method: 'post',
+        data: query
+    });
+};

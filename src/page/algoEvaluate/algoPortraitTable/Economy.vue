@@ -51,7 +51,9 @@
                 <el-table-column prop="trade_vol" label="交易量"> </el-table-column>
                 <el-table-column prop="profit_rate" label="收益率">
                     <template slot-scope="scope">
-                        <el-tag :type="scope.row.profit > 1 ? 'danger' : 'success'">{{ scope.row.profit }}%</el-tag>
+                        <el-tag :type="scope.row.profit > 0 ? 'danger' : 'success'"
+                            >{{ scope.row.profit > 0 ? '+' : '-' }} {{ scope.row.profit }}%</el-tag
+                        >
                     </template>
                 </el-table-column>
                 <el-table-column prop="total_fee" label="手续费"> </el-table-column>
@@ -116,7 +118,7 @@ export default {
             let query = { profile_type: 1, start_time: 1658194200, end_time: 1658244600, page: 1, limit: 10 };
             console.log(query);
             fiveDimensionsApi(query).then((res) => {
-                if (res.code == 0) {
+                if (res.code == 200) {
                     this.tableData = res.economy;
                     this.pageTotal = res.total;
                 } else {
