@@ -1,11 +1,21 @@
 import axios from 'axios';
 
+let baseURL = '';
+// process.env.NODE_ENV === 'development' 来判断是否开发环境
+if (process.env.NODE_ENV === 'development') {
+    // 开发环境
+    //  'http://192.168.1.81:20080',
+    baseURL = 'http://192.168.2.204:20080';
+} else {
+    //生产环境
+    baseURL = '/api';
+    // baseURL: 'http://314590ym44.zicp.vip:20080', 81外网服务！
+}
 const service = axios.create({
-    // process.env.NODE_ENV === 'development' 来判断是否开发环境
-    baseURL: '/api',
-    // BASE_URL: '/api',
+    // baseURL: '/api',
+    baseURL: baseURL,
     timeout: 5000,
-    withCredentials: true,
+    // withCredentials: true,
     headers: {
         'Content-Type': 'application/json; charset=utf-8'
     }
