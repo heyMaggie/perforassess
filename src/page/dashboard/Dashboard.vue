@@ -150,6 +150,8 @@
 <script>
 import * as echarts from 'echarts';
 import { dashboardSummarydApi, optionListApi, dashboardAlgolistApi } from '@/api/index';
+import fiexdDate from '../../utils/fixeddate';
+import dayjs from 'dayjs';
 export default {
     name: 'dashBoard',
     data() {
@@ -168,51 +170,9 @@ export default {
     created() {
         this.getSummarydata();
         this.getOptionList();
+        console.log(fiexdDate);
     },
-    mounted() {
-        this.getRadarChart();
-        // let list = [
-        //     {
-        //         algo_name: '智能委托(ZC)',
-        //         total_score: 77,
-        //         time_line: [
-        //             {
-        //                 time_point: '13:10',
-        //                 score: 5
-        //             },
-        //             {
-        //                 time_point: '14:08',
-        //                 score: 3
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         algo_name: 'V-wap plus',
-        //         total_score: 83,
-        //         time_line: [
-        //             {
-        //                 time_point: '10:36',
-        //                 score: 8
-        //             },
-        //             {
-        //                 time_point: '13:10',
-        //                 score: 6
-        //             }
-        //         ]
-        //     }
-        // ];
-
-        let list = {
-            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            series: [
-                { y: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] },
-                { y: ['21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32'] },
-                { y: ['31', '33', '33', '34', '35', '36', '37', '38', '39', '30', '31', '33'] },
-                { y: ['41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52'] }
-            ]
-        };
-        this.generateChart(list, 'main1');
-    },
+    mounted() {},
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
@@ -289,38 +249,30 @@ export default {
             };
             myChart.setOption(option, true);
         },
-        getRadarChart() {
+        getRadarChart(list = []) {
+            console.log(list, '8888888');
+            let indicatorList = [];
+            let totalScore = [];
+            for (let i = 0; i < 4; i++) {
+                if (list[i]) {
+                    indicatorList.push({ name: list[i].algo_name, max: 100 });
+                    totalScore.push(list[i].total_score);
+                } else {
+                    indicatorList.push({ name: '', max: 100 });
+                    totalScore.push('');
+                }
+            }
+
             let option = {
                 color: ['#3281FF', '#FACC14', '#2FC25B'],
                 radar: [
                     {
-                        indicator: [
-                            {
-                                name: '算法1',
-                                max: 100
-                            },
-                            {
-                                name: '算法2',
-                                max: 100
-                            },
-                            {
-                                name: '算法3',
-                                max: 100
-                            },
-                            {
-                                name: '算法4',
-                                max: 100
-                            }
-                        ],
+                        indicator: indicatorList,
                         center: ['50%', '50%'],
                         radius: 90,
                         startAngle: 90,
                         splitNumber: 3,
                         orient: 'horizontal', // 图例列表的布局朝向,默认'horizontal'为横向,'c'为纵向.
-                        // shape: 'circle',
-                        // backgroundColor: {
-                        //     image:imgPath[0]
-                        // },
                         axisName: {
                             formatter: '{value}',
                             fontSize: 14, //外圈标签字体大小
@@ -334,10 +286,6 @@ export default {
                                 color: ['RGBA(224, 239, 255, .6)', '#F5F9FF', '#F5F9FF', '#F5F9FF', '#F5F9FF'] // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
                             }
                         },
-                        // axisLabel: {
-                        //     //展示刻度
-                        //     show: true
-                        // },
                         axisLine: {
                             //指向外圈文本的分隔线样式
                             lineStyle: {
@@ -365,8 +313,7 @@ export default {
                         },
                         data: [
                             {
-                                name: '算法',
-                                value: [85, 65, 55, 90, 82],
+                                value: totalScore,
                                 areaStyle: {
                                     // 单项区域填充样式
                                     color: {
@@ -430,7 +377,23 @@ export default {
             }
             let option;
             let isNull = list.length ? false : true;
-            let seriesList = list.series;
+            let seriesList = [];
+            list.forEach((params) => {
+                seriesList.push(singelLine(params));
+            });
+            function singelLine(params) {
+                let lineObj = { name: '', data: [] };
+                fiexdDate.forEach((item, i) => {
+                    lineObj.name = params.algo_name;
+                    lineObj.data[i] = '';
+                    params.time_line.forEach((subitem) => {
+                        if (subitem.time_point == item) {
+                            lineObj.data[i] = subitem.score;
+                        }
+                    });
+                });
+                return lineObj;
+            }
             if (list.length == 0) {
                 message.error('该时间段暂无数据');
                 isNull = true;
@@ -438,14 +401,13 @@ export default {
                 isNull = false;
                 let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
-                    item.name = '算法' + (i + 1);
-                    item.data = item.y;
                     item.type = 'line';
                     item.smooth = true;
                     item.showSymbol = false;
                     item.itemStyle = {
                         color: colorList[i]
                     };
+                    item.connectNulls = true;
                     item.areaStyle = {
                         color: new echarts.graphic.LinearGradient(
                             0,
@@ -468,6 +430,37 @@ export default {
                         shadowBlur: 10
                     };
                 });
+                // seriesList.forEach((item, i) => {
+                //     item.name = '算法' + (i + 1);
+                //     item.data = item.y;
+                //     item.type = 'line';
+                //     item.smooth = true;
+                //     item.showSymbol = false;
+                //     item.itemStyle = {
+                //         color: colorList[i]
+                //     };
+                //     item.areaStyle = {
+                //         color: new echarts.graphic.LinearGradient(
+                //             0,
+                //             0,
+                //             0,
+                //             1,
+                //             [
+                //                 {
+                //                     offset: 0,
+                //                     color: colorList[i]
+                //                 },
+                //                 {
+                //                     offset: 1,
+                //                     color: 'rgba(255,255,255,0)'
+                //                 }
+                //             ],
+                //             false
+                //         ),
+                //         shadowColor: 'rgba(0, 0, 0, 0.1)',
+                //         shadowBlur: 10
+                //     };
+                // });
             }
             option = {
                 legend: {
@@ -489,7 +482,7 @@ export default {
                 },
                 grid: {
                     left: '3px',
-                    right: '10px',
+                    right: '15px',
                     bottom: '50px',
                     top: '38px',
                     containLabel: true
@@ -497,7 +490,11 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: list.x,
+                    data: fiexdDate,
+                    axisPointer: {
+                        type: 'line',
+                        lineStyle: { color: '#BDBEBF' }
+                    },
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -518,10 +515,6 @@ export default {
                     axisLine: {
                         // 刻度线的颜色
                         show: false
-                    },
-                    axisPointer: {
-                        type: 'line',
-                        lineStyle: { color: '#BDBEBF' }
                     }
                 },
                 yAxis: [
@@ -899,7 +892,7 @@ export default {
             // myChart.setOption(option);
         },
         handleClick(tab) {
-            console.log(tab.name);
+            // console.log(tab.name);
             this.selectIndex = tab.name;
             this.getAlgolist();
         },
@@ -960,6 +953,8 @@ export default {
                     this.assessList = res.list ? res.list : [];
                     this.algoContrastList = res.assess;
                     this.pageTotal = res.total;
+                    this.generateChart(this.algoContrastList, 'main1');
+                    this.getRadarChart(this.algoContrastList);
                     if (this.assessList.length) {
                         this.$nextTick(() => {
                             this.assessList.forEach((item, i) => {

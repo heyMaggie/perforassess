@@ -23,7 +23,7 @@ export const dynamicApi = (query) => {
         data: query
     });
 };
-// dashboard
+// dashboard 1
 export const dashboardSummarydApi = (query) => {
     return request({
         url: '/algo-assess/v1/dashboard/summary',
@@ -31,10 +31,26 @@ export const dashboardSummarydApi = (query) => {
         data: query
     });
 };
-// 算法动态
+// dashboard 2
 export const dashboardAlgolistApi = (query) => {
     return request({
         url: '/algo-assess/v1/dashboard/algolist',
+        method: 'post',
+        data: query
+    });
+};
+// 多日分析
+export const analyseAlgoApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/profile/analyse',
+        method: 'post',
+        data: query
+    });
+};
+// 对比分析
+export const mulitAnalyseApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/mulit-analyse',
         method: 'post',
         data: query
     });

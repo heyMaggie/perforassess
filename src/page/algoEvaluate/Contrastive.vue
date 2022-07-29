@@ -9,20 +9,18 @@
         <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
             <div class="input-area">
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型" @focus="selectAlgoType">
+                        <el-option v-for="item in algoTypeList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="选择对比算法">
-                    <el-select v-model="searchForm.algo_id" clearable placeholder="选择算法">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList">
+                        <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-date-picker
-                        v-model="searchForm.timeRange"
+                        v-model="timeRange"
                         type="daterange"
                         range-separator="-"
                         start-placeholder="开始日期"
@@ -43,36 +41,20 @@
                 <div class="right-row">
                     <div class="bulue-card radar" id="main2"></div>
                     <div class="bulue-card grade">
-                        <div class="grade-lump" v-for="i in 6" :key="i">
+                        <div class="grade-lump" v-for="(item, i) in mulitAnalyList" :key="i">
                             <div class="score">
-                                <div class="number">9{{ 6 - i }}</div>
+                                <div class="number">{{ item.composite_score }}</div>
                                 <div class="text">综合评分</div>
-                                <el-rate class="rate" v-model="startValue" disabled> </el-rate>
-                                <div class="rank-icon">{{ i }}</div>
+                                <el-rate class="rate" v-model="item.startValue" disabled> </el-rate>
+                                <div class="rank-icon">{{ item.ranking }}</div>
                             </div>
-                            <div class="dimensionality">
-                                <div class="title">算法绩效分析</div>
-                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈算法亏绩效成算绩</div>
-                            </div>
-                            <div class="dimensionality">
-                                <div class="title">算法绩效分析</div>
-                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                            </div>
-                            <div class="dimensionality">
-                                <div class="title">算法绩效分析</div>
-                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                            </div>
-                            <div class="dimensionality">
-                                <div class="title">算法绩效分析</div>
-                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                            </div>
-                            <div class="dimensionality">
-                                <div class="title">算法绩效分析</div>
-                                <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                            <div class="dimensionality" v-for="(subItem, j) in item.dimension" :key="subItem.profile_type">
+                                <div class="title">{{ titleList[j] }}</div>
+                                <div class="explain">{{ subItem.desc }}</div>
                             </div>
                             <div class="present">
                                 <span class="left">当前算法</span>
-                                <span class="right">算法11</span>
+                                <span class="right">{{ item.algo_name }}</span>
                             </div>
                         </div>
                     </div>
@@ -84,70 +66,106 @@
 
 <script>
 import * as echarts from 'echarts';
+import { mulitAnalyseApi, optionListApi } from '@/api/index';
+import fiexdDate from '../../utils/fixeddate';
+
 export default {
     name: 'contrastive66t',
     data() {
         return {
             searchForm: {
-                provider: '',
                 algo_type: '',
-                algo_id: '',
-                user_id: '',
-                timeRange: []
+                algo_id: ''
             },
-            tableData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    tag: '家'
-                },
-                {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄',
-                    tag: '家'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄',
-                    tag: '公司'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄',
-                    tag: '公司'
-                }
-            ],
+            timeRange: [],
             currentPage: 1,
-            startValue: 5
+            pageTotal: 0,
+            providerList: [],
+            algoTypeList: [],
+            algoList: [],
+            mulitAnalyList: [],
+            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法绩效分析', '算法稳定性分析']
         };
     },
-    mounted() {
-        let list = {
-            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            series: [
-                { y: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] },
-                { y: ['21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32'] },
-                { y: ['31', '33', '33', '34', '35', '36', '37', '38', '39', '30', '31', '33'] },
-                { y: ['41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52'] }
-            ]
+    created() {
+        this.getMulitAnalyseData();
+        // 获取厂商列表
+        let query = {
+            choose_type: 1
         };
-        this.generateChart(list, 'main1');
-        this.getRadarChart();
+        this.getOptionList(query, 'providerList', 'provider');
     },
+    mounted() {},
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
+        },
+        getOptionList(query, type, list) {
+            optionListApi(query).then((res) => {
+                if (res.code == 200) {
+                    this[type] = res[list];
+                }
+            });
+        },
+        selectAlgoType() {
+            // 获取算法类型
+            let query = {
+                choose_type: 2,
+                provider: this.searchForm.provider
+            };
+            this.getOptionList(query, 'algoTypeList', 'algo_type');
+        },
+        selectAlgoList() {
+            // 获取算法
+            let query = {
+                choose_type: 3,
+                provider: this.searchForm.provider,
+                algo_type: this.searchForm.algo_type
+            };
+            this.getOptionList(query, 'algoList', 'algo_name');
+        },
+        getMulitAnalyseData() {
+            let query = {
+                start_time: 1658194200,
+                end_time: 1658244600,
+                user_id: 'aUser0000055',
+                algo_name: ['V-wap plus', '智能委托(ZC)']
+            };
+            mulitAnalyseApi(query).then((res) => {
+                if (res.code == 200) {
+                    console.log(res.list);
+                    this.mulitAnalyList = res.list;
+                    this.mulitAnalyList.forEach((item) => {
+                        item.startValue = item.composite_score / 20;
+                    });
+
+                    this.generateChart(res.list, 'main1');
+                    this.getRadarChart(res.list);
+                }
+            });
         },
         generateChart(list, type) {
             if (list.length == 1) {
                 list.push({ x: '', y: list[0].y });
             }
             let isNull = list.length ? false : true;
-            let seriesList = list.series;
+            let seriesList = [];
+            list.forEach((params) => {
+                seriesList.push(singelLine(params));
+            });
+            function singelLine(params) {
+                let lineObj = { name: '', data: [] };
+                fiexdDate.forEach((item, i) => {
+                    lineObj.name = params.algo_name;
+                    lineObj.data[i] = '';
+                    params.data.forEach((subitem) => {
+                        if (subitem.time_point == item) {
+                            lineObj.data[i] = subitem.score;
+                        }
+                    });
+                });
+                return lineObj;
+            }
             if (list.length == 0) {
                 message.error('该时间段暂无数据');
                 isNull = true;
@@ -155,17 +173,13 @@ export default {
                 isNull = false;
                 let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
-                    item.name = '算法' + (i + 1);
-                    item.data = item.y;
                     item.type = 'line';
                     item.smooth = true;
                     item.showSymbol = false;
                     item.itemStyle = {
                         color: colorList[i]
-                        // normal: {
-                        //     color: colorList[i]
-                        // }
                     };
+                    item.connectNulls = true;
                     item.areaStyle = {
                         color: new echarts.graphic.LinearGradient(
                             0,
@@ -228,7 +242,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: list.x,
+                    data: fiexdDate,
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -237,7 +251,7 @@ export default {
                         }
                     },
                     axisLabel: {
-                        // interval: 0,
+                        // interval: 30
                         // rotate: 30,
                     },
                     axisTick: {
@@ -288,7 +302,40 @@ export default {
             myChart.setOption(option);
             myChart.resize();
         },
-        getRadarChart() {
+        getRadarChart(list) {
+            let seriesList = [];
+            list.forEach((item) => {
+                let sblist = [];
+                seriesList.push({
+                    name: item.algo_name,
+                    value: (() => {
+                        item.dimension.forEach((subItem) => {
+                            sblist.push(subItem.score);
+                        });
+                        return sblist;
+                    })(),
+                    areaStyle: {
+                        opacity: 0.02 // 区域透明度
+                    },
+                    symbolSize: 2.5, // 单个数据标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
+                    label: {
+                        // 单个拐点文本的样式设置
+                        show: true, // 单个拐点文本的样式设置。[ default: false ]
+                        position: 'top', // 标签的位置。[ default: top ]
+                        distance: 2, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。[ default: 5 ]
+                        color: '#333333', // 文字的颜色。如果设置为 'auto'，则为视觉映射得到的颜色，如系列色。[ default: "#fff" ]
+                        fontSize: 12, // 文字的字体大小
+                        formatter: function (params) {
+                            return params.value;
+                        }
+                    },
+                    itemStyle: {
+                        //图形悬浮效果
+                        // borderColor: '#1890FF',
+                        borderWidth: 3.5
+                    }
+                });
+            });
             let option = {
                 color: ['#1890FF', '#FACC14', '#2FC25B'],
                 legend: {
@@ -302,31 +349,30 @@ export default {
                     textStyle: {
                         fontSize: 12,
                         color: '#999999'
-                    },
-                    data: ['算法1', '算法2', '算法3']
+                    }
                 },
                 radar: [
                     {
                         indicator: [
                             {
                                 name: '完成度',
-                                max: 100
+                                max: 10
                             },
                             {
                                 name: '算法绩效',
-                                max: 100
+                                max: 10
                             },
                             {
                                 name: '贴合度',
-                                max: 100
+                                max: 10
                             },
                             {
                                 name: '风险度',
-                                max: 100
+                                max: 10
                             },
                             {
                                 name: '绩效稳定性',
-                                max: 100
+                                max: 10
                             }
                         ],
                         center: ['50%', '50%'],
@@ -379,69 +425,7 @@ export default {
                                 width: 4
                             }
                         },
-                        data: [
-                            {
-                                name: '算法1',
-                                value: [85, 65, 55, 90, 82],
-                                areaStyle: {
-                                    opacity: 0.02 // 区域透明度
-                                },
-                                symbolSize: 2.5, // 单个数据标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
-                                label: {
-                                    // 单个拐点文本的样式设置
-                                    show: true, // 单个拐点文本的样式设置。[ default: false ]
-                                    position: 'top', // 标签的位置。[ default: top ]
-                                    distance: 2, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。[ default: 5 ]
-                                    color: '#333333', // 文字的颜色。如果设置为 'auto'，则为视觉映射得到的颜色，如系列色。[ default: "#fff" ]
-                                    fontSize: 12, // 文字的字体大小
-                                    formatter: function (params) {
-                                        return params.value;
-                                    }
-                                },
-                                itemStyle: {
-                                    //图形悬浮效果
-                                    borderColor: '#1890FF',
-                                    borderWidth: 3.5
-                                    // normal: {
-                                    //     //图形悬浮效果
-                                    //     borderColor: '#1890FF',
-                                    //     borderWidth: 3.5
-                                    // }
-                                }
-                            },
-                            {
-                                name: '算法2',
-                                value: [50, 20, 45, 30, 75],
-                                symbolSize: 2.5,
-                                itemStyle: {
-                                    borderColor: '#f9cf67',
-                                    borderWidth: 3.5
-                                    // normal: {
-                                    //     borderColor: '#f9cf67',
-                                    //     borderWidth: 3.5
-                                    // }
-                                },
-                                areaStyle: {
-                                    opacity: 0.02 // 区域透明度
-                                }
-                            },
-                            {
-                                name: '算法3',
-                                value: [37, 80, 12, 50, 25],
-                                symbolSize: 2.5,
-                                itemStyle: {
-                                    borderColor: '#2FC25B',
-                                    borderWidth: 3.5
-                                    // normal: {
-                                    //     borderColor: '#2FC25B',
-                                    //     borderWidth: 3.5
-                                    // }
-                                },
-                                areaStyle: {
-                                    opacity: 0.02 // 区域透明度
-                                }
-                            }
-                        ]
+                        data: seriesList
                     }
                 ]
             };

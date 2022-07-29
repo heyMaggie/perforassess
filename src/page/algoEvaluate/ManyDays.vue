@@ -10,20 +10,17 @@
             <div class="input-area">
                 <el-form-item>
                     <el-select v-model="searchForm.provider" clearable placeholder="厂商">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                        <el-option v-for="item in providerList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型" @focus="selectAlgoType">
+                        <el-option v-for="item in algoTypeList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList">
+                        <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -34,7 +31,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-date-picker
-                        v-model="searchForm.timeRange"
+                        v-model="timeRange"
                         type="daterange"
                         range-separator="-"
                         start-placeholder="开始日期"
@@ -58,6 +55,8 @@
 
 <script>
 import * as echarts from 'echarts';
+import fiexdDate from '../../utils/fixeddate';
+import { mulitAnalyseApi, optionListApi } from '@/api/index';
 export default {
     name: 'manyDays',
     data() {
@@ -66,37 +65,23 @@ export default {
                 provider: '',
                 algo_type: '',
                 algo_id: '',
-                user_id: '',
-                timeRange: []
+                user_id: ''
             },
-            tableData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    tag: '家'
-                },
-                {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄',
-                    tag: '家'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄',
-                    tag: '公司'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄',
-                    tag: '公司'
-                }
-            ],
-            currentPage: 1
+            timeRange: [], //筛选时间范围
+            currentPage: 1,
+            pageTotal: 0,
+            providerList: [],
+            algoTypeList: [],
+            algoList: []
         };
+    },
+    created() {
+        // 获取厂商列表
+        let query = {
+            choose_type: 1
+        };
+        this.getOptionList(query, 'providerList', 'provider');
+        console.log(fiexdDate, 'fiexdDate');
     },
     mounted() {
         let list = [
@@ -120,6 +105,42 @@ export default {
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
+        },
+        getOptionList(query, type, list) {
+            optionListApi(query).then((res) => {
+                if (res.code == 200) {
+                    this[type] = res[list];
+                }
+            });
+        },
+        selectAlgoType() {
+            // 获取算法类型
+            let query = {
+                choose_type: 2,
+                provider: this.searchForm.provider
+            };
+            this.getOptionList(query, 'algoTypeList', 'algo_type');
+        },
+        selectAlgoList() {
+            // 获取算法
+            let query = {
+                choose_type: 3,
+                provider: this.searchForm.provider,
+                algo_type: this.searchForm.algo_type
+            };
+            this.getOptionList(query, 'algoList', 'algo_name');
+        },
+        getMulitAnalyseData() {
+            let query = {
+                start_time: 1658194200,
+                end_time: 1658244600,
+                user_id: 'aUser0000055',
+                algo_name: ['V-wap plus', '智能委托(ZC)']
+            };
+            mulitAnalyseApi(query).then((res) => {
+                if (res.code == 200) {
+                }
+            });
         },
         generateChart(list, type) {
             if (list.length == 1) {
