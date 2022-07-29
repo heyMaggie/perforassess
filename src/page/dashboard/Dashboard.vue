@@ -497,7 +497,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: Xdata,
+                    data: list.x,
                     splitLine: {
                         show: true,
                         lineStyle: {
