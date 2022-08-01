@@ -16,14 +16,16 @@
                             <th>算法名称</th>
                             <th>分数</th>
                         </tr>
-                        <tr v-for="i in 6" :key="i">
+                        <tr v-for="(item, i) in tableData" :key="i">
                             <td align="center">
-                                <div class="adorn" v-if="i < 4">{{ i }}</div>
-                                <div class="rank" v-else>{{ i }}</div>
+                                <div class="adorn" v-if="i < 4">{{ item.ranking }}</div>
+                                <div class="rank" v-else>{{ item.ranking }}</div>
                             </td>
-                            <td align="center"><span class="text">日内回转</span></td>
                             <td align="center">
-                                <span class="text">100</span>
+                                <span class="text">{{ item.algo_name }}</span>
+                            </td>
+                            <td align="center">
+                                <span class="text">{{ item.score }}</span>
                             </td>
                         </tr>
                     </table>
@@ -48,37 +50,13 @@ import { algoRankingApi } from '@/api/index';
 export default {
     data() {
         return {
-            tableData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }
-            ],
+            tableData: [],
             currentPage: 1,
             pageTotal: 5
         };
     },
     mounted() {
-        algoRankingApi(query).then((res) => {
-            if (res.code == 200) {
-            }
-        });
+        this.getAlgoRankingList();
     },
     methods: {
         goBack() {
@@ -89,6 +67,15 @@ export default {
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+        getAlgoRankingList() {
+            let query = { date: 1658194200, page: 1, limit: 6 };
+            algoRankingApi(query).then((res) => {
+                if (res.code == 200) {
+                    this.tableData = res.info;
+                    this.pageTotal = res.total;
+                }
+            });
         }
     }
 };
