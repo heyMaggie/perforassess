@@ -430,37 +430,6 @@ export default {
                         shadowBlur: 10
                     };
                 });
-                // seriesList.forEach((item, i) => {
-                //     item.name = '算法' + (i + 1);
-                //     item.data = item.y;
-                //     item.type = 'line';
-                //     item.smooth = true;
-                //     item.showSymbol = false;
-                //     item.itemStyle = {
-                //         color: colorList[i]
-                //     };
-                //     item.areaStyle = {
-                //         color: new echarts.graphic.LinearGradient(
-                //             0,
-                //             0,
-                //             0,
-                //             1,
-                //             [
-                //                 {
-                //                     offset: 0,
-                //                     color: colorList[i]
-                //                 },
-                //                 {
-                //                     offset: 1,
-                //                     color: 'rgba(255,255,255,0)'
-                //                 }
-                //             ],
-                //             false
-                //         ),
-                //         shadowColor: 'rgba(0, 0, 0, 0.1)',
-                //         shadowBlur: 10
-                //     };
-                // });
             }
             option = {
                 legend: {
