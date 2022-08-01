@@ -9,12 +9,19 @@
         <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
             <div class="input-area">
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型" @focus="selectAlgoType">
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型" @change="selectAlgoType">
                         <el-option v-for="item in algoTypeList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="选择对比算法">
-                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList">
+                <el-form-item label="选择对比算法" :width="300">
+                    <el-select
+                        v-model="searchForm.algo_id"
+                        clearable
+                        placeholder="算法"
+                        @focus="selectAlgoList"
+                        multiple
+                        class="select_width"
+                    >
                         <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
@@ -75,12 +82,11 @@ export default {
         return {
             searchForm: {
                 algo_type: '',
-                algo_id: ''
+                algo_id: []
             },
             timeRange: [],
             currentPage: 1,
             pageTotal: 0,
-            providerList: [],
             algoTypeList: [],
             algoList: [],
             mulitAnalyList: [],
@@ -91,14 +97,15 @@ export default {
         this.getMulitAnalyseData();
         // 获取厂商列表
         let query = {
-            choose_type: 1
+            choose_type: 5
         };
-        this.getOptionList(query, 'providerList', 'provider');
+        this.getOptionList(query, 'algoTypeList', 'algo_type');
     },
     mounted() {},
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
+            this.getMulitAnalyseData();
         },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
@@ -108,51 +115,45 @@ export default {
             });
         },
         selectAlgoType() {
-            // 获取算法类型
-            let query = {
-                choose_type: 2,
-                provider: this.searchForm.provider
-            };
-            this.getOptionList(query, 'algoTypeList', 'algo_type');
+            this.searchForm.algo_id = [];
         },
         selectAlgoList() {
             // 获取算法
             let query = {
-                choose_type: 3,
-                provider: this.searchForm.provider,
+                choose_type: 7,
                 algo_type: this.searchForm.algo_type
             };
+            console.log(this.searchForm);
             this.getOptionList(query, 'algoList', 'algo_name');
         },
         getMulitAnalyseData() {
+            let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
+            let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
             let query = {
-                start_time: 1658194200,
-                end_time: 1658244600,
+                start_time: start_time ? start_time : 1658194200,
+                end_time: end_time ? end_time : 1658244600,
                 user_id: 'aUser0000055',
-                algo_name: ['V-wap plus', '智能委托(ZC)']
+                algo_name: this.searchForm.algo_id.length ? this.searchForm.algo_id : ['V-wap plus', '智能委托(ZC)']
+                // algo_name: ['V-wap plus', '智能委托(ZC)']
             };
+            let list = [];
             mulitAnalyseApi(query).then((res) => {
                 if (res.code == 200) {
-                    console.log(res.list);
-                    this.mulitAnalyList = res.list;
+                    list = res.list ? res.list : [];
+                    this.mulitAnalyList = res.list ? res.list : [];
                     this.mulitAnalyList.forEach((item) => {
                         item.startValue = item.composite_score / 20;
                     });
-
-                    this.generateChart(res.list, 'main1');
-                    this.getRadarChart(res.list);
+                    this.generateChart(list, 'main1');
+                    this.getRadarChart(list);
+                } else {
+                    this.$message.error('请求错误');
                 }
             });
         },
         generateChart(list, type) {
-            if (list.length == 1) {
-                list.push({ x: '', y: list[0].y });
-            }
             let isNull = list.length ? false : true;
             let seriesList = [];
-            list.forEach((params) => {
-                seriesList.push(singelLine(params));
-            });
             function singelLine(params) {
                 let lineObj = { name: '', data: [] };
                 fiexdDate.forEach((item, i) => {
@@ -166,11 +167,14 @@ export default {
                 });
                 return lineObj;
             }
-            if (list.length == 0) {
-                message.error('该时间段暂无数据');
+            if (list.length == 0 || !list) {
+                this.$message.error('该时间段暂无数据');
                 isNull = true;
             } else {
                 isNull = false;
+                list.forEach((params) => {
+                    seriesList.push(singelLine(params));
+                });
                 let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
                     item.type = 'line';
@@ -216,7 +220,6 @@ export default {
                     color: '#333'
                 },
                 legend: {
-                    data: ['算法1', '算法2', '算法3', '算法4'],
                     bottom: 0,
                     icon: 'circle',
                     itemWidth: 8,
@@ -439,6 +442,9 @@ export default {
 
 <style scoped lang="less">
 .container {
+    .select_width {
+        width: 300px;
+    }
     .card {
         margin-bottom: 12px;
 

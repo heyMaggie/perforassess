@@ -878,6 +878,9 @@ export default {
             this.$router.push('/algoGrade');
         },
         getSummarydata() {
+            // let today = dayjs().format('YYYY-MM-DD');
+            // let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            // let end_time = new Date(`${today} 15:30`).getTime() / 1000;
             let query = { start_time: 1658194200, end_time: 1658244600 };
             dashboardSummarydApi(query).then((res) => {
                 // if (res.code == 200) {
@@ -910,6 +913,9 @@ export default {
             });
         },
         getAlgolist() {
+            //  let today = dayjs().format('YYYY-MM-DD');
+            // let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            // let end_time = new Date(`${today} 15:30`).getTime() / 1000;
             let query = {
                 start_time: 1658194200,
                 end_time: 1658244600,

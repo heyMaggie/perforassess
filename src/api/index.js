@@ -42,7 +42,7 @@ export const dashboardAlgolistApi = (query) => {
 // 多日分析
 export const analyseAlgoApi = (query) => {
     return request({
-        url: '/algo-assess/v1/profile/analyse',
+        url: '/algo-assess/v1/assess/analyse',
         method: 'post',
         data: query
     });
@@ -51,6 +51,14 @@ export const analyseAlgoApi = (query) => {
 export const mulitAnalyseApi = (query) => {
     return request({
         url: '/algo-assess/v1/assess/mulit-analyse',
+        method: 'post',
+        data: query
+    });
+};
+// 算法总体评分排行榜
+export const algoRankingApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/ranking',
         method: 'post',
         data: query
     });

@@ -44,6 +44,7 @@
     </div>
 </template>
 <script>
+import { algoRankingApi } from '@/api/index';
 export default {
     data() {
         return {
@@ -73,7 +74,12 @@ export default {
             pageTotal: 5
         };
     },
-    mounted() {},
+    mounted() {
+        algoRankingApi(query).then((res) => {
+            if (res.code == 200) {
+            }
+        });
+    },
     methods: {
         goBack() {
             this.$router.push('/dashboard');

@@ -56,7 +56,7 @@
 <script>
 import * as echarts from 'echarts';
 import fiexdDate from '../../utils/fixeddate';
-import { mulitAnalyseApi, optionListApi } from '@/api/index';
+import { analyseAlgoApi, optionListApi } from '@/api/index';
 export default {
     name: 'manyDays',
     data() {
@@ -81,30 +81,13 @@ export default {
             choose_type: 1
         };
         this.getOptionList(query, 'providerList', 'provider');
-        console.log(fiexdDate, 'fiexdDate');
+        this.getAnalyseAlgoData();
     },
-    mounted() {
-        let list = [
-            { x: 1, y: '1' },
-            { x: 2, y: '2' },
-            { x: 3, y: '3' },
-            { x: 4, y: '4' },
-            { x: 5, y: '5' },
-            { x: 6, y: '6' },
-            { x: 7, y: '7' },
-            { x: 8, y: '8' },
-            { x: 9, y: '9' },
-            { x: 10, y: '10' },
-            { x: 11, y: '11' },
-            { x: 12, y: '12' }
-        ];
-        this.generateChart(list, 'main1');
-        this.generateChart(list, 'main2');
-        this.generateChart(list, 'main3');
-    },
+    mounted() {},
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
+            this.getAnalyseAlgoData();
         },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
@@ -130,15 +113,34 @@ export default {
             };
             this.getOptionList(query, 'algoList', 'algo_name');
         },
-        getMulitAnalyseData() {
+        getAnalyseAlgoData() {
+            let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
+            let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
             let query = {
-                start_time: 1658194200,
-                end_time: 1658244600,
+                start_time: start_time ? start_time : 1658194200,
+                end_time: end_time ? end_time : 1658590200,
                 user_id: 'aUser0000055',
-                algo_name: ['V-wap plus', '智能委托(ZC)']
+                algo_name: this.searchForm.algo_id ? this.searchForm.algo_id : 'V-wap plus'
+                // algo_name: this.searchForm.algo_id
             };
-            mulitAnalyseApi(query).then((res) => {
+            let list = [];
+            analyseAlgoApi(query).then((res) => {
                 if (res.code == 200) {
+                    list = res.data;
+                    list.forEach((item) => {
+                        item.point = item.point ? item.point : [];
+                        switch (item.profile_type) {
+                            case 4: //绩效
+                                this.generateChart(item.point, 'main1');
+                                break;
+                            case 3: //风险度
+                                this.generateChart(item.point, 'main2');
+                                break;
+                            case 2: //完成度
+                                this.generateChart(item.point, 'main3');
+                                break;
+                        }
+                    });
                 }
             });
         },
@@ -148,7 +150,7 @@ export default {
             }
             let lineObj = {
                 main1: { name: '算法绩效', color: '#83BDFF' },
-                main2: { name: '算法贴合度', color: '#59CC7F' },
+                main2: { name: '算法风险度', color: '#59CC7F' },
                 main3: { name: '算法完成度', color: '#FCE75F' }
             };
             let isNull = list.length ? false : true;
@@ -176,11 +178,11 @@ export default {
                     }
                 },
                 dataset: {
-                    dimensions: ['x', 'y'],
+                    dimensions: ['time_point', 'score'],
                     source: list
                 },
                 grid: {
-                    left: '5px',
+                    left: '15px',
                     right: '10px',
                     bottom: '0px',
                     // top: '75px',

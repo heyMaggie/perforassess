@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Message } from 'element-ui';
 
 let baseURL = '';
 // process.env.NODE_ENV === 'development' 来判断是否开发环境
@@ -17,6 +18,7 @@ const service = axios.create({
     timeout: 5000,
     // withCredentials: true,
     headers: {
+        // 'Content-Type': 'application/x-www-form-urlencoded'
         'Content-Type': 'application/json; charset=utf-8'
     }
 });
@@ -42,10 +44,11 @@ service.interceptors.response.use(
     },
     (error) => {
         console.log(error);
-        // Message({
-        //     message: response.data.msg,
-        //     type: 'error'
-        // });
+        // Message.error('请求超时');
+        Message({
+            message: '请求超时',
+            type: 'error'
+        });
         return Promise.reject();
     }
 );
