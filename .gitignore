@@ -2,6 +2,7 @@
 node_modules
 /dist
 example.html
+package-lock.json
 favicon.ico
 # local env files
 .env.local
