@@ -52,7 +52,7 @@
                 <el-table-column prop="profit_rate" label="收益率">
                     <template slot-scope="scope">
                         <el-tag :type="scope.row.profit > 0 ? 'danger' : 'success'"
-                            >{{ scope.row.profit > 0 ? '+' : '-' }} {{ scope.row.profit }}%</el-tag
+                            >{{ scope.row.profit > 0 ? '+' : '' }}{{ scope.row.profit }}%</el-tag
                         >
                     </template>
                 </el-table-column>

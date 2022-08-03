@@ -380,6 +380,7 @@ export default {
                 ]
             };
             var myChart = echarts.init(document.getElementById(type));
+            myChart.clear();
             myChart.setOption(option);
             myChart.resize();
         },

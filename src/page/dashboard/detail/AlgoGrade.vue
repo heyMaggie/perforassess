@@ -52,7 +52,7 @@ export default {
         return {
             tableData: [],
             currentPage: 1,
-            pageTotal: 5
+            pageTotal: 0
         };
     },
     mounted() {
@@ -69,6 +69,7 @@ export default {
             console.log(`当前页: ${val}`);
         },
         getAlgoRankingList() {
+            // let time = Date.parse(new Date()) / 1000;
             let query = { date: 1658194200, page: 1, limit: 6 };
             algoRankingApi(query).then((res) => {
                 if (res.code == 200) {

@@ -178,7 +178,9 @@ export default {
             console.log('submit!', this.searchForm);
         },
         getWaterEchart(data) {
-            data = data / 100;
+            data = data.toFixed(1) / 100;
+            // data = (data.toFixed(2) / 100).toFixed(1);
+            // console.log((6.6564277985276).toFixed(2) / 100, 'dddddd');
             var chartDom = document.getElementById('water-polo');
             var myChart = echarts.init(chartDom);
             var option;
@@ -250,7 +252,6 @@ export default {
             myChart.setOption(option, true);
         },
         getRadarChart(list = []) {
-            console.log(list, '8888888');
             let indicatorList = [];
             let totalScore = [];
             for (let i = 0; i < 4; i++) {
@@ -516,6 +517,7 @@ export default {
                 series: seriesList
             };
             var myChart = echarts.init(document.getElementById(type));
+            myChart.clear();
             myChart.setOption(option);
             myChart.resize();
         },
@@ -913,7 +915,7 @@ export default {
             });
         },
         getAlgolist() {
-            //  let today = dayjs().format('YYYY-MM-DD');
+            // let today = dayjs().format('YYYY-MM-DD');
             // let start_time = new Date(`${today} 09:30`).getTime() / 1000;
             // let end_time = new Date(`${today} 15:30`).getTime() / 1000;
             let query = {

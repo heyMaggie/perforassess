@@ -9,7 +9,13 @@
             <div @click="goBack" class="backRow"><span class="backIcon icon el-icon-arrow-left"></span>返回</div>
             <div class="main1" id="main1"></div>
             <div class="blue-card">
-                <a class="minW-card" v-for="(item, j) in algoNameList" :key="j">
+                <a
+                    class="minW-card"
+                    v-for="(item, j) in algoNameList"
+                    :key="j"
+                    :class="selectIndex == j ? 'isselect' : ''"
+                    @click="selectAlgoList(item, j)"
+                >
                     <div v-for="(subItem, i) in item" :key="subItem">
                         <div class="dot" :style="{ background: colorList[i] }"></div>
                         <span class="algoName">{{ subItem }}</span>
@@ -29,167 +35,26 @@ export default {
         return {
             colorList: ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'],
             algoNameList: [],
-            forTime: 0
+            optAlgoList: [], //选中的
+            selectIndex: 0
         };
     },
-    created() {
-        // this.getMulitAnalyseData();
-        // 获取厂商列表
-        let query = { choose_type: 8, date: 1658244600 };
-        this.getOptionList(query, 'algoTypeList', 'algo_type');
-    },
+    created() {},
     mounted() {
-        this.getMulitAnalyseData();
+        // 获取算法列表
+        this.getOptionList();
     },
     methods: {
         goBack() {
             this.$router.push('/dashboard');
         },
-        generateChart(list, type) {
-            if (list.length == 1) {
-                list.push({ x: '', y: list[0].y });
-            }
-            let isNull = list.length ? false : true;
-            let seriesList = list.series;
-            if (list.length == 0) {
-                message.error('该时间段暂无数据');
-                isNull = true;
-            } else {
-                isNull = false;
-                let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
-                seriesList.forEach((item, i) => {
-                    item.name = '算法' + (i + 1);
-                    item.data = item.y;
-                    item.type = 'line';
-                    item.smooth = true;
-                    item.showSymbol = false;
-                    item.itemStyle = {
-                        color: colorList[i]
-                        // normal: {
-                        //     color: colorList[i]
-                        // }
-                    };
-                    item.areaStyle = {
-                        color: new echarts.graphic.LinearGradient(
-                            0,
-                            0,
-                            0,
-                            1,
-                            [
-                                {
-                                    offset: 0,
-                                    color: colorList[i]
-                                },
-                                {
-                                    offset: 1,
-                                    color: 'rgba(255,255,255,0)'
-                                }
-                            ],
-                            false
-                        ),
-                        shadowColor: 'rgba(0, 0, 0, 0.1)',
-                        shadowBlur: 10
-                    };
-                });
-            }
-            let option = {
-                title: {
-                    text: '算法绩效',
-                    textStyle: {
-                        color: '#333333',
-                        fontSize: 20,
-                        fontWeight: 500
-                    }
-                },
-                textStyle: {
-                    color: '#333'
-                },
-
-                tooltip: {
-                    trigger: 'axis',
-                    backgroundColor: '#1F2329',
-                    boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.15)',
-                    borderColor: '#1F2329',
-                    textStyle: {
-                        color: '#fff'
-                    }
-                },
-                grid: {
-                    left: '5px',
-                    right: '10px',
-                    bottom: '20px',
-                    // top: '60px',
-                    containLabel: true
-                },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: list.x,
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            color: '#E9E9E9',
-                            type: 'dashed'
-                        }
-                    },
-                    axisLabel: {
-                        // interval: 0,
-                        // rotate: 30,
-                    },
-                    axisTick: {
-                        show: true, //显示X轴刻度
-                        lineStyle: {
-                            color: '#E9E9E9'
-                        }
-                    },
-                    axisLine: {
-                        // 刻度线的颜色
-                        show: false
-                    },
-                    axisPointer: {
-                        type: 'line',
-                        lineStyle: { color: '#BDBEBF' }
-                    }
-                },
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: `单位：（%）`,
-                        axisLine: {
-                            show: false
-                        },
-                        nameTextStyle: {
-                            color: '#666'
-                        },
-                        axisTick: {
-                            show: false //隐藏X轴刻度
-                        },
-                        splitLine: {
-                            show: true,
-                            lineStyle: {
-                                color: '#E9E9E9',
-                                type: 'dashed'
-                            }
-                        },
-                        nameTextStyle: {
-                            padding: [0, 0, 0, 25]
-                        },
-                        min: isNull ? 0 : null,
-                        max: isNull ? 100 : null
-                    }
-                ],
-                series: seriesList
-            };
-            var myChart = echarts.init(document.getElementById(type));
-            myChart.setOption(option);
-            myChart.resize();
-        },
         getOptionList() {
+            // let time = Date.parse(new Date()) / 1000;
             let query = { choose_type: 8, date: 1658244600 };
             optionListApi(query).then((res) => {
                 if (res.code == 200) {
                     let array = res.algo_name;
-                    // let array = ['智能委托(ZC)', 'V-wap plus', '9999', '8888', '7777', '6666', '5555', '4444', '3333', '2222', '1111'];
+                    array = ['智能委托(ZC)', 'V-wap plus', '9999', '8888', '7777', '6666', '5555', '4444', '3333', '2222', '1111'];
                     let len = array.length;
                     let n = 4; //假设每行显示4个
                     let lineNum = len % n === 0 ? len / n : Math.floor(len / n + 1);
@@ -198,18 +63,20 @@ export default {
                         this.algoNameList.push(temp);
                     }
                     console.log(this.algoNameList);
+                    this.optAlgoList = this.algoNameList[0];
+                    this.getMulitAnalyseData();
                 }
             });
         },
         getMulitAnalyseData() {
-            // let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
-            // let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
+            // let today = dayjs().format('YYYY-MM-DD');
+            // let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            // let end_time = new Date(`${today} 15:30`).getTime() / 1000;
             let query = {
                 start_time: 1658194200,
                 end_time: 1658244600,
                 user_id: 'aUser0000055',
-                algo_name: ['V-wap plus', '智能委托(ZC)']
-                // algo_name: ['V-wap plus', '智能委托(ZC)']
+                algo_name: this.optAlgoList
             };
             let list = [];
             mulitAnalyseApi(query).then((res) => {
@@ -238,7 +105,7 @@ export default {
                 return lineObj;
             }
             if (list.length == 0 || !list) {
-                this.$message.error('该时间段暂无数据');
+                this.$message.error('该算法暂无数据');
                 isNull = true;
             } else {
                 isNull = false;
@@ -372,8 +239,14 @@ export default {
                 series: seriesList
             };
             var myChart = echarts.init(document.getElementById(type));
+            myChart.clear();
             myChart.setOption(option);
             myChart.resize();
+        },
+        selectAlgoList(algoList, index) {
+            this.optAlgoList = algoList;
+            this.selectIndex = index;
+            this.getMulitAnalyseData();
         }
     }
 };
@@ -445,6 +318,11 @@ export default {
                 color: #999999;
                 line-height: 22px;
             }
+        }
+        .isselect {
+            border-left: 2px solid #3281ff;
+            box-sizing: border-box;
+            box-shadow: 0px 6px 16px 0px rgba(198, 208, 224, 0.66);
         }
     }
 }

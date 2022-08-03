@@ -560,6 +560,7 @@ export default {
         getHistogramChart() {
             var chartDom = document.getElementById('histogram');
             var myChart = echarts.init(chartDom);
+            myChart.clear();
             var option;
             // 指定图表的配置项和数据
             var data3 = [20, 30, 20, 30, 20, 30, 20, 30, 20, 30];
