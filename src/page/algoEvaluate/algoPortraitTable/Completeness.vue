@@ -57,9 +57,9 @@
                 background
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
                 :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
+                :current-page="pageObj.page"
+                :page-size="pageObj.pageNum"
                 layout=" ->, prev, pager, next, total, jumper"
                 :total="pageTotal"
             >
@@ -86,7 +86,8 @@ export default {
             pageTotal: 0,
             providerList: [],
             algoTypeList: [],
-            algoList: []
+            algoList: [],
+            pageObj: { page: 1, pageNum: 2 }
         };
     },
     created() {
@@ -98,11 +99,12 @@ export default {
         this.getOptionList(query, 'providerList', 'provider');
     },
     methods: {
-        getTableData() {
+        getTableData(pageObj = { page: 1, pageNum: 2 }) {
+            this.pageObj = pageObj;
             let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
             let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
             // let query = { profile_type: 1, page: 1, limit: 10, start_time, end_time, ...this.searchForm };
-            let query = { profile_type: 2, start_time: 1658194200, end_time: 1658244600, page: 1, limit: 10 };
+            let query = { profile_type: 2, start_time: 1658194200, end_time: 1658244600, page: pageObj.page, limit: pageObj.pageNum };
             console.log(query);
             fiveDimensionsApi(query).then((res) => {
                 if (res.code == 200) {
@@ -146,7 +148,8 @@ export default {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            let pageObj = { page: val / 1, pageNum: 2 };
+            this.getTableData(pageObj);
         }
     }
 };

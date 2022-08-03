@@ -34,9 +34,9 @@
                     background
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage"
                     :page-sizes="[10, 20, 30, 40]"
-                    :page-size="10"
+                    :current-page="pageObj.page"
+                    :page-size="pageObj.pageNum"
                     layout=" ->, prev, pager, next, total, jumper"
                     :total="pageTotal"
                 >
@@ -51,8 +51,8 @@ export default {
     data() {
         return {
             tableData: [],
-            currentPage: 1,
-            pageTotal: 0
+            pageTotal: 0,
+            pageObj: { page: 1, pageNum: 2 }
         };
     },
     mounted() {
@@ -66,11 +66,13 @@ export default {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            let pageObj = { page: val / 1, pageNum: 2 };
+            this.getAlgoRankingList(pageObj);
         },
-        getAlgoRankingList() {
+        getAlgoRankingList(pageObj = { page: 1, pageNum: 2 }) {
+            this.pageObj = pageObj;
             // let time = Date.parse(new Date()) / 1000;
-            let query = { date: 1658194200, page: 1, limit: 6 };
+            let query = { date: 1658194200, page: pageObj.page, limit: pageObj.pageNum };
             algoRankingApi(query).then((res) => {
                 if (res.code == 200) {
                     this.tableData = res.info;

@@ -54,7 +54,7 @@ export default {
             optionListApi(query).then((res) => {
                 if (res.code == 200) {
                     let array = res.algo_name;
-                    array = ['智能委托(ZC)', 'V-wap plus', '9999', '8888', '7777', '6666', '5555', '4444', '3333', '2222', '1111'];
+                    // array = ['智能委托(ZC)', 'V-wap plus', '9999', '8888', '7777', '6666', '5555', '4444', '3333', '2222', '1111'];
                     let len = array.length;
                     let n = 4; //假设每行显示4个
                     let lineNum = len % n === 0 ? len / n : Math.floor(len / n + 1);
@@ -96,6 +96,8 @@ export default {
                 fiexdDate.forEach((item, i) => {
                     lineObj.name = params.algo_name;
                     lineObj.data[i] = '';
+                    //容错处理
+                    params.data = params.data ? params.data : [];
                     params.data.forEach((subitem) => {
                         if (subitem.time_point == item) {
                             lineObj.data[i] = subitem.score;

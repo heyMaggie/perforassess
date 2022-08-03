@@ -78,8 +78,8 @@
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane v-for="(item, i) in algo_nameList" :key="item" :label="item" :name="i + ''">
                         <el-empty v-if="!assessList.length" description="暂无数据" class="empty-card"></el-empty>
-                        <template v-else class="pane-card">
-                            <div v-for="(sonItem, j) in assessList" :key="sonItem.provider" class="pane-card">
+                        <div v-else class="pane-card">
+                            <div v-for="(sonItem, j) in assessList" :key="sonItem.provider">
                                 <div class="rowtitle">{{ sonItem.provider }}</div>
                                 <div class="rowlist">
                                     <div class="blue-mincard">
@@ -113,18 +113,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <el-pagination
-                                background
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="currentPage"
-                                :page-sizes="[10, 20, 30, 40]"
-                                :page-size="10"
-                                layout=" ->, prev, pager, next, total, jumper"
-                                :total="pageTotal"
-                            >
-                            </el-pagination> </template
-                    ></el-tab-pane>
+                        </div>
+                        <el-pagination
+                            background
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :page-sizes="[10, 20, 30, 40]"
+                            :current-page="pageObj.page"
+                            :page-size="pageObj.pageNum"
+                            layout=" ->, prev, pager, next, total, jumper"
+                            :total="pageTotal"
+                            style="margin-top: 20px"
+                        >
+                        </el-pagination>
+                    </el-tab-pane>
                 </el-tabs>
             </div>
             <div class="showPortrait">
@@ -158,19 +160,18 @@ export default {
         return {
             startValue: 3.5,
             activeName: '0',
-            currentPage: 1,
             summaryObj: {},
             market_rate: {},
             algo_nameList: [],
             selectIndex: '0',
             assessList: [],
-            pageTotal: 0
+            pageTotal: 0,
+            pageObj: { page: 1, pageNum: 4 }
         };
     },
     created() {
         this.getSummarydata();
         this.getOptionList();
-        console.log(fiexdDate);
     },
     mounted() {},
     methods: {
@@ -373,20 +374,17 @@ export default {
             myChart.resize();
         },
         generateChart(list, type) {
-            if (list.length == 1) {
-                list.push({ x: '', y: list[0].y });
-            }
             let option;
             let isNull = list.length ? false : true;
             let seriesList = [];
-            list.forEach((params) => {
-                seriesList.push(singelLine(params));
-            });
+
             function singelLine(params) {
                 let lineObj = { name: '', data: [] };
                 fiexdDate.forEach((item, i) => {
                     lineObj.name = params.algo_name;
                     lineObj.data[i] = '';
+                    //容错处理
+                    params.time_line = params.time_line ? params.time_line : [];
                     params.time_line.forEach((subitem) => {
                         if (subitem.time_point == item) {
                             lineObj.data[i] = subitem.score;
@@ -399,6 +397,9 @@ export default {
                 message.error('该时间段暂无数据');
                 isNull = true;
             } else {
+                list.forEach((params) => {
+                    seriesList.push(singelLine(params));
+                });
                 isNull = false;
                 let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
@@ -865,13 +866,14 @@ export default {
         handleClick(tab) {
             // console.log(tab.name);
             this.selectIndex = tab.name;
-            this.getAlgolist();
+            this.getFerfAlgolist();
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            let pageObj = { page: val / 1, pageNum: 4 };
+            this.getFerfAlgolist(pageObj);
         },
         goMoreAlgo() {
             this.$router.push('/algoMoreEchart');
@@ -902,7 +904,7 @@ export default {
             optionListApi(query).then((res) => {
                 if (res.code == 200) {
                     this.algo_nameList = res.algo_type;
-                    this.getAlgolist();
+                    this.getFerfAlgolist();
                     // this.$nextTick(() => {
                     //     for (let i = 1; i < this.algoContrastList.length; i++) {
                     //         this.getSemicircle('pieList' + i, {
@@ -914,7 +916,8 @@ export default {
                 }
             });
         },
-        getAlgolist() {
+        getFerfAlgolist(pageObj = { page: 1, pageNum: 4 }) {
+            this.pageObj = pageObj;
             // let today = dayjs().format('YYYY-MM-DD');
             // let start_time = new Date(`${today} 09:30`).getTime() / 1000;
             // let end_time = new Date(`${today} 15:30`).getTime() / 1000;
@@ -922,8 +925,8 @@ export default {
                 start_time: 1658194200,
                 end_time: 1658244600,
                 algo_type_name: this.algo_nameList[this.activeName],
-                page: 1,
-                limit: 4
+                page: pageObj.page,
+                limit: pageObj.pageNum
             };
             dashboardAlgolistApi(query).then((res) => {
                 if (res.code == 200) {
@@ -1111,7 +1114,7 @@ export default {
             height: 532px;
         }
         .empty-card {
-            height: 564px;
+            height: 532px;
         }
         .rowtitle {
             height: 20px;
