@@ -223,7 +223,7 @@ export default {
                         },
                         label: {
                             formatter: function (param) {
-                                return '{b|' + Number(param.value) * 100 + '}{c| %}';
+                                return '{b|' + (param.value * 100).toFixed(1) + '}{c| %}';
                             },
                             textStyle: {
                                 rich: {

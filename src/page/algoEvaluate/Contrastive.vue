@@ -57,7 +57,7 @@
                             </div>
                             <div class="dimensionality" v-for="(subItem, j) in item.dimension" :key="subItem.profile_type">
                                 <div class="title">{{ titleList[j] }}</div>
-                                <div class="explain">{{ subItem.desc }}</div>
+                                <div class="explain" :title="subItem.desc">{{ subItem.desc }}</div>
                             </div>
                             <div class="present">
                                 <span class="left">当前算法</span>
@@ -536,6 +536,9 @@ export default {
                             font-size: 12px;
                             color: #999999;
                             line-height: 18px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                         }
                     }
                     .present {

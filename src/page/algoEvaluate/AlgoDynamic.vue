@@ -41,7 +41,7 @@
                 </div>
                 <div class="dimensionality" v-for="item in dimensionalityList" :key="item.title">
                     <div class="title">{{ item.title }}</div>
-                    <div class="explain">{{ item.desc }}</div>
+                    <div class="explain" :title="item.desc">{{ item.desc }}</div>
                 </div>
             </div>
             <div class="card" id="main2"></div>
@@ -923,6 +923,9 @@ export default {
                 font-size: 12px;
                 color: #999999;
                 line-height: 18px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
     }

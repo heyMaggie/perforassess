@@ -44,17 +44,74 @@
                 </el-form-item>
             </div>
             <div class="button-right">
-                <div class="box1">
-                    <span class="capital">资金：</span>
-                    <span class="treasure">￥18271982190</span>
-                    <span class="capital">盈亏：</span>
-                    <span class="profit-loss">-121121</span><span class="icon">亏损</span>
-                </div>
                 <el-button type="primary" @click="onSubmit">确定</el-button>
             </div>
         </el-form>
         <div class="echart-container">
             <div class="showBorder">
+                <div class="card">
+                    <div class="card-title">资金</div>
+                    <div class="blue-card">
+                        <span class="number"
+                            >100
+                            <div class="unit">(万元)</div></span
+                        >
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">盈亏</div>
+                    <div class="blue-card">
+                        <span class="number"
+                            >-121121<span class="icon">亏损</span>
+                            <div class="unit">(万元)</div></span
+                        >
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">登录次数</div>
+                    <div class="circular">
+                        <span class="number">100<span class="unit">(次)</span></span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">交易次数</div>
+                    <div class="circular">
+                        <span class="number">100<span class="unit">(次)</span></span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">当天交易金额</div>
+                    <div class="blue-card">
+                        <span class="number"
+                            >321,621.00
+                            <div class="unit">(万元)</div>
+                        </span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title line-img">用户级别</div>
+                    <img class="query-icon" src="../../assets/icon/query.png" />
+                    <div class="circular special-pink">
+                        <span class="number">A<span class="unit">级</span></span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title line-img">当天滚动持仓</div>
+                    <img class="query-icon" src="../../assets/icon/query.png" />
+                    <div class="blue-card">
+                        <span class="number">
+                            128,321,6.00
+                            <div class="unit">(万元)</div>
+                        </span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title line-img">完成度</div>
+                    <img class="query-icon" src="../../assets/icon/query.png" />
+                    <div id="water-polo" class="water-polo"></div>
+                </div>
+            </div>
+            <!-- <div class="showBorder">
                 <div class="card">
                     <div class="card-title">登录次数</div>
                     <div class="circular">
@@ -98,7 +155,7 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="showPortrait">
                 <div class="card" id="radar"></div>
                 <div class="card" id="main1"></div>
@@ -183,7 +240,7 @@ export default {
         };
     },
     mounted() {
-        this.getWaterEchart();
+        this.getWaterEchart('6.75');
         this.getRadarChart();
         let list = [
             { x: 1, y: '1' },
@@ -207,7 +264,11 @@ export default {
         onSubmit() {
             console.log('submit!', this.searchForm);
         },
-        getWaterEchart() {
+        getWaterEchart(data) {
+            data = Number(data).toFixed(1) / 100;
+            console.log(data, 'ddddddddd');
+            // data = (data.toFixed(2) / 100).toFixed(1);
+            // console.log((6.6564277985276).toFixed(2) / 100, 'dddddd');
             var chartDom = document.getElementById('water-polo');
             var myChart = echarts.init(chartDom);
             var option;
@@ -216,7 +277,7 @@ export default {
                 series: [
                     {
                         type: 'liquidFill',
-                        data: [0.38],
+                        data: [data],
                         radius: '95%',
                         // 水球颜色
                         color: [
@@ -249,7 +310,7 @@ export default {
                         },
                         label: {
                             formatter: function (param) {
-                                return '{b|' + Number(param.value) * 100 + '}{c| %}';
+                                return '{b|' + (param.value * 100).toFixed(1) + '}{c| %}';
                             },
                             textStyle: {
                                 rich: {
@@ -684,32 +745,31 @@ export default {
     .showBorder {
         .card {
             margin-right: 12px;
-            width: 265px;
-            height: 248px;
-            &:nth-child(6) {
+            width: 196px;
+            height: 220px;
+            &:nth-child(8) {
                 margin-right: 0px;
             }
-            .line {
+            .line-img {
                 display: inline-block;
             }
             .water-polo {
                 margin-top: 19px;
-                height: 165px;
-                // background: black;
+                height: 135px;
             }
             .circular {
                 margin: 20px auto;
-                width: 158px;
-                height: 158px;
+                width: 135px;
+                height: 135px;
                 border-radius: 50%;
                 background-color: #e8f1ff;
-                padding-top: 15px;
+                padding-top: 13px;
                 box-sizing: border-box;
                 &::after {
                     content: '';
                     display: block;
-                    width: 128px;
-                    height: 128px;
+                    width: 109px;
+                    height: 110px;
                     border-radius: 50%;
                     background-color: #fff;
                     box-shadow: 0px 4px 6px 0px rgba(50, 129, 255, 0.32);
@@ -718,18 +778,20 @@ export default {
                 .number {
                     float: left;
                     margin: auto;
-                    line-height: 120px;
+                    line-height: 36px;
                     text-align: center;
                     width: 100%;
-                    font-size: 52px;
+                    font-size: 46px;
                     font-family: DINAlternate-Bold, DINAlternate;
                     font-weight: bold;
                     color: #333333;
+                    margin-top: 24px;
                 }
                 .unit {
-                    padding-left: 5px;
-                    font-size: 16px;
+                    display: block;
+                    font-size: 14px;
                     font-weight: 500;
+                    color: #999999;
                 }
             }
             .special-green {
@@ -739,30 +801,90 @@ export default {
                     box-shadow: 0px 4px 6px 0px rgba(29, 195, 138, 0.32);
                 }
             }
+            .special-pink {
+                background-color: #fef2f0;
+                &::after {
+                    background-color: #fff;
+                    box-shadow: 0px 4px 6px 0px rgba(247, 139, 127, 0.32);
+                }
+            }
+            .gather {
+                margin-top: 24px;
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                width: 170px;
+                margin: 24px -11px 0;
+                .min-blue-card {
+                    width: 76px;
+                    height: 64px;
+                    background: #fafbff;
+                    text-align: center;
+                    margin-bottom: 8px;
+                    .number {
+                        width: 21px;
+                        font-size: 28px;
+                        font-family: DINAlternate-Bold, DINAlternate;
+                        font-weight: bold;
+                        color: #333333;
+                        line-height: 32px;
+                    }
+                    .unit {
+                        font-size: 14px;
+                    }
+                    .explain {
+                        font-size: 14px;
+                        font-family: SourceHanSansSC-Regular, SourceHanSansSC;
+                        font-weight: 400;
+                        color: #999999;
+                        line-height: 20px;
+                    }
+                    // line-height: 64px;
+                }
+            }
+            .medium-blue-card {
+                width: 161px;
+                height: 136px;
+                background: #fafbff;
+                margin-top: 24px;
+
+                &::after {
+                    content: '';
+                    display: block;
+                    width: 100%;
+                    height: 8px;
+                    position: relative;
+                    bottom: 68px;
+                    background-color: #fff;
+                }
+            }
         }
         .query-icon {
             margin-left: 10px;
             cursor: pointer;
         }
         .blue-card {
-            width: 100%;
-            height: 149px;
+            // width: 100%;
+            position: relative;
+            height: 126px;
             background: #fafbff;
             border-radius: 8px;
-            margin-top: 24px;
+            // margin-top: 24px;
+            margin: 24px -12px 0;
             text-align: center;
-            // line-height: 149px;
             .number {
-                font-size: 28px;
+                font-size: 26px;
                 font-family: DINAlternate-Bold, DINAlternate;
                 font-weight: bold;
                 color: rgba(0, 0, 0, 0.85);
-                line-height: 39px;
-                margin-top: 40px;
+                margin-top: 35px;
                 display: inline-block;
             }
             .unit {
-                font-size: 16px;
+                font-size: 14px;
+                color: #999999;
+                font-weight: 500;
+                margin-top: 10px;
             }
         }
     }
@@ -862,47 +984,18 @@ export default {
     // align-items: center;
     // line-height: 36px;
 }
-.box1 {
-    display: inline-block;
-    .capital {
-        display: inline-block;
-        font-size: 14px;
-        font-family: SourceHanSansSC-Regular, SourceHanSansSC;
-        font-weight: 400;
-        color: #666666;
-    }
-    .treasure {
-        // display: inline-block;
-        font-size: 24px;
-        font-family: PingFangSC-Semibold, PingFang SC;
-        font-weight: 600;
-        color: #333333;
-        margin-right: 20px;
-        line-height: 0px;
-        // padding-top: 10px;
-    }
-    .profit-loss {
-        // display: inline-block;
-        font-size: 24px;
-        // font-family: DINAlternate-Bold, DINAlternate;
-        font-weight: bold;
-        color: #4dcb73;
-        line-height: 0;
-    }
-    .icon {
-        display: inline-block;
-        text-align: center;
-        font-size: 10px;
-        // font-family: SourceHanSansSC-Regular, SourceHanSansSC;
-        font-weight: 400;
-        color: #4dcb73;
-        width: 32px;
-        height: 18px;
-        // line-height: 16px;
-        background: rgba(77, 203, 115, 0.24);
-        border-radius: 4px;
-        margin-right: 20px;
-        // margin-bottom: 10px;
-    }
+.icon {
+    // float: right;
+    position: absolute;
+    font-size: 12px;
+    font-weight: 400;
+    color: #4dcb73;
+    width: 32px;
+    height: 18px;
+    background: rgba(77, 203, 115, 0.24);
+    border-radius: 4px 4px 4px 0px;
+    right: 5px;
+    top: 25px;
+    // margin-right: -20px;
 }
 </style>
