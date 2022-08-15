@@ -42,7 +42,7 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button
-                ><el-button type="plain" @click="onSubmit"><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button>
+                ><el-button type="plain" @click="onDownLoad"><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button>
             </div>
         </el-form>
         <div class="container">
@@ -88,6 +88,9 @@ export default {
         onSubmit() {
             console.log('submit!', this.searchForm);
             this.getAnalyseAlgoData();
+        },
+        onDownLoad() {
+            console.log('onDownLoad!');
         },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {

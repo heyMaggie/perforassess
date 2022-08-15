@@ -108,8 +108,8 @@ export default {
             this.pageObj = pageObj;
             let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
             let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
-            // let query = { profile_type: 1, page: 1, limit: 10, start_time, end_time, ...this.searchForm };
-            let query = { profile_type: 4, start_time: 1658194200, end_time: 1658244600, page: pageObj.page, limit: pageObj.pageNum };
+            // let query = { profile_type: 4, start_time: 1658194200, end_time: 1658244600, page: pageObj.page, limit: pageObj.pageNum };
+            let query = { profile_type: 4, start_time, end_time, page: pageObj.page, limit: pageObj.pageNum, ...this.searchForm };
             console.log(query);
             fiveDimensionsApi(query).then((res) => {
                 if (res.code == 200) {
