@@ -2,7 +2,7 @@
     <div class="header">
         <!-- 折叠按钮 -->
         <img class="collapse-btn" src="../../assets/img/logo.png" />
-        <div class="logo">绩效评估后台</div>
+        <div class="logo">绩效评估平台</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 用户头像 -->
