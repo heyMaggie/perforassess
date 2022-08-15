@@ -87,7 +87,7 @@ export default {
             providerList: [],
             algoTypeList: [],
             algoList: [],
-            pageObj: { page: 1, pageNum: 2 }
+            pageObj: { page: 1, pageNum: 10 }
         };
     },
     created() {
@@ -99,7 +99,7 @@ export default {
         this.getOptionList(query, 'providerList', 'provider');
     },
     methods: {
-        getTableData(pageObj = { page: 1, pageNum: 2 }) {
+        getTableData(pageObj = { page: 1, pageNum: 10 }) {
             this.pageObj = pageObj;
             let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
             let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
@@ -148,7 +148,7 @@ export default {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-            let pageObj = { page: val / 1, pageNum: 2 };
+            let pageObj = { page: val / 1, pageNum: 10 };
             this.getTableData(pageObj);
         }
     }

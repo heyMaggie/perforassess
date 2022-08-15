@@ -52,7 +52,7 @@ export default {
         return {
             tableData: [],
             pageTotal: 0,
-            pageObj: { page: 1, pageNum: 2 }
+            pageObj: { page: 1, pageNum: 5 }
         };
     },
     mounted() {
@@ -66,10 +66,10 @@ export default {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-            let pageObj = { page: val / 1, pageNum: 2 };
+            let pageObj = { page: val / 1, pageNum: 5 };
             this.getAlgoRankingList(pageObj);
         },
-        getAlgoRankingList(pageObj = { page: 1, pageNum: 2 }) {
+        getAlgoRankingList(pageObj = { page: 1, pageNum: 5 }) {
             this.pageObj = pageObj;
             // let time = Date.parse(new Date()) / 1000;
             let query = { date: 1658194200, page: pageObj.page, limit: pageObj.pageNum };
