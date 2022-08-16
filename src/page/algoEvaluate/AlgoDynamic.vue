@@ -39,7 +39,8 @@
                     <el-rate class="rate" v-model="startValue" disabled> </el-rate>
                     <div class="rank-icon">{{ ranking }}</div>
                 </div>
-                <div class="dimensionality" v-for="item in dimensionalityList" :key="item.title">
+                <el-empty v-if="!dimensionalityList.length" description="暂无数据" class="medium-empty"></el-empty>
+                <div v-else class="dimensionality" v-for="item in dimensionalityList" :key="item.title">
                     <div class="title">{{ item.title }}</div>
                     <div class="explain" :title="item.desc">{{ item.desc }}</div>
                 </div>
@@ -47,7 +48,8 @@
             <div class="card" id="main2"></div>
             <div class="card">
                 <div class="card-title">资金占比</div>
-                <div class="blur-card" id="pie1"></div>
+                <el-empty v-if="!marketRateList.length" description="暂无数据" class="min-empty"></el-empty>
+                <div v-else class="blur-card" id="pie1"></div>
             </div>
             <div class="card">
                 <div class="card-title">买卖方向</div>
@@ -55,11 +57,13 @@
             </div>
             <div class="card">
                 <div class="card-title">股价类型</div>
-                <div class="blur-card" id="pie3"></div>
+                <el-empty v-if="!priceType.length" description="暂无数据" class="min-empty"></el-empty>
+                <div class="blur-card" v-else id="pie3"></div>
             </div>
             <div class="card">
                 <div class="card-title">交易量</div>
-                <div class="blur-card" id="pie4"></div>
+                <el-empty v-if="!volTypeList.length" description="暂无数据" class="min-empty"></el-empty>
+                <div class="blur-card" v-else id="pie4"></div>
             </div>
         </div>
     </div>
@@ -68,6 +72,7 @@
 <script>
 import * as echarts from 'echarts';
 import { dynamicApi, optionListApi } from '@/api/index';
+import fiexdDate from '../../utils/fixeddate';
 const dayjs = require('dayjs');
 export default {
     name: 'baseform',
@@ -93,7 +98,9 @@ export default {
             volType: [], //交易量
             assessLine: [], //绩效
             progressLine: [], //完成度
-            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法稳定性分析', '算法绩效分析']
+            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法稳定性分析', '算法绩效分析'],
+            marketRateList: [],
+            volTypeList: []
         };
     },
     created() {
@@ -246,9 +253,10 @@ export default {
             myChart.resize();
         },
         generateChart(list, type) {
-            if (list.length == 1) {
-                list.push({ x: '', y: list[0].y });
-            }
+            let yDataList = [];
+            list.forEach((item) => {
+                yDataList.push(item.score);
+            });
             let lineObj = {
                 main1: { name: '实时绩效', color: '#83BDFF' },
                 main2: { name: '实时完成度', color: '#FCE75F' }
@@ -275,10 +283,7 @@ export default {
                         color: '#fff'
                     }
                 },
-                dataset: {
-                    dimensions: ['time_point', 'score'],
-                    source: list
-                },
+
                 grid: {
                     left: '5px',
                     right: '20px',
@@ -289,6 +294,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
+                    data: fiexdDate,
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -349,11 +355,9 @@ export default {
                         type: 'line',
                         smooth: true,
                         showSymbol: false,
+                        data: yDataList,
                         itemStyle: {
                             color: lineObj[type].color
-                            // normal: {
-                            //     color: lineObj[type].color
-                            // }
                         },
                         areaStyle: {
                             color: new echarts.graphic.LinearGradient(
@@ -471,8 +475,12 @@ export default {
             var chartDom = document.getElementById('pie2');
             var myChart = echarts.init(chartDom);
             var option;
-            let sell_rate = (this.side.sell_rate / 1).toFixed(1);
-            let buy_rate = (this.side.buy_rate / 1).toFixed(1);
+            let sell_rate = 0;
+            let buy_rate = 0;
+            if (this.side.length) {
+                sell_rate = (this.side.sell_rate / 1).toFixed(1);
+                buy_rate = (this.side.buy_rate / 1).toFixed(1);
+            }
             option = {
                 series: [
                     {
@@ -756,44 +764,60 @@ export default {
             let query = { algo_name: this.searchForm.algo_id, user_id: localStorage.getItem('ms_username'), start_time, end_time };
             this.dimensionalityList = [];
             let radarList = [];
-            let marketRateList = [];
-            let volTypeList = [];
-            dynamicApi(query).then((res) => {
-                if (res.code == 200) {
-                    this.startValue = res.composite_score / 20;
-                    this.compositeScore = res.composite_score;
-                    this.ranking = res.ranking;
-                    this.marketRate = res.market_rate;
-                    this.side = res.side;
-                    this.priceType = res.price_type;
-                    this.volType = res.vol_type;
-                    this.assessLine = res.assess_line;
-                    this.progressLine = res.progress_line;
-                    this.dimension = res.dimension.sort((a, b) => {
-                        return a.profile_type - b.profile_type;
-                    }); //5个维度升序
-                    this.dimension.forEach((item, i) => {
-                        this.dimensionalityList.push({
-                            title: this.titleList[i],
-                            desc: item.desc
+            dynamicApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        this.startValue = res.composite_score / 20;
+                        this.compositeScore = res.composite_score;
+                        this.ranking = res.ranking;
+                        this.marketRate = res.market_rate;
+                        this.side = res.side;
+                        this.priceType = res.price_type;
+                        this.volType = res.vol_type;
+                        this.assessLine = res.assess_line;
+                        this.progressLine = res.progress_line;
+                        this.dimension = res.dimension.sort((a, b) => {
+                            return a.profile_type - b.profile_type;
+                        }); //5个维度升序
+                        this.dimension.forEach((item, i) => {
+                            this.dimensionalityList.push({
+                                title: this.titleList[i],
+                                desc: item.desc
+                            });
+                            radarList.push(item.score);
                         });
-                        radarList.push(item.score);
-                    });
-                    this.getRadarChart(radarList);
-                    this.generateChart(res.assess_line.point, 'main1');
-                    this.generateChart(res.progress_line.point, 'main2');
-                    res.market_rate.forEach((item, i) => {
-                        marketRateList.push({ name: item.mk_name, value: item.rate.toFixed(1) });
-                    });
-                    res.vol_type.forEach((item, i) => {
-                        volTypeList.push({ name: item.vol_name, value: item.rate.toFixed(1) });
-                    });
-                    this.getPieChart('pie1', marketRateList);
-                    this.getPieChart('pie4', volTypeList);
+                        this.getRadarChart(radarList);
+                        this.generateChart(res.assess_line.point, 'main1');
+                        this.generateChart(res.progress_line.point, 'main2');
+                        res.market_rate.forEach((item, i) => {
+                            this.marketRateList.push({ name: item.mk_name, value: item.rate.toFixed(1) });
+                        });
+                        res.vol_type.forEach((item, i) => {
+                            this.volTypeList.push({ name: item.vol_name, value: item.rate.toFixed(1) });
+                        });
+                        this.getPieChart('pie1', this.marketRateList);
+                        this.getPieChart('pie4', this.volTypeList);
+                        this.getSemicircle('pie2');
+                        this.getStripChart();
+                    } else {
+                        this.generateChart([], 'main1');
+                        this.generateChart([], 'main2');
+                        this.getSemicircle('pie2');
+                        this.getRadarChart([]);
+                        this.priceType = [];
+                        this.marketRateList = [];
+                        this.volTypeList = [];
+                    }
+                })
+                .catch(() => {
+                    this.generateChart([], 'main1');
+                    this.generateChart([], 'main2');
                     this.getSemicircle('pie2');
-                    this.getStripChart();
-                }
-            });
+                    this.getRadarChart([]);
+                    this.priceType = [];
+                    this.marketRateList = [];
+                    this.volTypeList = [];
+                });
         },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
@@ -933,6 +957,18 @@ export default {
         height: 130px;
         border-radius: 12px;
         background: #fafbff;
+    }
+    .min-empty {
+        padding: 0;
+        /deep/.el-empty__image {
+            width: 84px !important;
+        }
+    }
+    .medium-empty {
+        padding: 20 0;
+        /deep/.el-empty__image {
+            width: 84px !important;
+        }
     }
 }
 </style>

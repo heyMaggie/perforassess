@@ -49,22 +49,25 @@
                 <div class="right-row">
                     <div class="bulue-card radar" id="main2"></div>
                     <div class="bulue-card grade">
-                        <div class="grade-lump" v-for="(item, i) in mulitAnalyList" :key="i">
-                            <div class="score">
-                                <div class="number">{{ item.composite_score }}</div>
-                                <div class="text">综合评分</div>
-                                <el-rate class="rate" v-model="item.startValue" disabled> </el-rate>
-                                <div class="rank-icon">{{ item.ranking }}</div>
-                            </div>
-                            <div class="dimensionality" v-for="(subItem, j) in item.dimension" :key="subItem.profile_type">
-                                <div class="title">{{ titleList[j] }}</div>
-                                <div class="explain" :title="subItem.desc">{{ subItem.desc }}</div>
-                            </div>
-                            <div class="present">
-                                <span class="left">当前算法</span>
-                                <span class="right">{{ item.algo_name }}</span>
-                            </div>
-                        </div>
+                        <el-empty v-if="!mulitAnalyList.length" description="暂无数据" style="width: 100%"></el-empty>
+                        <template v-else>
+                            <div class="grade-lump" v-for="(item, i) in mulitAnalyList" :key="i">
+                                <div class="score">
+                                    <div class="number">{{ item.composite_score }}</div>
+                                    <div class="text">综合评分</div>
+                                    <el-rate class="rate" v-model="item.startValue" disabled> </el-rate>
+                                    <div class="rank-icon">{{ item.ranking }}</div>
+                                </div>
+                                <div class="dimensionality" v-for="(subItem, j) in item.dimension" :key="subItem.profile_type">
+                                    <div class="title">{{ titleList[j] }}</div>
+                                    <div class="explain" :title="subItem.desc">{{ subItem.desc }}</div>
+                                </div>
+                                <div class="present">
+                                    <span class="left">当前算法</span>
+                                    <span class="right">{{ item.algo_name }}</span>
+                                </div>
+                            </div></template
+                        >
                     </div>
                 </div>
             </div>

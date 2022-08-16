@@ -130,30 +130,41 @@ export default {
                 // algo_name: this.searchForm.algo_id
             };
             let list = [];
-            analyseAlgoApi(query).then((res) => {
-                if (res.code == 200) {
-                    list = res.data;
-                    list.forEach((item) => {
-                        item.point = item.point ? item.point : [];
-                        switch (item.profile_type) {
-                            case 4: //绩效
-                                this.generateChart(item.point, 'main1');
-                                break;
-                            case 3: //风险度
-                                this.generateChart(item.point, 'main2');
-                                break;
-                            case 2: //完成度
-                                this.generateChart(item.point, 'main3');
-                                break;
-                        }
-                    });
-                }
-            });
+            analyseAlgoApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        list = res.data;
+                        list.forEach((item) => {
+                            item.point = item.point ? item.point : [];
+                            switch (item.profile_type) {
+                                case 4: //绩效
+                                    this.generateChart(item.point, 'main1');
+                                    break;
+                                case 3: //风险度
+                                    this.generateChart(item.point, 'main2');
+                                    break;
+                                case 2: //完成度
+                                    this.generateChart(item.point, 'main3');
+                                    break;
+                            }
+                        });
+                    } else {
+                        this.generateChart([], 'main1');
+                        this.generateChart([], 'main2');
+                        this.generateChart([], 'main3');
+                    }
+                })
+                .catch(() => {
+                    this.generateChart([], 'main1');
+                    this.generateChart([], 'main2');
+                    this.generateChart([], 'main3');
+                });
         },
         generateChart(list, type) {
-            if (list.length == 1) {
-                list.push({ x: '', y: list[0].y });
-            }
+            let yDataList = [];
+            list.forEach((item) => {
+                yDataList.push(item.score);
+            });
             let lineObj = {
                 main1: { name: '算法绩效', color: '#83BDFF' },
                 main2: { name: '算法风险度', color: '#59CC7F' },
@@ -183,10 +194,6 @@ export default {
                         color: '#fff'
                     }
                 },
-                dataset: {
-                    dimensions: ['time_point', 'score'],
-                    source: list
-                },
                 grid: {
                     left: '15px',
                     right: '10px',
@@ -197,6 +204,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
+                    data: fiexdDate,
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -257,11 +265,9 @@ export default {
                         type: 'line',
                         smooth: true,
                         showSymbol: false,
+                        data: yDataList,
                         itemStyle: {
                             color: lineObj[type].color
-                            // normal: {
-                            //     color: lineObj[type].color
-                            // }
                         },
                         areaStyle: {
                             color: new echarts.graphic.LinearGradient(

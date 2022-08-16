@@ -29,6 +29,7 @@
 import * as echarts from 'echarts';
 import { mulitAnalyseApi, optionListApi } from '@/api/index';
 import fiexdDate from '../../../utils/fixeddate';
+const dayjs = require('dayjs');
 
 export default {
     data() {

@@ -46,7 +46,7 @@ service.interceptors.response.use(
         console.log(error);
         // Message.error('请求超时');
         Message({
-            message: '请求超时',
+            message: '请求异常',
             type: 'error'
         });
         return Promise.reject();
