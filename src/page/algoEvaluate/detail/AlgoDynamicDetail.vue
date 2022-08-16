@@ -99,6 +99,7 @@
 </template>
 <script>
 import * as echarts from 'echarts';
+import dayjs from 'dayjs';
 export default {
     data() {
         return {
@@ -107,7 +108,7 @@ export default {
                 algo_type: '',
                 algo_id: '',
                 user_id: '',
-                timeRange: []
+                timeRange: [new Date(), new Date()] //筛选时间范围 默认当天
             },
             currentPage: 1,
             startValue: 3.5

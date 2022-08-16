@@ -31,7 +31,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-date-picker
-                        v-model="searchForm.timeRange"
+                        v-model="timeRange"
                         type="daterange"
                         range-separator="-"
                         start-placeholder="开始日期"
@@ -70,6 +70,7 @@
 
 <script>
 import { fiveDimensionsApi, optionListApi } from '@/api/index';
+import dayjs from 'dayjs';
 export default {
     name: 'completeness',
     data() {
@@ -80,7 +81,7 @@ export default {
                 algo_id: '',
                 user_id: ''
             },
-            timeRange: [], //筛选时间范围
+            timeRange: [new Date(), new Date()], //筛选时间范围 默认当天
             tableData: [],
             currentPage: 1,
             pageTotal: 0,
@@ -101,9 +102,10 @@ export default {
     methods: {
         getTableData(pageObj = { page: 1, pageNum: 10 }) {
             this.pageObj = pageObj;
-            let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
-            let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
-            // let query = { profile_type: 1, page: 1, limit: 10, start_time, end_time, ...this.searchForm };
+            let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
+            let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            let end_time = new Date(`${today2} 15:30`).getTime() / 1000; // let query = { profile_type: 1, page: 1, limit: 10, start_time, end_time, ...this.searchForm };
             let query = { profile_type: 2, start_time, end_time, page: pageObj.page, limit: pageObj.pageNum, ...this.searchForm };
             console.log(query);
             fiveDimensionsApi(query).then((res) => {

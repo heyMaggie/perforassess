@@ -13,14 +13,15 @@
                         <el-option v-for="item in algoTypeList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="选择对比算法" :width="300">
+                <el-form-item label="选择对比算法">
                     <el-select
-                        v-model="searchForm.algo_id"
+                        v-model="searchForm.algo_id_list"
                         clearable
                         placeholder="算法"
                         @focus="selectAlgoList"
                         multiple
                         class="select_width"
+                        @change="multipleChange"
                     >
                         <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
@@ -38,7 +39,7 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button
-                ><el-button type="plain" @click="onSubmit"><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button>
+                ><el-button type="plain" @click="downLoad"><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button>
             </div>
         </el-form>
         <div class="container">
@@ -75,6 +76,7 @@
 import * as echarts from 'echarts';
 import { mulitAnalyseApi, optionListApi } from '@/api/index';
 import fiexdDate from '../../utils/fixeddate';
+import dayjs from 'dayjs';
 
 export default {
     name: 'contrastive66t',
@@ -82,9 +84,9 @@ export default {
         return {
             searchForm: {
                 algo_type: '',
-                algo_id: []
+                algo_id_list: []
             },
-            timeRange: [],
+            timeRange: [new Date(), new Date()], //筛选时间范围 默认当天
             currentPage: 1,
             pageTotal: 0,
             algoTypeList: [],
@@ -107,6 +109,7 @@ export default {
             console.log('submit!', this.searchForm);
             this.getMulitAnalyseData();
         },
+        downLoad() {},
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
                 if (res.code == 200) {
@@ -115,7 +118,7 @@ export default {
             });
         },
         selectAlgoType() {
-            this.searchForm.algo_id = [];
+            this.searchForm.algo_id_list = [];
         },
         selectAlgoList() {
             // 获取算法
@@ -126,15 +129,22 @@ export default {
             console.log(this.searchForm);
             this.getOptionList(query, 'algoList', 'algo_name');
         },
+        multipleChange(val) {
+            if (val.length > 4) {
+                this.$message.error('最多只能选择4个对比算法！');
+                this.searchForm.algo_id_list.splice(-1);
+            }
+        },
         getMulitAnalyseData() {
-            let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
-            let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
+            let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
+            let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            let end_time = new Date(`${today2} 15:30`).getTime() / 1000;
             let query = {
-                start_time: start_time ? start_time : 1658194200,
-                end_time: end_time ? end_time : 1658244600,
-                user_id: 'aUser0000055',
-                algo_name: this.searchForm.algo_id.length ? this.searchForm.algo_id : ['V-wap plus', '智能委托(ZC)']
-                // algo_name: ['V-wap plus', '智能委托(ZC)']
+                start_time: start_time,
+                end_time: end_time,
+                user_id: 'aUser0000065',
+                algo_name: this.searchForm.algo_id_list
             };
             let list = [];
             mulitAnalyseApi(query).then((res) => {
@@ -442,10 +452,13 @@ export default {
 </script>
 
 <style scoped lang="less">
-.container {
-    .select_width {
-        width: 300px;
+.select_width {
+    /deep/ .el-input--small .el-input__inner {
+        width: 450px;
     }
+}
+
+.container {
     .card {
         margin-bottom: 12px;
 

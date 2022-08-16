@@ -49,8 +49,8 @@ export default {
             this.$router.push('/dashboard');
         },
         getOptionList() {
-            // let time = Date.parse(new Date()) / 1000;
-            let query = { choose_type: 8, date: 1658244600 };
+            let time = Date.parse(new Date()) / 1000;
+            let query = { choose_type: 8, date: time };
             optionListApi(query).then((res) => {
                 if (res.code == 200) {
                     let array = res.algo_name;
@@ -69,13 +69,13 @@ export default {
             });
         },
         getMulitAnalyseData() {
-            // let today = dayjs().format('YYYY-MM-DD');
-            // let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            // let end_time = new Date(`${today} 15:30`).getTime() / 1000;
+            let today = dayjs().format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            let end_time = new Date(`${today} 15:30`).getTime() / 1000;
             let query = {
-                start_time: 1658194200,
-                end_time: 1658244600,
-                user_id: 'aUser0000055',
+                start_time: start_time,
+                end_time: end_time,
+                user_id: 'aUser0000065',
                 algo_name: this.optAlgoList
             };
             let list = [];

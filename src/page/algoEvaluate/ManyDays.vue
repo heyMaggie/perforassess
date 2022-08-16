@@ -57,6 +57,7 @@
 import * as echarts from 'echarts';
 import fiexdDate from '../../utils/fixeddate';
 import { analyseAlgoApi, optionListApi } from '@/api/index';
+import dayjs from 'dayjs';
 export default {
     name: 'manyDays',
     data() {
@@ -67,7 +68,7 @@ export default {
                 algo_id: '',
                 user_id: ''
             },
-            timeRange: [], //筛选时间范围
+            timeRange: [new Date(), new Date()], //筛选时间范围 默认当天
             currentPage: 1,
             pageTotal: 0,
             providerList: [],
@@ -117,13 +118,15 @@ export default {
             this.getOptionList(query, 'algoList', 'algo_name');
         },
         getAnalyseAlgoData() {
-            let start_time = Date.parse(this.timeRange[0]) / 1000 || '';
-            let end_time = Date.parse(this.timeRange[1]) / 1000 || '';
+            let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
+            let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            let end_time = new Date(`${today2} 15:30`).getTime() / 1000;
             let query = {
-                start_time: start_time ? start_time : 1658194200,
-                end_time: end_time ? end_time : 1658590200,
-                user_id: 'aUser0000055',
-                algo_name: this.searchForm.algo_id ? this.searchForm.algo_id : 'V-wap plus'
+                start_time: start_time,
+                end_time: end_time,
+                user_id: 'aUser0000065',
+                algo_name: this.searchForm.algo_id
                 // algo_name: this.searchForm.algo_id
             };
             let list = [];

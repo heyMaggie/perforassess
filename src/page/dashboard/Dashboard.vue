@@ -98,7 +98,7 @@
                                             :type="sonItem.profit_rate > 0 ? 'danger' : 'success'"
                                         >
                                             <div class="number">
-                                                <span class="symbol">{{ sonItem.profit_rate > 0 ? '+' : '- ' }}</span
+                                                <span class="symbol">{{ sonItem.profit_rate > 0 ? '+' : ' ' }}</span
                                                 >{{ Number(sonItem.profit_rate).toFixed(1) }}<span class="unit">%</span>
                                             </div>
                                         </el-badge>
@@ -133,14 +133,18 @@
                 <div class="card">
                     <div class="card-title">
                         <span>算法绩效</span>
-                        <span class="more" @click="goMoreAlgo">查看更多<span class="icon el-icon-arrow-right"></span></span>
+                        <span class="more" @click="goMoreAlgo" v-if="algoContrastList.length"
+                            >查看更多<span class="icon el-icon-arrow-right"></span
+                        ></span>
                     </div>
                     <div class="main1" id="main1"></div>
                 </div>
                 <div class="card">
                     <div class="card-title">
                         <span>算法总体评分</span>
-                        <span class="more" @click="goMoreGrade">查看更多<span class="icon el-icon-arrow-right"></span></span>
+                        <span class="more" @click="goMoreGrade" v-if="algoContrastList.length"
+                            >查看更多<span class="icon el-icon-arrow-right"></span
+                        ></span>
                     </div>
                     <div id="radar" class="radarCard"></div>
                 </div>
@@ -166,7 +170,8 @@ export default {
             selectIndex: '0',
             assessList: [],
             pageTotal: 0,
-            pageObj: { page: 1, pageNum: 4 }
+            pageObj: { page: 1, pageNum: 4 },
+            algoContrastList: []
         };
     },
     created() {
@@ -175,9 +180,6 @@ export default {
     },
     mounted() {},
     methods: {
-        onSubmit() {
-            console.log('submit!', this.searchForm);
-        },
         getWaterEchart(data) {
             data = data.toFixed(1) / 100;
             // data = (data.toFixed(2) / 100).toFixed(1);
@@ -882,10 +884,10 @@ export default {
             this.$router.push('/algoGrade');
         },
         getSummarydata() {
-            // let today = dayjs().format('YYYY-MM-DD');
-            // let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            // let end_time = new Date(`${today} 15:30`).getTime() / 1000;
-            let query = { start_time: 1658194200, end_time: 1658244600 };
+            let today = dayjs().format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            let end_time = new Date(`${today} 15:30`).getTime() / 1000;
+            let query = { start_time, end_time };
             dashboardSummarydApi(query).then((res) => {
                 // if (res.code == 200) {
                 this.summaryObj = res;
@@ -905,25 +907,17 @@ export default {
                 if (res.code == 200) {
                     this.algo_nameList = res.algo_type;
                     this.getFerfAlgolist();
-                    // this.$nextTick(() => {
-                    //     for (let i = 1; i < this.algoContrastList.length; i++) {
-                    //         this.getSemicircle('pieList' + i, {
-                    //             buy: 39.96,
-                    //             sell: 60.03
-                    //         });
-                    //     }
-                    // });
                 }
             });
         },
         getFerfAlgolist(pageObj = { page: 1, pageNum: 4 }) {
             this.pageObj = pageObj;
-            // let today = dayjs().format('YYYY-MM-DD');
-            // let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            // let end_time = new Date(`${today} 15:30`).getTime() / 1000;
+            let today = dayjs().format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
+            let end_time = new Date(`${today} 15:30`).getTime() / 1000;
             let query = {
-                start_time: 1658194200,
-                end_time: 1658244600,
+                start_time: start_time,
+                end_time: end_time,
                 algo_type_name: this.algo_nameList[this.activeName],
                 page: pageObj.page,
                 limit: pageObj.pageNum
