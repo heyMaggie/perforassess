@@ -10,7 +10,8 @@
             <div class="main-content">
                 <div class="cardB-title">算法总体评分</div>
                 <div class="big-blue-card">
-                    <table border="0">
+                    <el-empty v-if="!tableData.length" description="暂无数据" style="height: 491px"></el-empty>
+                    <table v-else border="0">
                         <tr>
                             <th>排名</th>
                             <th>算法名称</th>
@@ -71,8 +72,8 @@ export default {
         },
         getAlgoRankingList(pageObj = { page: 1, pageNum: 5 }) {
             this.pageObj = pageObj;
-            // let time = Date.parse(new Date()) / 1000;
-            let query = { date: 1658194200, page: pageObj.page, limit: pageObj.pageNum };
+            let time = Date.parse(new Date()) / 1000;
+            let query = { date: time, page: pageObj.page, limit: pageObj.pageNum };
             algoRankingApi(query).then((res) => {
                 if (res.code == 200) {
                     this.tableData = res.info;
