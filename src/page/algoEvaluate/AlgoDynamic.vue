@@ -753,8 +753,7 @@ export default {
             let today = dayjs().format('YYYY-MM-DD');
             let start_time = new Date(`${today} 09:30`).getTime() / 1000;
             let end_time = new Date(`${today} 15:30`).getTime() / 1000;
-            // let query = { algo_name: this.searchForm.algo_id, user_id: 'aUser0000065', start_time, end_time };
-            let query = { algo_name: this.searchForm.algo_id, user_id: 'aUser0000065', start_time, end_time };
+            let query = { algo_name: this.searchForm.algo_id, user_id: localStorage.getItem('ms_username'), start_time, end_time };
             this.dimensionalityList = [];
             let radarList = [];
             let marketRateList = [];

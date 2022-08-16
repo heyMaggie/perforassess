@@ -143,7 +143,7 @@ export default {
             let query = {
                 start_time: start_time,
                 end_time: end_time,
-                user_id: 'aUser0000065',
+                user_id: localStorage.getItem('ms_username'),
                 algo_name: this.searchForm.algo_id_list
             };
             let list = [];

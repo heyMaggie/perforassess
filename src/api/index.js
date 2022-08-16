@@ -63,3 +63,12 @@ export const algoRankingApi = (query) => {
         data: query
     });
 };
+
+// 登录
+export const loginApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/login',
+        method: 'post',
+        data: query
+    });
+};

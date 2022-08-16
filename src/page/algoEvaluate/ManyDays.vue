@@ -24,7 +24,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.user_id" clearable placeholder="用户ID">
+                    <el-select v-model="searchForm.user_id" clearable placeholder="用户ID" v-if="false">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
@@ -66,7 +66,7 @@ export default {
                 provider: '',
                 algo_type: '',
                 algo_id: '',
-                user_id: ''
+                user_id: localStorage.getItem('ms_username')
             },
             timeRange: [new Date(), new Date()], //筛选时间范围 默认当天
             currentPage: 1,
@@ -125,7 +125,7 @@ export default {
             let query = {
                 start_time: start_time,
                 end_time: end_time,
-                user_id: 'aUser0000065',
+                user_id: localStorage.getItem('ms_username'),
                 algo_name: this.searchForm.algo_id
                 // algo_name: this.searchForm.algo_id
             };
