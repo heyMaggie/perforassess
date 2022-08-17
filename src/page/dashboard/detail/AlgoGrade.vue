@@ -19,7 +19,7 @@
                         </tr>
                         <tr v-for="(item, i) in tableData" :key="i">
                             <td align="center">
-                                <div class="adorn" v-if="i < 4">{{ item.ranking }}</div>
+                                <div class="adorn" v-if="i < 3">{{ item.ranking }}</div>
                                 <div class="rank" v-else>{{ item.ranking }}</div>
                             </td>
                             <td align="center">

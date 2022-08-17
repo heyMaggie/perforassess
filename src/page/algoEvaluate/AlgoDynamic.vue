@@ -48,8 +48,9 @@
             <div class="card" id="main2"></div>
             <div class="card">
                 <div class="card-title">资金占比</div>
-                <el-empty v-if="!marketRateList.length" description="暂无数据" class="min-empty"></el-empty>
-                <div v-else class="blur-card" id="pie1"></div>
+                <div class="blur-card" id="pie1"></div>
+                <!-- <el-empty v-if="!marketRate.length" description="暂无数据" class="min-empty"></el-empty>
+                <div v-show="marketRate.length" class="blur-card" id="pie1"></div> -->
             </div>
             <div class="card">
                 <div class="card-title">买卖方向</div>
@@ -57,13 +58,14 @@
             </div>
             <div class="card">
                 <div class="card-title">股价类型</div>
-                <el-empty v-if="!priceType.length" description="暂无数据" class="min-empty"></el-empty>
-                <div class="blur-card" v-else id="pie3"></div>
+                <el-empty v-show="!priceType.length" description="暂无数据" class="min-empty"></el-empty>
+                <div class="blur-card" id="pie3"></div>
             </div>
             <div class="card">
                 <div class="card-title">交易量</div>
-                <el-empty v-if="!volTypeList.length" description="暂无数据" class="min-empty"></el-empty>
-                <div class="blur-card" v-else id="pie4"></div>
+                <div class="blur-card" id="pie4"></div>
+                <!-- <el-empty v-if="!volType.length" description="暂无数据" class="min-empty"></el-empty>
+                <div class="blur-card" v-show="volType.length" id="pie4"></div> -->
             </div>
         </div>
     </div>
@@ -98,9 +100,7 @@ export default {
             volType: [], //交易量
             assessLine: [], //绩效
             progressLine: [], //完成度
-            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法稳定性分析', '算法绩效分析'],
-            marketRateList: [],
-            volTypeList: []
+            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法稳定性分析', '算法绩效分析']
         };
     },
     created() {
@@ -121,6 +121,7 @@ export default {
             this.getDynamicData();
         },
         getRadarChart(radarList) {
+            console.log(radarList, 'radarList');
             let option = {
                 color: ['#3281FF', '#FACC14', '#2FC25B'],
                 radar: [
@@ -252,16 +253,24 @@ export default {
             option && myChart.setOption(option);
             myChart.resize();
         },
-        generateChart(list, type) {
+        generateChart(list = [], type) {
+            list = !list ? [] : list;
             let yDataList = [];
-            list.forEach((item) => {
-                yDataList.push(item.score);
-            });
+            let isNull = true;
+            console.log(list);
+            if (!list.length) {
+                isNull = true;
+            } else {
+                isNull = false;
+                list.forEach((item) => {
+                    yDataList.push(item.score);
+                });
+            }
+
             let lineObj = {
                 main1: { name: '实时绩效', color: '#83BDFF' },
                 main2: { name: '实时完成度', color: '#FCE75F' }
             };
-            let isNull = list.length ? false : true;
             let option = {
                 title: {
                     text: lineObj[type].name,
@@ -389,9 +398,17 @@ export default {
             myChart.resize();
         },
         getPieChart(type, rateList) {
+            var myChart;
             var chartDom = document.getElementById(type);
-            var myChart = echarts.init(chartDom);
+            myChart = echarts.init(chartDom);
             var option;
+            console.log(rateList, 'rateList');
+            // rateList = [
+            //     { mk_name: '超大市值', rate: 0 },
+            //     { mk_name: '大市值', rate: 0 },
+            //     { mk_name: '中等市值', rate: 0 },
+            //     { mk_name: '小市值', rate: 100 }
+            // ];
             let pieObj = {
                 pie1: { name1: '资 金 占 比', colorList: ['#F78B7F', '#FACC14', '#7CB3FF', '#2FC25B'] },
                 pie4: { name1: '交易量占比', colorList: ['#32B7FF', '#FACC14', '#32B7FF', '#83BDFF'] }
@@ -469,15 +486,17 @@ export default {
                     }
                 ]
             };
-            option && myChart.setOption(option);
+            myChart.clear();
+            option && myChart.setOption(option, true);
         },
         getSemicircle() {
+            var myChart;
             var chartDom = document.getElementById('pie2');
-            var myChart = echarts.init(chartDom);
+            myChart = echarts.init(chartDom);
             var option;
             let sell_rate = 0;
             let buy_rate = 0;
-            if (this.side.length) {
+            if (this.side) {
                 sell_rate = (this.side.sell_rate / 1).toFixed(1);
                 buy_rate = (this.side.buy_rate / 1).toFixed(1);
             }
@@ -638,15 +657,15 @@ export default {
             myChart.setOption(option, true);
         },
         getStripChart() {
-            var chartDom = document.getElementById('pie3');
-            var myChart = echarts.init(chartDom);
             var option;
+            var myChart;
+            var chartDom = document.getElementById('pie3');
+            myChart = echarts.init(chartDom);
             var _max = 100;
             var colorList = ['#65A6FF', '#72E05A', '#32B7FF', '#83BDFF', '#83E3FF', '#F78B7F', '#FFD747'];
             let seriesList = [];
             let borderRadius = [];
             let priceTypeList = this.priceType;
-            console.log(priceTypeList, 'priceTypeList');
             priceTypeList.forEach((item, i) => {
                 borderRadius = i == 0 ? [4, 0, 0, 4] : i == priceTypeList.length - 1 ? [0, 4, 4, 0] : '';
                 seriesList.push({
@@ -668,8 +687,8 @@ export default {
                     data: [item.rate.toFixed(1)]
                 });
             });
-            console.log(seriesList, 'seriesList');
-
+            console.log(this.priceType, 'this.priceType');
+            console.log(seriesList, 'seriesListseriesList');
             option = {
                 legend: [
                     {
@@ -754,8 +773,8 @@ export default {
                 ],
                 series: seriesList
             };
-
-            myChart.setOption(option, true);
+            myChart.clear();
+            option && myChart.setOption(option, true);
         },
         getDynamicData() {
             let today = dayjs().format('YYYY-MM-DD');
@@ -764,59 +783,64 @@ export default {
             let query = { algo_name: this.searchForm.algo_id, user_id: localStorage.getItem('ms_username'), start_time, end_time };
             this.dimensionalityList = [];
             let radarList = [];
+            let marketRateList = [];
+            let volTypeList = [];
             dynamicApi(query)
                 .then((res) => {
                     if (res.code == 200) {
                         this.startValue = res.composite_score / 20;
                         this.compositeScore = res.composite_score;
                         this.ranking = res.ranking;
-                        this.marketRate = res.market_rate;
-                        this.side = res.side;
-                        this.priceType = res.price_type;
-                        this.volType = res.vol_type;
+                        this.side = res.side; //买卖方向
+                        this.priceType = res.price_type; //股价类型
                         this.assessLine = res.assess_line;
                         this.progressLine = res.progress_line;
-                        this.dimension = res.dimension.sort((a, b) => {
-                            return a.profile_type - b.profile_type;
-                        }); //5个维度升序
-                        this.dimension.forEach((item, i) => {
-                            this.dimensionalityList.push({
-                                title: this.titleList[i],
-                                desc: item.desc
+                        //5个维度升序
+                        if (res.dimension && res.dimension.length) {
+                            this.dimension = res.dimension.sort((a, b) => {
+                                return a.profile_type - b.profile_type;
                             });
-                            radarList.push(item.score);
-                        });
-                        this.getRadarChart(radarList);
+                            this.dimension.forEach((item, i) => {
+                                this.dimensionalityList.push({
+                                    title: this.titleList[i],
+                                    desc: item.desc
+                                });
+                                radarList.push(item.score);
+                            });
+                        }
+                        //资金占比
+                        if (res.market_rate && res.market_rate.length) {
+                            this.marketRate = res.market_rate;
+                            res.market_rate.forEach((item, i) => {
+                                marketRateList.push({ name: item.mk_name, value: item.rate.toFixed(1) });
+                            });
+                        }
+                        //交易量
+                        if (res.vol_type && res.vol_type.length) {
+                            this.volType = res.vol_type;
+                            res.vol_type.forEach((item, i) => {
+                                volTypeList.push({ name: item.vol_name, value: item.rate.toFixed(1) });
+                            });
+                        }
+                        this.getPieChart('pie1', marketRateList); //资金占比
+                        this.getPieChart('pie4', volTypeList); //交易量
+                        this.getRadarChart(radarList); //雷达图
                         this.generateChart(res.assess_line.point, 'main1');
                         this.generateChart(res.progress_line.point, 'main2');
-                        res.market_rate.forEach((item, i) => {
-                            this.marketRateList.push({ name: item.mk_name, value: item.rate.toFixed(1) });
-                        });
-                        res.vol_type.forEach((item, i) => {
-                            this.volTypeList.push({ name: item.vol_name, value: item.rate.toFixed(1) });
-                        });
-                        this.getPieChart('pie1', this.marketRateList);
-                        this.getPieChart('pie4', this.volTypeList);
-                        this.getSemicircle('pie2');
-                        this.getStripChart();
+                        this.getSemicircle(); //买卖方向
+                        this.getStripChart(); //股价类型
                     } else {
-                        this.generateChart([], 'main1');
-                        this.generateChart([], 'main2');
-                        this.getSemicircle('pie2');
-                        this.getRadarChart([]);
-                        this.priceType = [];
-                        this.marketRateList = [];
-                        this.volTypeList = [];
+                        return Promise.reject(new Error('返回错误'));
                     }
                 })
-                .catch(() => {
+                .catch((erro) => {
+                    console.log(999999999, erro);
                     this.generateChart([], 'main1');
                     this.generateChart([], 'main2');
-                    this.getSemicircle('pie2');
+                    this.getPieChart('pie1', []); //资金占比
+                    this.getPieChart('pie4', []); //交易量
+                    this.getSemicircle();
                     this.getRadarChart([]);
-                    this.priceType = [];
-                    this.marketRateList = [];
-                    this.volTypeList = [];
                 });
         },
         getOptionList(query, type, list) {

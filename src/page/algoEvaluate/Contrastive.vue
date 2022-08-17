@@ -180,13 +180,17 @@ export default {
                 });
                 return lineObj;
             }
-            if (list.length == 0 || !list) {
-                this.$message.error('该时间段暂无数据');
+            if (!list.length || !list) {
+                // this.$message.error('该时间段暂无数据');
                 isNull = true;
             } else {
-                isNull = false;
                 list.forEach((params) => {
-                    seriesList.push(singelLine(params));
+                    if (params.data) {
+                        seriesList.push(singelLine(params));
+                        isNull = false;
+                    } else {
+                        isNull = true;
+                    }
                 });
                 let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
@@ -380,7 +384,7 @@ export default {
                                 max: 10
                             },
                             {
-                                name: '贴合度',
+                                name: '经济性',
                                 max: 10
                             },
                             {

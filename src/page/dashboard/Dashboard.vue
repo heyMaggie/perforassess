@@ -396,8 +396,8 @@ export default {
                 });
                 return lineObj;
             }
-            if (list.length == 0) {
-                this.$message.error('该时间段暂无数据');
+            if (!list.length || !list[0].time_line) {
+                // this.$message.error('该时间段暂无数据');
                 isNull = true;
             } else {
                 list.forEach((params) => {
