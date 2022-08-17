@@ -134,20 +134,26 @@ export default {
                 .then((res) => {
                     if (res.code == 200) {
                         list = res.data;
-                        list.forEach((item) => {
-                            item.point = item.point ? item.point : [];
-                            switch (item.profile_type) {
-                                case 4: //绩效
-                                    this.generateChart(item.point, 'main1');
-                                    break;
-                                case 3: //风险度
-                                    this.generateChart(item.point, 'main2');
-                                    break;
-                                case 2: //完成度
-                                    this.generateChart(item.point, 'main3');
-                                    break;
-                            }
-                        });
+                        if (!list.length) {
+                            this.generateChart([], 'main1');
+                            this.generateChart([], 'main2');
+                            this.generateChart([], 'main3');
+                        } else {
+                            list.forEach((item) => {
+                                item.point = item.point ? item.point : [];
+                                switch (item.profile_type) {
+                                    case 4: //绩效
+                                        this.generateChart(item.point, 'main1');
+                                        break;
+                                    case 3: //风险度
+                                        this.generateChart(item.point, 'main2');
+                                        break;
+                                    case 2: //完成度
+                                        this.generateChart(item.point, 'main3');
+                                        break;
+                                }
+                            });
+                        }
                     } else {
                         this.generateChart([], 'main1');
                         this.generateChart([], 'main2');

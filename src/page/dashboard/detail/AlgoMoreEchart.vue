@@ -53,7 +53,7 @@ export default {
             let time = Date.parse(new Date()) / 1000;
             let query = { choose_type: 8, date: time };
             optionListApi(query).then((res) => {
-                if (res.code == 200) {
+                if (res.code == 200 && res.algo_name && res.algo_name.length) {
                     let array = res.algo_name;
                     // array = ['智能委托(ZC)', 'V-wap plus', '9999', '8888', '7777', '6666', '5555', '4444', '3333', '2222', '1111'];
                     let len = array.length;
@@ -66,6 +66,8 @@ export default {
                     console.log(this.algoNameList);
                     this.optAlgoList = this.algoNameList[0];
                     this.getMulitAnalyseData();
+                } else {
+                    this.generateChart([], 'main1');
                 }
             });
         },

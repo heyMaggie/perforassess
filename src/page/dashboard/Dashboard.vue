@@ -76,7 +76,8 @@
             </div>
             <div class="showClounm">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane v-for="(item, i) in algo_nameList" :key="item" :label="item" :name="i + ''">
+                    <el-empty v-if="!algo_nameList.length" description="暂无数据" style="height: 532px"></el-empty>
+                    <el-tab-pane v-else v-for="(item, i) in algo_nameList" :key="item" :label="item" :name="i + ''">
                         <el-empty v-if="!assessList.length" description="暂无数据" class="empty-card"></el-empty>
                         <div v-else class="pane-card">
                             <div v-for="(sonItem, j) in assessList" :key="sonItem.provider">
@@ -396,7 +397,7 @@ export default {
                 return lineObj;
             }
             if (list.length == 0) {
-                message.error('该时间段暂无数据');
+                this.$message.error('该时间段暂无数据');
                 isNull = true;
             } else {
                 list.forEach((params) => {
@@ -907,6 +908,9 @@ export default {
                 if (res.code == 200) {
                     this.algo_nameList = res.algo_type;
                     this.getFerfAlgolist();
+                } else {
+                    this.generateChart([], 'main1');
+                    this.getRadarChart([]);
                 }
             });
         },
@@ -922,27 +926,35 @@ export default {
                 page: pageObj.page,
                 limit: pageObj.pageNum
             };
-            dashboardAlgolistApi(query).then((res) => {
-                if (res.code == 200) {
-                    this.assessList = res.list ? res.list : [];
-                    this.algoContrastList = res.assess;
-                    this.pageTotal = res.total;
-                    this.generateChart(this.algoContrastList, 'main1');
-                    this.getRadarChart(this.algoContrastList);
-                    if (this.assessList.length) {
-                        this.$nextTick(() => {
-                            this.assessList.forEach((item, i) => {
-                                this.$refs['pieList' + i].height = '50px';
-                                this.$refs['pieList' + i].width = '300px';
-                                this.getSemicircle('pieList' + i, {
-                                    buy: item.side.buy,
-                                    sell: item.side.sell
+            dashboardAlgolistApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        this.assessList = res.list ? res.list : [];
+                        this.algoContrastList = res.assess;
+                        this.pageTotal = res.total;
+                        this.generateChart(this.algoContrastList, 'main1');
+                        this.getRadarChart(this.algoContrastList);
+                        if (this.assessList.length) {
+                            this.$nextTick(() => {
+                                this.assessList.forEach((item, i) => {
+                                    this.$refs['pieList' + i].height = '50px';
+                                    this.$refs['pieList' + i].width = '300px';
+                                    this.getSemicircle('pieList' + i, {
+                                        buy: item.side.buy,
+                                        sell: item.side.sell
+                                    });
                                 });
                             });
-                        });
+                        }
+                    } else {
+                        this.generateChart([], 'main1');
+                        this.getRadarChart([]);
                     }
-                }
-            });
+                })
+                .catch((erro) => {
+                    this.generateChart([], 'main1');
+                    this.getRadarChart([]);
+                });
         }
     }
 };
