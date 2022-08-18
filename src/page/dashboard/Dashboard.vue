@@ -76,9 +76,19 @@
             </div>
             <div class="showClounm">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-empty v-if="!algo_nameList.length" description="暂无数据" style="height: 532px"></el-empty>
+                    <el-empty
+                        v-if="!algo_nameList.length"
+                        description="暂无数据"
+                        style="height: 532px"
+                        :image="require('../../assets/img/empty.png')"
+                    ></el-empty>
                     <el-tab-pane v-else v-for="(item, i) in algo_nameList" :key="item" :label="item" :name="i + ''">
-                        <el-empty v-if="!assessList.length" description="暂无数据" class="empty-card"></el-empty>
+                        <el-empty
+                            v-if="!assessList.length"
+                            description="暂无数据"
+                            class="empty-card"
+                            :image="require('../../assets/img/empty.png')"
+                        ></el-empty>
                         <div v-else class="pane-card">
                             <div v-for="(sonItem, j) in assessList" :key="sonItem.provider">
                                 <div class="rowtitle">{{ sonItem.provider }}</div>

@@ -39,7 +39,12 @@
                     <el-rate class="rate" v-model="startValue" disabled> </el-rate>
                     <div class="rank-icon">{{ ranking }}</div>
                 </div>
-                <el-empty v-if="!dimensionalityList.length" description="暂无数据" class="medium-empty"></el-empty>
+                <el-empty
+                    v-if="!dimensionalityList.length"
+                    description="暂无数据"
+                    class="medium-empty"
+                    :image="require('../../assets/img/empty.png')"
+                ></el-empty>
                 <div v-else class="dimensionality" v-for="item in dimensionalityList" :key="item.title">
                     <div class="title">{{ item.title }}</div>
                     <div class="explain" :title="item.desc">{{ item.desc }}</div>
@@ -58,7 +63,12 @@
             </div>
             <div class="card">
                 <div class="card-title">股价类型</div>
-                <el-empty v-show="!priceType.length" description="暂无数据" class="min-empty"></el-empty>
+                <el-empty
+                    v-show="!priceType.length"
+                    description="暂无数据"
+                    class="min-empty"
+                    :image="require('../../assets/img/empty.png')"
+                ></el-empty>
                 <div class="blur-card" id="pie3"></div>
             </div>
             <div class="card">

@@ -49,7 +49,12 @@
                 <div class="right-row">
                     <div class="bulue-card radar" id="main2"></div>
                     <div class="bulue-card grade">
-                        <el-empty v-if="!mulitAnalyList.length" description="暂无数据" style="width: 100%"></el-empty>
+                        <el-empty
+                            v-if="!mulitAnalyList.length"
+                            description="暂无数据"
+                            style="width: 100%"
+                            :image="require('../../assets/img/empty.png')"
+                        ></el-empty>
                         <template v-else>
                             <div class="grade-lump" v-for="(item, i) in mulitAnalyList" :key="i">
                                 <div class="score">

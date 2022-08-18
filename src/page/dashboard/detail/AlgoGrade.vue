@@ -10,7 +10,12 @@
             <div class="main-content">
                 <div class="cardB-title">算法总体评分</div>
                 <div class="big-blue-card">
-                    <el-empty v-if="!tableData.length" description="暂无数据" style="height: 491px"></el-empty>
+                    <el-empty
+                        v-if="!tableData.length"
+                        description="暂无数据"
+                        style="height: 491px"
+                        :image="require('../../../assets/img/empty.png')"
+                    ></el-empty>
                     <table v-else border="0">
                         <tr>
                             <th>排名</th>

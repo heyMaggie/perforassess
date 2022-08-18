@@ -45,7 +45,12 @@
             </div>
         </el-form>
         <div class="table-container">
-            <el-empty v-if="!tableData.length" description="暂无数据" style="height: 695px"></el-empty>
+            <el-empty
+                v-if="!tableData.length"
+                description="暂无数据"
+                style="height: 695px"
+                :image="require('../../../assets/img/empty.png')"
+            ></el-empty>
             <el-table v-else :data="tableData" size="medium " :row-style="{ height: '56px' }" height="695px">
                 <el-table-column prop="algo_name" label="算法名称"> </el-table-column>
                 <el-table-column prop="min_jonit_rate" label="最小贴合度"> </el-table-column>
