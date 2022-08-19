@@ -173,7 +173,6 @@ export default {
     name: 'dashBoard',
     data() {
         return {
-            startValue: 3.5,
             activeName: '0',
             summaryObj: {
                 user_cnt: '0',

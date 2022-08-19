@@ -45,7 +45,7 @@
                 ><el-button type="plain" @click="onDownLoad"><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button>
             </div>
         </el-form>
-        <div class="container">
+        <div class="container" id="resultsHuiZongTableId">
             <div class="card" id="main1"></div>
             <div class="card" id="main2"></div>
             <div class="card" id="main3"></div>
@@ -58,6 +58,8 @@ import * as echarts from 'echarts';
 import fiexdDate from '../../utils/fixeddate';
 import { analyseAlgoApi, optionListApi } from '@/api/index';
 import dayjs from 'dayjs';
+import html2Canvas from 'html2canvas';
+import JsPDF from 'jspdf';
 export default {
     name: 'manyDays',
     data() {
@@ -92,6 +94,7 @@ export default {
         },
         onDownLoad() {
             console.log('onDownLoad!');
+            this.createPDF('多日分析');
         },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
@@ -303,6 +306,48 @@ export default {
             myChart.clear();
             myChart.setOption(option);
             myChart.resize();
+        },
+        createPDF(title) {
+            return new Promise((resolve) => {
+                html2Canvas(document.querySelector('#resultsHuiZongTableId'), {
+                    allowTaint: false,
+                    useCORS: true, // allowTaint、useCORS只能够出现一个
+                    imageTimeout: 0,
+                    dpi: 500, // 像素
+                    scale: 4 // 图片大小
+                }).then(function (canvas) {
+                    // document.body.appendChild(canvas)
+                    // 用于将canvas对象转换为base64位编码
+                    let pageData = canvas.toDataURL('image/jpeg', 1.0),
+                        canvasWidth = canvas.width,
+                        canvasHeight = canvas.height,
+                        concentWidth = 500,
+                        concentHeight = Math.round((concentWidth / canvasWidth) * canvasHeight),
+                        position = 40,
+                        pageHeight = 892,
+                        height = concentHeight;
+                    console.log(canvasWidth, canvasHeight);
+                    console.log(height, pageHeight, concentWidth);
+                    // 新建一个new JsPDF，A3的像素大小 842*1191，A4的像素大小 592*841。这个px像素不准确，不清楚他们的像素大小来源如何
+                    let PDF = new JsPDF('p', 'px', 'a3');
+                    if (height <= pageHeight) {
+                        // 添加图片
+                        PDF.addImage(pageData, 'JPEG', 60, position, concentWidth, concentHeight);
+                    } else {
+                        while (height > 0) {
+                            PDF.addImage(pageData, 'JPEG', 60, position, concentWidth, concentHeight);
+                            height -= pageHeight;
+                            position -= pageHeight;
+                            if (height > 0) {
+                                PDF.addPage();
+                            }
+                        }
+                    }
+                    // 保存 pdf 文档
+                    PDF.save(`${title}.pdf`);
+                    resolve(true);
+                });
+            });
         }
     }
 };

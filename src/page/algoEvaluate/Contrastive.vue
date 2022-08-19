@@ -42,7 +42,7 @@
                 ><el-button type="plain" @click="downLoad"><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button>
             </div>
         </el-form>
-        <div class="container">
+        <div class="container" id="resultsHuiZongTableId">
             <div class="card" id="main1"></div>
             <div class="card p-bottom">
                 <div class="card-title">算法能力分析</div>
@@ -85,7 +85,8 @@ import * as echarts from 'echarts';
 import { mulitAnalyseApi, optionListApi } from '@/api/index';
 import fiexdDate from '../../utils/fixeddate';
 import dayjs from 'dayjs';
-
+import html2Canvas from 'html2canvas';
+import JsPDF from 'jspdf';
 export default {
     name: 'contrastive66t',
     data() {
@@ -117,7 +118,9 @@ export default {
             console.log('submit!', this.searchForm);
             this.getMulitAnalyseData();
         },
-        downLoad() {},
+        downLoad() {
+            this.createPDF('对比分析');
+        },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
                 if (res.code == 200) {
@@ -463,6 +466,51 @@ export default {
             var myChart = echarts.init(document.getElementById('main2'));
             option && myChart.setOption(option);
             myChart.resize();
+        },
+        createPDF(title) {
+            return new Promise((resolve) => {
+                html2Canvas(document.querySelector('#resultsHuiZongTableId'), {
+                    allowTaint: false,
+                    useCORS: true, // allowTaint、useCORS只能够出现一个
+                    imageTimeout: 0,
+                    dpi: 500, // 像素
+                    scale: 4 // 图片大小
+                }).then(function (canvas) {
+                    // document.body.appendChild(canvas)
+                    // 用于将canvas对象转换为base64位编码
+                    console.log(canvas, 'canvas');
+                    let pageData = canvas.toDataURL('image/jpeg', 1.0),
+                        canvasWidth = canvas.width,
+                        canvasHeight = canvas.height,
+                        concentWidth = 610,
+                        concentHeight = Math.round((concentWidth / canvasWidth) * canvasHeight),
+                        position = 40,
+                        pageHeight = 892,
+                        height = concentHeight;
+                    console.log(canvasWidth, canvasHeight);
+                    console.log(height, pageHeight, concentWidth, concentHeight);
+                    // 新建一个new JsPDF，A3的像素大小 842*1191，A4的像素大小 592*841。这个px像素不准确，不清楚他们的像素大小来源如何
+                    let PDF = new JsPDF('p', 'px', 'a3');
+                    if (height <= pageHeight) {
+                        // 添加图片
+                        // PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, 867);
+                        PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, concentHeight);
+                    } else {
+                        while (height > 0) {
+                            // PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, 867);
+                            PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, concentHeight);
+                            height -= pageHeight;
+                            position -= pageHeight;
+                            if (height > 0) {
+                                PDF.addPage();
+                            }
+                        }
+                    }
+                    // 保存 pdf 文档
+                    PDF.save(`${title}.pdf`);
+                    resolve(true);
+                });
+            });
         }
     }
 };
