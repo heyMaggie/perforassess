@@ -155,19 +155,24 @@ export default {
                 algo_name: this.searchForm.algo_id_list
             };
             let list = [];
-            mulitAnalyseApi(query).then((res) => {
-                if (res.code == 200) {
-                    list = res.list ? res.list : [];
-                    this.mulitAnalyList = res.list ? res.list : [];
-                    this.mulitAnalyList.forEach((item) => {
-                        item.startValue = item.composite_score / 20;
-                    });
-                    this.generateChart(list, 'main1');
-                    this.getRadarChart(list);
-                } else {
-                    this.$message.error('请求错误');
-                }
-            });
+            mulitAnalyseApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        list = res.list ? res.list : [];
+                        this.mulitAnalyList = res.list ? res.list : [];
+                        this.mulitAnalyList.forEach((item) => {
+                            item.startValue = item.composite_score / 20;
+                        });
+                        this.generateChart(list, 'main1');
+                        this.getRadarChart(list);
+                    } else {
+                        return Promise.reject(new Error('请求异常'));
+                    }
+                })
+                .catch(() => {
+                    this.generateChart([], 'main1');
+                    this.getRadarChart([]);
+                });
         },
         generateChart(list, type) {
             let isNull = list.length ? false : true;

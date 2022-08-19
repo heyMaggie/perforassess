@@ -175,8 +175,19 @@ export default {
         return {
             startValue: 3.5,
             activeName: '0',
-            summaryObj: {},
-            market_rate: {},
+            summaryObj: {
+                user_cnt: '0',
+                algo_cnt: '0',
+                trade_vol: '0',
+                order_cnt: '0',
+                provider_cnt: '0'
+            },
+            market_rate: {
+                huge: '0',
+                big: '0',
+                middle: '0',
+                small: '0'
+            },
             algo_nameList: [],
             selectIndex: '0',
             assessList: [],
@@ -536,6 +547,10 @@ export default {
             myChart.resize();
         },
         getSemicircle(type, data) {
+            if (!data || !data.length) {
+                data.buy = '0';
+                data.sell = '0';
+            }
             data.buy = Number(data.buy).toFixed(1) / 1;
             data.sell = Number(data.sell).toFixed(1) / 1;
             var chartDom = document.getElementById(type);
@@ -716,9 +731,6 @@ export default {
                     }
                 ]
             };
-            // if (type != 'pie2') {
-
-            // }
             option2 = {
                 series: [
                     {
@@ -899,30 +911,37 @@ export default {
             let start_time = new Date(`${today} 09:30`).getTime() / 1000;
             let end_time = new Date(`${today} 15:30`).getTime() / 1000;
             let query = { start_time, end_time };
-            dashboardSummarydApi(query).then((res) => {
-                // if (res.code == 200) {
-                this.summaryObj = res;
-                this.market_rate = this.summaryObj.market_rate;
-                this.getSemicircle('pie2', this.summaryObj.side);
-                this.getWaterEchart(this.summaryObj.progress);
-                console.log(this.summaryObj);
-                console.log(this.market_rate);
-                // }
-            });
+            dashboardSummarydApi(query)
+                .then((res) => {
+                    // if (res.code == 200) {
+                    this.summaryObj = res;
+                    this.market_rate = this.summaryObj.market_rate;
+                    this.getSemicircle('pie2', this.summaryObj.side);
+                    this.getWaterEchart(this.summaryObj.progress);
+                    // }
+                })
+                .catch(() => {
+                    this.getSemicircle('pie2', []);
+                    this.getWaterEchart(0);
+                });
         },
         getOptionList() {
             let query = {
                 choose_type: 5
             };
-            optionListApi(query).then((res) => {
-                if (res.code == 200) {
-                    this.algo_nameList = res.algo_type;
-                    this.getFerfAlgolist();
-                } else {
+            optionListApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        this.algo_nameList = res.algo_type;
+                        this.getFerfAlgolist();
+                    } else {
+                        return Promise.reject(new Error('请求异常'));
+                    }
+                })
+                .catch(() => {
                     this.generateChart([], 'main1');
                     this.getRadarChart([]);
-                }
-            });
+                });
         },
         getFerfAlgolist(pageObj = { page: 1, pageNum: 4 }) {
             this.pageObj = pageObj;
