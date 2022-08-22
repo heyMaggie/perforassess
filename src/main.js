@@ -15,6 +15,7 @@ import './assets/css/main.less';
 // import echarts from 'echarts'; //引入echarts
 import 'echarts-liquidfill';
 import './utils/index';
+import '../theme/index.css';
 
 Vue.config.productionTip = false;
 Vue.use(VueI18n);

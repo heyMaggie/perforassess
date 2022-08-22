@@ -31,6 +31,7 @@
     "devDependencies": {
         "@vue/cli-plugin-babel": "^3.9.0",
         "@vue/cli-service": "^3.9.0",
+        "element-theme-chalk": "^2.15.9",
         "vue-template-compiler": "^2.6.10"
     }
 }

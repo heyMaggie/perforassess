@@ -188,6 +188,7 @@ export default {
                 small: '0'
             },
             algo_nameList: [],
+            algo_nameList: ['ddddd', 'fgdsgggggggggg', 'gggggggggggggggg'],
             selectIndex: '0',
             assessList: [],
             pageTotal: 0,
@@ -931,15 +932,18 @@ export default {
             optionListApi(query)
                 .then((res) => {
                     if (res.code == 200) {
-                        this.algo_nameList = res.algo_type;
+                        // this.algo_nameList = res.algo_type;
+                        this.algo_nameList = ['ddddd', 'fgdsgggggggggg', 'gggggggggggggggg'];
                         this.getFerfAlgolist();
                     } else {
                         return Promise.reject(new Error('请求异常'));
                     }
+                    this.algo_nameList = ['ddddd', 'fgdsgggggggggg', 'gggggggggggggggg'];
                 })
                 .catch(() => {
                     this.generateChart([], 'main1');
                     this.getRadarChart([]);
+                    this.algo_nameList = ['ddddd', 'fgdsgggggggggg', 'gggggggggggggggg'];
                 });
         },
         getFerfAlgolist(pageObj = { page: 1, pageNum: 4 }) {
