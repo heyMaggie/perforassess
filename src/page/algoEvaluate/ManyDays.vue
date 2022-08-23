@@ -60,6 +60,7 @@ import { analyseAlgoApi, optionListApi } from '@/api/index';
 import dayjs from 'dayjs';
 import html2Canvas from 'html2canvas';
 import JsPDF from 'jspdf';
+import '../../utils/pdfFont/simhei-normal';
 export default {
     name: 'manyDays',
     data() {
@@ -325,21 +326,31 @@ export default {
                     let pageData = canvas.toDataURL('image/jpeg', 1.0),
                         canvasWidth = canvas.width,
                         canvasHeight = canvas.height,
-                        concentWidth = 500,
+                        concentWidth = 880,
                         concentHeight = Math.round((concentWidth / canvasWidth) * canvasHeight),
                         position = 40,
-                        pageHeight = 892,
+                        pageHeight = 1060,
                         height = concentHeight;
                     console.log(canvasWidth, canvasHeight);
                     console.log(height, pageHeight, concentWidth);
                     // 新建一个new JsPDF，A3的像素大小 842*1191，A4的像素大小 592*841。这个px像素不准确，不清楚他们的像素大小来源如何
-                    let PDF = new JsPDF('p', 'px', 'a3');
+                    let PDF = new JsPDF('l', 'px', 'a3');
+                    PDF.setFont('simhei'); //设置黑体
+                    PDF.setProperties({
+                        title: 'hangge.com',
+                        subject: 'This is the subject',
+                        author: 'hangge',
+                        keywords: 'generated, javascript, web 2.0, ajax',
+                        creator: 'hangge'
+                    });
                     if (height <= pageHeight) {
+                        PDF.text(20, 20, '我是标题');
                         // 添加图片
-                        PDF.addImage(pageData, 'JPEG', 60, position, concentWidth, concentHeight);
+                        PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, concentHeight);
                     } else {
                         while (height > 0) {
-                            PDF.addImage(pageData, 'JPEG', 60, position, concentWidth, concentHeight);
+                            PDF.text(20, 20, '我是标题');
+                            PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, concentHeight);
                             height -= pageHeight;
                             position -= pageHeight;
                             if (height > 0) {
@@ -347,6 +358,8 @@ export default {
                             }
                         }
                     }
+                    //设置pdf的描述信息（标题、作者等）
+
                     // 保存 pdf 文档
                     PDF.save(`${title}.pdf`);
                     resolve(true);

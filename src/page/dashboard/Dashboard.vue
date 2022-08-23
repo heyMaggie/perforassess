@@ -120,7 +120,11 @@
                                     </div>
                                     <div class="blue-mincard">
                                         <div class="tit"><img src="../../assets/icon/5ee.png" />买卖占比</div>
-                                        <div class="pieList" :id="'pieList' + j" :ref="'pieList' + j"></div>
+                                        <div
+                                            :style="{ height: '50px', width: '300px' }"
+                                            :id="`pieList${j}${i}`"
+                                            :ref="`pieList${j}${i}`"
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
@@ -437,7 +441,8 @@ export default {
                     }
                     item.type = 'line';
                     item.smooth = true;
-                    item.showSymbol = false;
+                    item.showSymbol = true;
+                    item.showAllSymbol = true;
                     item.itemStyle = {
                         color: colorList[i]
                     };
@@ -562,6 +567,7 @@ export default {
             myChart.resize();
         },
         getSemicircle(type, data) {
+            console.log(type, data);
             if (!data) {
                 data.buy = '0';
                 data.sell = '0';
@@ -906,7 +912,13 @@ export default {
         handleClick(tab) {
             // console.log(tab.name);
             this.selectIndex = tab.name;
-            this.getFerfAlgolist();
+            this.$nextTick(() => {
+                this.getFerfAlgolist();
+            });
+
+            setTimeout(() => {
+                this.getFerfAlgolist();
+            }, 5000);
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
@@ -981,9 +993,10 @@ export default {
                         if (this.assessList.length) {
                             this.$nextTick(() => {
                                 this.assessList.forEach((item, i) => {
-                                    this.$refs['pieList' + i].height = '50px';
-                                    this.$refs['pieList' + i].width = '300px';
-                                    this.getSemicircle('pieList' + i, {
+                                    // this.$refs[`pieList${i}${this.activeName}`].height = '50px';
+                                    // this.$refs[`pieList${i}${this.activeName}`].width = '300px';
+                                    console.log(this.$refs[`pieList${i}${this.activeName}`]);
+                                    this.getSemicircle(`pieList${i}${this.activeName}`, {
                                         buy: item.side.buy,
                                         sell: item.side.sell
                                     });

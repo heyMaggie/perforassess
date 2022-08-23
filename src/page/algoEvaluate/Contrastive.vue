@@ -484,15 +484,15 @@ export default {
                     let pageData = canvas.toDataURL('image/jpeg', 1.0),
                         canvasWidth = canvas.width,
                         canvasHeight = canvas.height,
-                        concentWidth = 610,
+                        concentWidth = 880,
                         concentHeight = Math.round((concentWidth / canvasWidth) * canvasHeight),
                         position = 40,
-                        pageHeight = 892,
+                        pageHeight = 1060,
                         height = concentHeight;
                     console.log(canvasWidth, canvasHeight);
                     console.log(height, pageHeight, concentWidth, concentHeight);
                     // 新建一个new JsPDF，A3的像素大小 842*1191，A4的像素大小 592*841。这个px像素不准确，不清楚他们的像素大小来源如何
-                    let PDF = new JsPDF('p', 'px', 'a3');
+                    let PDF = new JsPDF('l', 'px', 'a3');
                     if (height <= pageHeight) {
                         // 添加图片
                         // PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, 867);
