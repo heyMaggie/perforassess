@@ -92,7 +92,7 @@ export default {
             });
         },
         generateChart(list, type) {
-            let isNull = list.length ? false : true;
+            let isNull = false;
             let seriesList = [];
             function singelLine(params) {
                 let lineObj = { name: '', data: [] };
@@ -113,12 +113,17 @@ export default {
                 this.$message.error('该算法暂无数据');
                 isNull = true;
             } else {
-                isNull = false;
                 list.forEach((params) => {
                     seriesList.push(singelLine(params));
                 });
                 let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
+                    // 有值
+                    if (item.data.some((item) => item)) {
+                        isNull = false;
+                    } else {
+                        isNull = true;
+                    }
                     item.type = 'line';
                     item.smooth = true;
                     item.showSymbol = false;
@@ -144,6 +149,7 @@ export default {
                             ],
                             false
                         ),
+                        opacity: 0.2,
                         shadowColor: 'rgba(0, 0, 0, 0.1)',
                         shadowBlur: 10
                     };
@@ -178,10 +184,10 @@ export default {
                     }
                 },
                 grid: {
-                    left: '5px',
-                    right: '10px',
+                    left: '3px',
+                    right: '15px',
                     bottom: '30px',
-                    // top: '60px',
+                    top: '68px',
                     containLabel: true
                 },
                 xAxis: {
@@ -196,7 +202,7 @@ export default {
                         }
                     },
                     axisLabel: {
-                        // interval: 30
+                        interval: 29
                         // rotate: 30,
                     },
                     axisTick: {
@@ -207,7 +213,10 @@ export default {
                     },
                     axisLine: {
                         // 刻度线的颜色
-                        show: false
+                        show: true,
+                        lineStyle: {
+                            color: '#E8E8E8'
+                        }
                     },
                     axisPointer: {
                         type: 'line',
@@ -221,9 +230,6 @@ export default {
                         axisLine: {
                             show: false
                         },
-                        nameTextStyle: {
-                            color: '#666'
-                        },
                         axisTick: {
                             show: false //隐藏X轴刻度
                         },
@@ -234,7 +240,11 @@ export default {
                                 type: 'dashed'
                             }
                         },
+                        axisLabel: {
+                            color: '#000'
+                        },
                         nameTextStyle: {
+                            color: '#888',
                             padding: [0, 0, 0, 25]
                         },
                         min: isNull ? 0 : null,

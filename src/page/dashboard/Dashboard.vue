@@ -23,8 +23,8 @@
                     <div class="card-title">交易量</div>
                     <div class="blue-card">
                         <span class="number"
-                            >{{ summaryObj.trade_vol }}
-                            <div class="unit">(万元)</div>
+                            >{{ Number(summaryObj.trade_vol).toFixed(2) }}
+                            <div class="unit">(元)</div>
                         </span>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="blue-mincard">
                                         <div class="tit"><img src="../../assets/icon/2bb.png" />交易量</div>
-                                        <div class="number"><span class="symbol">￥</span>{{ sonItem.trade_vol }}</div>
+                                        <div class="number"><span class="symbol">￥</span>{{ Number(sonItem.trade_vol).toFixed(2) }}</div>
                                     </div>
                                     <div class="blue-mincard">
                                         <div class="tit"><img src="../../assets/icon/3cc.png" />收益率</div>
@@ -399,7 +399,7 @@ export default {
         },
         generateChart(list, type) {
             let option;
-            let isNull = list.length ? false : true;
+            let isNull = false;
             let seriesList = [];
             function singelLine(params) {
                 let lineObj = { name: '', data: [] };
@@ -407,13 +407,16 @@ export default {
                     lineObj.name = params.algo_name;
                     lineObj.data[i] = '';
                     //容错处理
-                    params.time_line = params.time_line ? params.time_line : [];
-                    params.time_line.forEach((subitem) => {
-                        // console.log(subitem.time_point, item);
-                        if (subitem.time_point == item) {
-                            lineObj.data[i] = subitem.score;
-                        }
-                    });
+                    if (!params.time_line) {
+                        params.time_line = [];
+                    } else {
+                        params.time_line.forEach((subitem) => {
+                            // console.log(subitem.time_point, item);
+                            if (subitem.time_point == item) {
+                                lineObj.data[i] = subitem.score;
+                            }
+                        });
+                    }
                 });
                 return lineObj;
             }
@@ -424,12 +427,13 @@ export default {
                 list.forEach((params) => {
                     seriesList.push(singelLine(params));
                 });
-                isNull = false;
                 let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
-                    // 没有值
+                    // 有值
                     if (item.data.some((item) => item)) {
                         isNull = false;
+                    } else {
+                        isNull = true;
                     }
                     item.type = 'line';
                     item.smooth = true;
@@ -456,6 +460,7 @@ export default {
                             ],
                             false
                         ),
+                        opacity: 0.2,
                         shadowColor: 'rgba(0, 0, 0, 0.1)',
                         shadowBlur: 10
                     };
@@ -483,7 +488,7 @@ export default {
                     left: '3px',
                     right: '15px',
                     bottom: '50px',
-                    top: '38px',
+                    top: '42px',
                     containLabel: true
                 },
                 xAxis: {
@@ -502,8 +507,10 @@ export default {
                         }
                     },
                     axisLabel: {
-                        // interval: 0,
+                        interval: 29,
                         // rotate: 30,
+                        color: '#000'
+                        // x轴字体颜色
                     },
                     axisTick: {
                         show: true, //显示X轴刻度
@@ -513,7 +520,10 @@ export default {
                     },
                     axisLine: {
                         // 刻度线的颜色
-                        show: false
+                        show: true,
+                        lineStyle: {
+                            color: '#E8E8E8'
+                        }
                     }
                 },
                 yAxis: [
@@ -522,9 +532,6 @@ export default {
                         name: `单位：（%）`,
                         axisLine: {
                             show: false
-                        },
-                        nameTextStyle: {
-                            color: '#666'
                         },
                         axisTick: {
                             show: false //隐藏X轴刻度
@@ -536,8 +543,12 @@ export default {
                                 type: 'dashed'
                             }
                         },
+                        axisLabel: {
+                            color: '#000'
+                        },
                         nameTextStyle: {
-                            padding: [0, 0, 0, 25]
+                            color: '#888',
+                            padding: [0, 0, 0, 35]
                         },
                         min: isNull ? 0 : null,
                         max: isNull ? 100 : null

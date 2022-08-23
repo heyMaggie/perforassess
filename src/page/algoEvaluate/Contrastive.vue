@@ -232,6 +232,7 @@ export default {
                             ],
                             false
                         ),
+                        opacity: 0.2,
                         shadowColor: 'rgba(0, 0, 0, 0.1)',
                         shadowBlur: 10
                     };
@@ -267,9 +268,9 @@ export default {
                 },
                 grid: {
                     left: '5px',
-                    right: '10px',
+                    right: '15px',
                     bottom: '30px',
-                    // top: '60px',
+                    top: '65px',
                     containLabel: true
                 },
                 xAxis: {
@@ -284,7 +285,8 @@ export default {
                         }
                     },
                     axisLabel: {
-                        // interval: 30
+                        interval: 29,
+                        color: '#000'
                         // rotate: 30,
                     },
                     axisTick: {
@@ -297,6 +299,7 @@ export default {
                         // 刻度线的颜色
                         show: false
                     },
+
                     axisPointer: {
                         type: 'line',
                         lineStyle: { color: '#BDBEBF' }
@@ -309,9 +312,7 @@ export default {
                         axisLine: {
                             show: false
                         },
-                        nameTextStyle: {
-                            color: '#666'
-                        },
+
                         axisTick: {
                             show: false //隐藏X轴刻度
                         },
@@ -323,7 +324,8 @@ export default {
                             }
                         },
                         nameTextStyle: {
-                            padding: [0, 0, 0, 25]
+                            padding: [0, 0, 0, 25],
+                            color: '#888'
                         },
                         min: isNull ? 0 : null,
                         max: isNull ? 100 : null

@@ -8,7 +8,7 @@ const filters = {
      * @param {Number} date 时间戳
      * @returns {String} 规范后的 时间/日期 字符串
      */
-    formatDate: function (date, formatStr = 'YYYY-MM-DD hh:mm:ss') {
+    formatDate: function (date, formatStr = 'YYYY-MM-DD HH:mm:ss') {
         console.log(date, 'date');
         if (!date) {
             return '-';

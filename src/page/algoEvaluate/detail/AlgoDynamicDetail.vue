@@ -322,7 +322,7 @@ export default {
                     left: '5px',
                     right: '20px',
                     bottom: '0px',
-                    // top: '75px',
+                    top: '65px',
                     containLabel: true
                 },
                 xAxis: {
@@ -337,7 +337,8 @@ export default {
                         }
                     },
                     axisLabel: {
-                        // interval: 0,
+                        interval: 29,
+                        color: '#000'
                         // rotate: 30,
                     },
                     axisTick: {
@@ -348,7 +349,10 @@ export default {
                     },
                     axisLine: {
                         // 刻度线的颜色
-                        show: false
+                        show: true,
+                        lineStyle: {
+                            color: '#E8E8E8'
+                        }
                     },
                     axisPointer: {
                         type: 'line',
@@ -363,8 +367,8 @@ export default {
                         axisLine: {
                             show: false
                         },
-                        nameTextStyle: {
-                            color: '#666'
+                        axisLabel: {
+                            color: '#000'
                         },
                         axisTick: {
                             show: false //隐藏X轴刻度
@@ -376,9 +380,7 @@ export default {
                                 type: 'dashed'
                             }
                         },
-                        nameTextStyle: {
-                            padding: [0, 0, 0, 30]
-                        },
+                        nameTextStyle: { color: '#888', padding: [0, 0, 0, 30] },
                         min: isNull ? 0 : null,
                         max: isNull ? 100 : null
                     }
@@ -411,6 +413,7 @@ export default {
                                 ],
                                 false
                             ),
+                            opacity: 0.2,
                             shadowColor: 'rgba(0, 0, 0, 0.1)',
                             shadowBlur: 10
                         }

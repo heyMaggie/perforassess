@@ -969,7 +969,7 @@
   content: "\e6dd"; }
 
 .el-icon-arrow-up:before {
-  content: "\e6e1"; }
+  content: "";font-size: 13px;color: #8E9DB1; }
 
 .el-icon-arrow-down:before {
   content: "";font-size: 13px;color: #8E9DB1; }

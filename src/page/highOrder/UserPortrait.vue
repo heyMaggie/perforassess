@@ -559,7 +559,7 @@ export default {
                             show: false
                         },
                         nameTextStyle: {
-                            color: '#666'
+                            color: '#888'
                         },
                         axisTick: {
                             show: false //隐藏X轴刻度
@@ -608,6 +608,7 @@ export default {
                                 ],
                                 false
                             ),
+                            opacity: 0.2,
                             shadowColor: 'rgba(0, 0, 0, 0.1)',
                             shadowBlur: 10
                         }
