@@ -2,7 +2,9 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> 算法评估 / 算法动态 / 查看历史</el-breadcrumb-item>
+                <el-breadcrumb-item>算法评估</el-breadcrumb-item>
+                <el-breadcrumb-item>算法动态</el-breadcrumb-item>
+                <el-breadcrumb-item>查看历史</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="card special">
@@ -802,8 +804,8 @@ export default {
         getDynamicData() {
             let today = dayjs(this.searchForm.timeRange[0]).format('YYYY-MM-DD');
             let today2 = dayjs(this.searchForm.timeRange[1]).format('YYYY-MM-DD');
-            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            let end_time = new Date(`${today2} 15:30`).getTime() / 1000;
+            let start_time = new Date(`${today} 00:00`).getTime() / 1000;
+            let end_time = new Date(`${today2} 23:59`).getTime() / 1000;
             let query = { algo_name: this.searchForm.algo_id, user_id: localStorage.getItem('ms_username'), start_time, end_time };
             console.log(query, 'query');
             this.dimensionalityList = [];

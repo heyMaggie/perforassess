@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> 算法评估</el-breadcrumb-item>
+                <el-breadcrumb-item>算法评估</el-breadcrumb-item>
                 <el-breadcrumb-item>完成度</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -110,8 +110,8 @@ export default {
             this.pageObj = pageObj;
             let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
             let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
-            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            let end_time = new Date(`${today2} 15:30`).getTime() / 1000; // let query = { profile_type: 1, page: 1, limit: 10, start_time, end_time, ...this.searchForm };
+            let start_time = new Date(`${today} 00:00`).getTime() / 1000;
+            let end_time = new Date(`${today2} 23:59`).getTime() / 1000; // let query = { profile_type: 1, page: 1, limit: 10, start_time, end_time, ...this.searchForm };
             let query = { profile_type: 2, start_time, end_time, page: pageObj.page, limit: pageObj.pageNum, ...this.searchForm };
             console.log(query);
             fiveDimensionsApi(query).then((res) => {

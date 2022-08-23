@@ -166,7 +166,7 @@ export default {
     }
     /deep/ .el-submenu.is-active {
         .span4 {
-            color: #3281ff;
+            color: none;
         }
     }
     /deep/ .el-submenu {

@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> 算法评估</el-breadcrumb-item>
+                <el-breadcrumb-item>算法评估</el-breadcrumb-item>
                 <el-breadcrumb-item>算法动态</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -414,14 +414,13 @@ export default {
             var option;
             console.log(rateList, 'rateList');
             // rateList = [
-            //     { mk_name: '超大市值', rate: 0 },
-            //     { mk_name: '大市值', rate: 0 },
-            //     { mk_name: '中等市值', rate: 0 },
-            //     { mk_name: '小市值', rate: 100 }
+            //     { name: '超大市值', value: '0.0' },
+            //     { name: '大市值', value: '0.0' },
+            //     { name: '小市值', value: '100.00' }
             // ];
             let pieObj = {
                 pie1: { name1: '资 金 占 比', colorList: ['#F78B7F', '#FACC14', '#7CB3FF', '#2FC25B'] },
-                pie4: { name1: '交易量占比', colorList: ['#32B7FF', '#FACC14', '#32B7FF', '#83BDFF'] }
+                pie4: { name1: '交易量占比', colorList: ['#83E3FF', '#FACC14', '#32B7FF', '#7CB3FF'] }
             };
             option = {
                 title: [
@@ -788,8 +787,8 @@ export default {
         },
         getDynamicData() {
             let today = dayjs().format('YYYY-MM-DD');
-            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            let end_time = new Date(`${today} 15:30`).getTime() / 1000;
+            let start_time = new Date(`${today} 00:00`).getTime() / 1000;
+            let end_time = new Date(`${today} 23:59`).getTime() / 1000;
             let query = { algo_name: this.searchForm.algo_id, user_id: localStorage.getItem('ms_username'), start_time, end_time };
             this.dimensionalityList = [];
             let radarList = [];

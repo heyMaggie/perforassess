@@ -972,7 +972,7 @@
   content: "\e6e1"; }
 
 .el-icon-arrow-down:before {
-  content: "\e6df"; }
+  content: "";font-size: 13px;color: #8E9DB1; }
 
 .el-icon-arrow-right:before {
   content: "\e6e0"; }
@@ -32526,14 +32526,14 @@
   .el-breadcrumb__separator {
     margin: 0 9px;
     font-weight: bold;
-    color: #c0c4cc; }
+    color: #333; }
     .el-breadcrumb__separator[class*=icon] {
       margin: 0 6px;
       font-weight: normal; }
   .el-breadcrumb__item {
     float: left; }
     .el-breadcrumb__inner {
-      color: #606266; }
+      color: #999; }
       .el-breadcrumb__inner.is-link, .el-breadcrumb__inner a {
         font-weight: bold;
         text-decoration: none;
@@ -32547,10 +32547,10 @@
     .el-breadcrumb__item:last-child .el-breadcrumb__inner a,
     .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover {
       font-weight: normal;
-      color: #606266;
+      color: #333;
       cursor: text; }
     .el-breadcrumb__item:last-child .el-breadcrumb__separator {
-      display: none; }
+      display: none;}
 
 /* BEM support Func
  -------------------------- */

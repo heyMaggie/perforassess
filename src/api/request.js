@@ -5,7 +5,7 @@ let baseURL = '';
 // process.env.NODE_ENV === 'development' 来判断是否开发环境
 if (process.env.NODE_ENV === 'development') {
     // 开发环境
-    baseURL = 'http://192.168.2.204:20080';
+    baseURL = 'http://192.168.2.212:20080';
     // baseURL = 'http://192.168.1.81:20080';
 } else {
     //生产环境

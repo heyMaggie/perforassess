@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> Dashboard</el-breadcrumb-item>
+                <el-breadcrumb-item>Dashboard</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="echart-container">
@@ -169,6 +169,7 @@ import * as echarts from 'echarts';
 import { dashboardSummarydApi, optionListApi, dashboardAlgolistApi } from '@/api/index';
 import fiexdDate from '../../utils/fixeddate';
 import dayjs from 'dayjs';
+import { set } from 'vue';
 export default {
     name: 'dashBoard',
     data() {
@@ -188,7 +189,6 @@ export default {
                 small: '0'
             },
             algo_nameList: [],
-            algo_nameList: ['ddddd', 'fgdsgggggggggg', 'gggggggggggggggg'],
             selectIndex: '0',
             assessList: [],
             pageTotal: 0,
@@ -401,7 +401,6 @@ export default {
             let option;
             let isNull = list.length ? false : true;
             let seriesList = [];
-
             function singelLine(params) {
                 let lineObj = { name: '', data: [] };
                 fiexdDate.forEach((item, i) => {
@@ -410,6 +409,7 @@ export default {
                     //容错处理
                     params.time_line = params.time_line ? params.time_line : [];
                     params.time_line.forEach((subitem) => {
+                        // console.log(subitem.time_point, item);
                         if (subitem.time_point == item) {
                             lineObj.data[i] = subitem.score;
                         }
@@ -417,7 +417,7 @@ export default {
                 });
                 return lineObj;
             }
-            if (!list.length || !list[0].time_line) {
+            if (!list.length) {
                 // this.$message.error('该时间段暂无数据');
                 isNull = true;
             } else {
@@ -427,6 +427,10 @@ export default {
                 isNull = false;
                 let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
+                    // 没有值
+                    if (item.data.some((item) => item)) {
+                        isNull = false;
+                    }
                     item.type = 'line';
                     item.smooth = true;
                     item.showSymbol = false;
@@ -547,7 +551,7 @@ export default {
             myChart.resize();
         },
         getSemicircle(type, data) {
-            if (!data || !data.length) {
+            if (!data) {
                 data.buy = '0';
                 data.sell = '0';
             }
@@ -908,8 +912,8 @@ export default {
         },
         getSummarydata() {
             let today = dayjs().format('YYYY-MM-DD');
-            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            let end_time = new Date(`${today} 15:30`).getTime() / 1000;
+            let start_time = new Date(`${today} 00:00`).getTime() / 1000;
+            let end_time = new Date(`${today} 23:59`).getTime() / 1000;
             let query = { start_time, end_time };
             dashboardSummarydApi(query)
                 .then((res) => {
@@ -932,25 +936,22 @@ export default {
             optionListApi(query)
                 .then((res) => {
                     if (res.code == 200) {
-                        // this.algo_nameList = res.algo_type;
-                        this.algo_nameList = ['ddddd', 'fgdsgggggggggg', 'gggggggggggggggg'];
+                        this.algo_nameList = res.algo_type;
                         this.getFerfAlgolist();
                     } else {
                         return Promise.reject(new Error('请求异常'));
                     }
-                    this.algo_nameList = ['ddddd', 'fgdsgggggggggg', 'gggggggggggggggg'];
                 })
                 .catch(() => {
                     this.generateChart([], 'main1');
                     this.getRadarChart([]);
-                    this.algo_nameList = ['ddddd', 'fgdsgggggggggg', 'gggggggggggggggg'];
                 });
         },
         getFerfAlgolist(pageObj = { page: 1, pageNum: 4 }) {
             this.pageObj = pageObj;
             let today = dayjs().format('YYYY-MM-DD');
-            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            let end_time = new Date(`${today} 15:30`).getTime() / 1000;
+            let start_time = new Date(`${today} 00:00`).getTime() / 1000;
+            let end_time = new Date(`${today} 23:59`).getTime() / 1000;
             let query = {
                 start_time: start_time,
                 end_time: end_time,

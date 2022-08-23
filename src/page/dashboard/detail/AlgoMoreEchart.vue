@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> Dashboard / 查看更多</el-breadcrumb-item>
+                <el-breadcrumb-item>Dashboard / 查看更多</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="card">
@@ -73,8 +73,8 @@ export default {
         },
         getMulitAnalyseData() {
             let today = dayjs().format('YYYY-MM-DD');
-            let start_time = new Date(`${today} 09:30`).getTime() / 1000;
-            let end_time = new Date(`${today} 15:30`).getTime() / 1000;
+            let start_time = new Date(`${today} 00:00`).getTime() / 1000;
+            let end_time = new Date(`${today} 23:59`).getTime() / 1000;
             let query = {
                 start_time: start_time,
                 end_time: end_time,

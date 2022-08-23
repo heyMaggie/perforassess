@@ -2,7 +2,8 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-calendar"></i> Dashboard / 排行榜</el-breadcrumb-item>
+                <el-breadcrumb-item>Dashboard</el-breadcrumb-item>
+                <el-breadcrumb-item>排行榜</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="card">
