@@ -42,6 +42,7 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button>
+                <el-button type="plain" @click="downLoad"><img class="iconImg" src="../../../assets/icon/xiazai.png" />导出列表</el-button>
             </div>
         </el-form>
         <div class="table-container">
@@ -68,9 +69,7 @@
                     <template slot-scope="scope"> {{ scope.row.cancel_rate }}% </template>
                 </el-table-column>
                 <el-table-column prop="min_split_order" label="最小拆单单位"> </el-table-column>
-                <el-table-column prop="create_time" label="创建时间" show-overflow-tooltip>
-                    <template slot-scope="scope">{{ scope.row.create_time | formatDate }}</template>
-                </el-table-column>
+                <el-table-column prop="create_time" label="创建时间" show-overflow-tooltip> </el-table-column>
             </el-table>
             <el-pagination
                 background
@@ -90,6 +89,7 @@
 <script>
 import { fiveDimensionsApi, optionListApi } from '@/api/index';
 import dayjs from 'dayjs';
+import { export2Excel } from '../../../utils/exportExcel';
 export default {
     name: 'economy',
     data() {
@@ -130,11 +130,15 @@ export default {
                 .then((res) => {
                     if (res.code == 200) {
                         this.tableData = res.economy ? res.economy : [];
+                        this.tableData.map((item) => {
+                            item.create_time = dayjs(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss');
+                        });
                         this.pageTotal = res.total;
                     } else {
                     }
                 })
                 .catch(() => {
+                    this.tableData = [];
                     this.$message.error('查询失败！');
                 });
         },
@@ -165,6 +169,18 @@ export default {
         onSubmit() {
             console.log('submit!', this.searchForm);
             this.getTableData();
+        },
+        downLoad() {
+            export2Excel(
+                [
+                    { title: '用户ID', key: 'user_id' },
+                    { title: '算法名称', key: 'algo_name' },
+                    { title: '完成度', key: 'progress' },
+                    { title: '创建时间', key: 'create_time' }
+                ],
+                this.tableData,
+                '完成度列表'
+            );
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);

@@ -42,6 +42,7 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button>
+                <el-button type="plain" @click="downLoad"><img class="iconImg" src="../../../assets/icon/xiazai.png" />导出列表</el-button>
             </div>
         </el-form>
         <div class="table-container">
@@ -63,9 +64,7 @@
                 <el-table-column prop="joint_rate" label="贴合度">
                     <template slot-scope="scope"> {{ scope.row.joint_rate }}% </template>
                 </el-table-column>
-                <el-table-column prop="create_time" label="创建时间">
-                    <template slot-scope="scope">{{ scope.row.create_time | formatDate }}</template>
-                </el-table-column>
+                <el-table-column prop="create_time" label="创建时间"> </el-table-column>
             </el-table>
             <el-pagination
                 background
@@ -85,6 +84,8 @@
 <script>
 import { fiveDimensionsApi, optionListApi } from '@/api/index';
 import dayjs from 'dayjs';
+import { export2Excel } from '../../../utils/exportExcel';
+
 export default {
     name: 'stability',
     data() {
@@ -121,14 +122,22 @@ export default {
             let end_time = new Date(`${today2} 23:59`).getTime() / 1000;
             let query = { profile_type: 5, start_time, end_time, page: pageObj.page, limit: pageObj.pageNum, ...this.searchForm };
             console.log(query);
-            fiveDimensionsApi(query).then((res) => {
-                if (res.code == 200) {
-                    this.tableData = res.stability;
-                    this.pageTotal = res.total;
-                } else {
+            fiveDimensionsApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        this.tableData = res.stability ? res.stability : [];
+                        this.tableData.map((item) => {
+                            item.create_time = dayjs(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss');
+                        });
+                        this.pageTotal = res.total;
+                    } else {
+                        this.$message.error('查询失败！');
+                    }
+                })
+                .catch(() => {
+                    this.tableData = [];
                     this.$message.error('查询失败！');
-                }
-            });
+                });
         },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
@@ -157,6 +166,20 @@ export default {
         onSubmit() {
             console.log('submit!', this.searchForm);
             this.getTableData();
+        },
+        downLoad() {
+            export2Excel(
+                [
+                    { title: '用户ID', key: 'user_id' },
+                    { title: '算法名称', key: 'algo_name' },
+                    { title: 'VWAP滑点值标准差', key: 'vwap_std_dev' },
+                    { title: '收益率标准差', key: 'profit_rate_std' },
+                    { title: '贴合度', key: 'joint_rate' },
+                    { title: '创建时间', key: 'create_time' }
+                ],
+                this.tableData,
+                '稳定性列表'
+            );
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);

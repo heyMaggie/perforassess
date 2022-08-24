@@ -42,6 +42,7 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button>
+                <el-button type="plain" @click="downLoad"><img class="iconImg" src="../../../assets/icon/xiazai.png" />导出列表</el-button>
             </div>
         </el-form>
         <div class="table-container">
@@ -60,9 +61,7 @@
                 <el-table-column prop="withdraw_rate" label="回撤比率">
                     <template slot-scope="scope"> {{ scope.row.withdraw_rate }}% </template>
                 </el-table-column>
-                <el-table-column prop="create_time" width="250" label="创建时间">
-                    <template slot-scope="scope">{{ scope.row.create_time | formatDate }}</template>
-                </el-table-column>
+                <el-table-column prop="create_time" width="250" label="创建时间"> </el-table-column>
             </el-table>
             <el-pagination
                 background
@@ -82,6 +81,8 @@
 <script>
 import { fiveDimensionsApi, optionListApi } from '@/api/index';
 import dayjs from 'dayjs';
+import { export2Excel } from '../../../utils/exportExcel';
+
 export default {
     name: 'riskDegree',
     data() {
@@ -120,14 +121,22 @@ export default {
             // let query = { profile_type: 3, start_time: 1658194200, end_time: 1658244600, page: pageObj.page, limit: pageObj.pageNum };
             let query = { profile_type: 3, start_time, end_time, page: pageObj.page, limit: pageObj.pageNum, ...this.searchForm };
             console.log(query);
-            fiveDimensionsApi(query).then((res) => {
-                if (res.code == 200) {
-                    this.tableData = res.risk;
-                    this.pageTotal = res.total;
-                } else {
+            fiveDimensionsApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        this.tableData = res.risk ? res.risk : [];
+                        this.tableData.map((item) => {
+                            item.create_time = dayjs(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss');
+                        });
+                        this.pageTotal = res.total;
+                    } else {
+                        this.$message.error('查询失败！');
+                    }
+                })
+                .catch(() => {
+                    this.tableData = [];
                     this.$message.error('查询失败！');
-                }
-            });
+                });
         },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
@@ -156,6 +165,19 @@ export default {
         onSubmit() {
             console.log('submit!', this.searchForm);
             this.getTableData();
+        },
+        downLoad() {
+            export2Excel(
+                [
+                    { title: '算法名称', key: 'algo_name' },
+                    { title: '最小贴合度', key: 'min_jonit_rate' },
+                    { title: '收益率', key: 'profit_rate' },
+                    { title: '回撤比率', key: 'withdraw_rate' },
+                    { title: '创建时间', key: 'create_time' }
+                ],
+                this.tableData,
+                '风险度列表'
+            );
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
