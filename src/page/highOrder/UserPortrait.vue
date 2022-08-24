@@ -583,7 +583,8 @@ export default {
                         name: '算法单数',
                         type: 'line',
                         smooth: true,
-                        showSymbol: false,
+                        showSymbol: true,
+                        showAllSymbol: true,
                         itemStyle: {
                             color: lineObj[type].color
                             // normal: {

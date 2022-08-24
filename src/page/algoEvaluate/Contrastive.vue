@@ -209,7 +209,8 @@ export default {
                 seriesList.forEach((item, i) => {
                     item.type = 'line';
                     item.smooth = true;
-                    item.showSymbol = false;
+                    item.showSymbol = true;
+                    item.showAllSymbol = true;
                     item.itemStyle = {
                         color: colorList[i]
                     };
@@ -521,7 +522,7 @@ export default {
 <style scoped lang="less">
 .select_width {
     /deep/ .el-input--small .el-input__inner {
-        width: 450px;
+        width: 460px;
     }
 }
 

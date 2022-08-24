@@ -2,7 +2,8 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>Dashboard / 查看更多</el-breadcrumb-item>
+                <el-breadcrumb-item>Dashboard</el-breadcrumb-item>
+                <el-breadcrumb-item>查看更多</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="card">

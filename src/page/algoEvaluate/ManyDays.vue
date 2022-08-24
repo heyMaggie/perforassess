@@ -277,7 +277,8 @@ export default {
                         name: '算法单数',
                         type: 'line',
                         smooth: true,
-                        showSymbol: false,
+                        showSymbol: true,
+                        showAllSymbol: true,
                         data: yDataList,
                         itemStyle: {
                             color: lineObj[type].color
@@ -335,6 +336,7 @@ export default {
                     console.log(height, pageHeight, concentWidth);
                     // 新建一个new JsPDF，A3的像素大小 842*1191，A4的像素大小 592*841。这个px像素不准确，不清楚他们的像素大小来源如何
                     let PDF = new JsPDF('l', 'px', 'a3');
+                    //设置pdf的描述信息（标题、作者等）
                     PDF.setFont('simhei'); //设置黑体
                     PDF.setProperties({
                         title: 'hangge.com',
@@ -358,7 +360,6 @@ export default {
                             }
                         }
                     }
-                    //设置pdf的描述信息（标题、作者等）
 
                     // 保存 pdf 文档
                     PDF.save(`${title}.pdf`);

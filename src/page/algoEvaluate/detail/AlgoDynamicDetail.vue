@@ -125,7 +125,7 @@ export default {
             volType: [], //交易量
             assessLine: [], //绩效
             progressLine: [], //完成度
-            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法稳定性分析', '算法绩效分析']
+            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法绩效分析', '算法稳定性分析']
         };
     },
     created() {
@@ -390,7 +390,8 @@ export default {
                         name: '算法单数',
                         type: 'line',
                         smooth: true,
-                        showSymbol: false,
+                        showSymbol: true,
+                        showAllSymbol: true,
                         data: yDataList,
                         itemStyle: {
                             color: lineObj[type].color
