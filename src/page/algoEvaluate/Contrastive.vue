@@ -112,6 +112,14 @@ export default {
         };
         this.getOptionList(query, 'algoTypeList', 'algo_type');
     },
+    watch: {
+        'searchForm.algo_type'(newV, oldV) {
+            if (!newV) {
+                this.searchForm.algo_id_list = [];
+                this.algoList = [];
+            }
+        }
+    },
     mounted() {},
     methods: {
         onSubmit() {

@@ -111,6 +111,25 @@ export default {
         };
         this.getOptionList(query, 'providerList', 'provider');
     },
+    watch: {
+        'searchForm.provider'(newV, oldV) {
+            if (!newV) {
+                this.searchForm = {
+                    provider: '',
+                    algo_type: '',
+                    algo_id: ''
+                };
+                this.algoTypeList = [];
+                this.algoList = [];
+            }
+        },
+        'searchForm.algo_type'(newV, oldV) {
+            if (!newV) {
+                this.searchForm.algo_id = '';
+                this.algoList = [];
+            }
+        }
+    },
     methods: {
         getTableData(pageObj = { page: 1, pageNum: 5 }) {
             this.pageObj = pageObj;
