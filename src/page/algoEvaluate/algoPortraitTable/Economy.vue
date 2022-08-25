@@ -58,8 +58,8 @@
                 <el-table-column prop="trade_vol" label="交易量"> </el-table-column>
                 <el-table-column prop="profit_rate" label="收益率">
                     <template slot-scope="scope">
-                        <el-tag :type="scope.row.profit > 0 ? 'danger' : 'success'"
-                            >{{ scope.row.profit > 0 ? '+' : '' }}{{ scope.row.profit }}%</el-tag
+                        <el-tag :type="scope.row.profit_rate > 0 ? 'danger' : 'success'"
+                            >{{ scope.row.profit_rate > 0 ? '+' : '' }}{{ scope.row.profit_rate }}%</el-tag
                         >
                     </template>
                 </el-table-column>
@@ -194,11 +194,16 @@ export default {
                 [
                     { title: '用户ID', key: 'user_id' },
                     { title: '算法名称', key: 'algo_name' },
-                    { title: '完成度', key: 'progress' },
+                    { title: '交易量', key: 'trade_vol' },
+                    { title: '收益率', key: 'profit_rate' },
+                    { title: '手续费', key: 'total_fee' },
+                    { title: '流量费', key: 'cross_fee' },
+                    { title: '撤单率', key: 'cancel_rate' },
+                    { title: '最小拆单单位', key: 'min_split_order' },
                     { title: '创建时间', key: 'create_time' }
                 ],
                 this.tableData,
-                '完成度列表'
+                '经济性列表'
             );
         },
         handleSizeChange(val) {
