@@ -72,10 +72,12 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../assets/icon/query.png);
-    background-size: 100%;
-    // background: gray;
+    background-image: url(../assets/img/login-bg.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    // background: pink;
     overflow: hidden;
+    background-position: center;
 }
 .ms-title {
     font-size: 20px;
