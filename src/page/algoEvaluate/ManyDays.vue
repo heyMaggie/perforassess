@@ -60,7 +60,6 @@ import { analyseAlgoApi, optionListApi } from '@/api/index';
 import dayjs from 'dayjs';
 import html2Canvas from 'html2canvas';
 import JsPDF from 'jspdf';
-import '../../utils/pdfFont/simhei-normal';
 export default {
     name: 'manyDays',
     data() {
