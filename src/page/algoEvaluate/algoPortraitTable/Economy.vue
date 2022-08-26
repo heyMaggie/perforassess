@@ -56,6 +56,7 @@
                 <el-table-column prop="user_id" label="用户ID"> </el-table-column>
                 <el-table-column prop="algo_name" label="算法名称"> </el-table-column>
                 <el-table-column prop="trade_vol" label="交易量"> </el-table-column>
+                <el-table-column prop="profit" label="盈亏"> </el-table-column>
                 <el-table-column prop="profit_rate" label="收益率">
                     <template slot-scope="scope">
                         <el-tag :type="scope.row.profit_rate > 0 ? 'danger' : 'success'"
@@ -195,6 +196,7 @@ export default {
                     { title: '用户ID', key: 'user_id' },
                     { title: '算法名称', key: 'algo_name' },
                     { title: '交易量', key: 'trade_vol' },
+                    { title: '盈亏', key: 'profit' },
                     { title: '收益率', key: 'profit_rate' },
                     { title: '手续费', key: 'total_fee' },
                     { title: '流量费', key: 'cross_fee' },
