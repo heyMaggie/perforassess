@@ -23,9 +23,9 @@
                             <th>算法名称</th>
                             <th>分数</th>
                         </tr>
-                        <tr v-for="(item, i) in tableData" :key="i">
+                        <tr v-for="item in tableData" :key="item.ranking">
                             <td align="center">
-                                <div class="adorn" v-if="i < 3">{{ item.ranking }}</div>
+                                <div class="adorn" v-if="item.ranking < 4">{{ item.ranking }}</div>
                                 <div class="rank" v-else>{{ item.ranking }}</div>
                             </td>
                             <td align="center">
@@ -79,13 +79,18 @@ export default {
         getAlgoRankingList(pageObj = { page: 1, pageNum: 5 }) {
             this.pageObj = pageObj;
             let time = Date.parse(new Date()) / 1000;
-            let query = { date: time, page: pageObj.page, limit: pageObj.pageNum };
-            algoRankingApi(query).then((res) => {
-                if (res.code == 200) {
-                    this.tableData = res.info;
-                    this.pageTotal = res.total;
-                }
-            });
+            let query = { date: time, page: pageObj.page, limit: pageObj.pageNum, rank_type: 1 };
+            algoRankingApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        this.tableData = res.info;
+                        this.pageTotal = res.total;
+                    }
+                })
+                .catch(() => {
+                    this.tableData = [];
+                    this.pageTotal = 0;
+                });
         }
     }
 };
