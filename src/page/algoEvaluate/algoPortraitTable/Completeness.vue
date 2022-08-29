@@ -87,7 +87,7 @@ export default {
                 algo_id: '',
                 user_id: localStorage.getItem('ms_username')
             },
-            timeRange: [new Date(), new Date()], //筛选时间范围 默认当天
+            timeRange: [dayjs().day(-5), new Date()], //筛选时间范围 默认当天
             tableData: [],
             currentPage: 1,
             pageTotal: 0,
