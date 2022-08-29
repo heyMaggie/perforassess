@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>Dashboard</el-breadcrumb-item>
+                <el-breadcrumb-item>高阶评估</el-breadcrumb-item>
                 <el-breadcrumb-item>排行榜</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -11,24 +11,32 @@
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="股票排行" name="first">
                         <div class="big-blue-card">
-                            <table border="0">
+                            <el-empty
+                                v-if="!stockRankList.length"
+                                description="暂无数据"
+                                style="height: 491px"
+                                :image="require('../../assets/img/empty.png')"
+                            ></el-empty>
+                            <table v-else border="0">
                                 <tr>
                                     <th>排名</th>
                                     <th>算法名称</th>
                                     <th>分数</th>
                                     <th>证券代码</th>
                                 </tr>
-                                <tr v-for="i in 6" :key="i">
+                                <tr v-for="item in stockRankList" :key="item.ranking">
                                     <td align="center">
-                                        <div class="adorn" v-if="i < 4">{{ i }}</div>
-                                        <div class="rank" v-else>{{ i }}</div>
-                                    </td>
-                                    <td align="center"><span class="text">日内回转</span></td>
-                                    <td align="center">
-                                        <span class="text">100</span>
+                                        <div class="adorn" v-if="item.ranking < 4">{{ item.ranking }}</div>
+                                        <div class="rank" v-else>{{ item.ranking }}</div>
                                     </td>
                                     <td align="center">
-                                        <span class="text">610928121</span>
+                                        <span class="text">{{ item.sec_name }}</span>
+                                    </td>
+                                    <td align="center">
+                                        <span class="text">{{ item.score }}</span>
+                                    </td>
+                                    <td align="center">
+                                        <span class="text">{{ item.sec_id }}</span>
                                     </td>
                                 </tr>
                             </table>
@@ -36,65 +44,115 @@
                         <el-pagination
                             background
                             @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage"
+                            @current-change="handleCurrentChangeStock"
+                            :current-page="stockCurrentPage"
                             :page-sizes="[10, 20, 30, 40]"
                             :page-size="10"
                             layout=" ->, prev, pager, next, total, jumper"
-                            :total="pageTotal"
+                            :total="stockRankListTotal"
                         >
                         </el-pagination
                     ></el-tab-pane>
-                    <el-tab-pane label="用户排行" name="second">222</el-tab-pane>
+                    <el-tab-pane label="用户排行" name="second"
+                        ><div class="big-blue-card">
+                            <el-empty
+                                v-if="!userRankList.length"
+                                description="暂无数据"
+                                style="height: 491px"
+                                :image="require('../../assets/img/empty.png')"
+                            ></el-empty>
+                            <table v-else border="0">
+                                <tr>
+                                    <th>排名</th>
+                                    <th>用户名称</th>
+                                    <th>分数</th>
+                                    <th>用户ID</th>
+                                </tr>
+                                <tr v-for="item in userRankList" :key="item.ranking">
+                                    <td align="center">
+                                        <div class="adorn" v-if="item.ranking < 4">{{ item.ranking }}</div>
+                                        <div class="rank" v-else>{{ item.ranking }}</div>
+                                    </td>
+                                    <td align="center">
+                                        <span class="text">{{ item.user_name }}</span>
+                                    </td>
+                                    <td align="center">
+                                        <span class="text">{{ item.score }}</span>
+                                    </td>
+                                    <td align="center">
+                                        <span class="text">{{ item.user_id }}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <el-pagination
+                            background
+                            @current-change="handleCurrentChangeUser"
+                            :current-page="userCurrentPage"
+                            :page-sizes="[10, 20, 30, 40]"
+                            :page-size="10"
+                            layout=" ->, prev, pager, next, total, jumper"
+                            :total="userRankListTotal"
+                        >
+                        </el-pagination
+                    ></el-tab-pane>
                 </el-tabs>
             </div>
         </div>
     </div>
 </template>
 <script>
+import { algoRankingApi } from '@/api/index';
 export default {
     data() {
         return {
-            tableData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }
-            ],
+            stockRankList: [],
+            stockRankListTotal: 0,
+            stockCurrentPage: 1,
+
+            userRankList: [],
+            userRankListTotal: 0,
+            userCurrentPage: 1,
             activeName: 'first',
-            currentPage: 1,
-            pageTotal: 5
+
+            pageTotal: 5,
+            pageObj: { page: 1, pageNum: 6 }
         };
     },
-    mounted() {},
+    mounted() {
+        this.getAlgoRankingList(2, 'stockRankList');
+        this.getAlgoRankingList(3, 'userRankList');
+    },
     methods: {
-        goBack() {
-            this.$router.push('/dashboard');
-        },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
         },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+        handleCurrentChangeStock(val) {
+            let pageObj = { page: val / 1, pageNum: 6 };
+            this.getAlgoRankingList(2, 'stockRankList', pageObj);
+        },
+        handleCurrentChangeUser(val) {
+            let pageObj = { page: val / 1, pageNum: 6 };
+            this.getAlgoRankingList(3, 'userRankList', pageObj);
         },
         handleClick(tab, event) {
-            console.log(tab, event);
+            // console.log(tab, event);
+        },
+        getAlgoRankingList(typeInt, typeList, pageObj = { page: 1, pageNum: 6 }) {
+            this.pageObj = pageObj;
+            let time = Date.parse(new Date()) / 1000;
+            let query = { date: time, page: pageObj.page, limit: pageObj.pageNum, rank_type: typeInt };
+            algoRankingApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        this[typeList] = res.info;
+                        this[typeList + 'Total'] = res.total;
+                    }
+                })
+                .catch(() => {
+                    this[typeList] = [];
+                    this[typeList + 'Total'] = 0;
+                });
         }
     }
 };
