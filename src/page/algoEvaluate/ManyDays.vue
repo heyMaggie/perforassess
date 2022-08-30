@@ -50,6 +50,10 @@
             <div class="card" id="main2"></div>
             <div class="card" id="main3"></div>
         </div>
+        <!-- 用于导出报告 -->
+        <img src="../../assets/img/importCover.png" v-show="false" alt="" ref="coverImg" />
+        <img src="../../assets/img/watermark.png" v-show="false" alt="" ref="watermarkImg" />
+        <img src="../../assets/img/backGr.png" v-show="false" alt="" ref="backGr" />
     </div>
 </template>
 
@@ -332,53 +336,53 @@ export default {
             myChart.resize();
         },
         createPDF(title) {
+            let _this = this;
             return new Promise((resolve) => {
                 html2Canvas(document.querySelector('#resultsHuiZongTableId'), {
                     allowTaint: false,
                     useCORS: true, // allowTaint、useCORS只能够出现一个
                     imageTimeout: 0,
                     dpi: 500, // 像素
-                    scale: 4 // 图片大小
+                    scale: 2 // 图片大小
                 }).then(function (canvas) {
-                    // document.body.appendChild(canvas)
                     // 用于将canvas对象转换为base64位编码
-                    let pageData = canvas.toDataURL('image/jpeg', 1.0),
-                        canvasWidth = canvas.width,
-                        canvasHeight = canvas.height,
-                        concentWidth = 880,
-                        concentHeight = Math.round((concentWidth / canvasWidth) * canvasHeight),
-                        position = 40,
-                        pageHeight = 1060,
-                        height = concentHeight;
-                    console.log(canvasWidth, canvasHeight);
-                    console.log(height, pageHeight, concentWidth);
-                    // 新建一个new JsPDF，A3的像素大小 842*1191，A4的像素大小 592*841。这个px像素不准确，不清楚他们的像素大小来源如何
-                    let PDF = new JsPDF('l', 'px', 'a3');
-                    //设置pdf的描述信息（标题、作者等）
+                    let pageData = canvas.toDataURL('image/jpeg', 1.0);
+                    // canvasWidth = canvas.width,
+                    // canvasHeight = canvas.height,
+                    // concentWidth = 620,
+                    // concentHeight = Math.round((concentWidth / canvasWidth) * canvasHeight);
+                    // console.log(canvasWidth, canvasHeight, 'canvas');
+                    // console.log(concentHeight, concentWidth, 'concent');
+                    // 新建一个new JsPDF [880, 524] 一页全屏
+                    let PDF = new JsPDF('l', 'px', [880, 524]);
                     PDF.setFont('simhei'); //设置黑体
-                    PDF.setProperties({
-                        title: 'hangge.com',
-                        subject: 'This is the subject',
-                        author: 'hangge',
-                        keywords: 'generated, javascript, web 2.0, ajax',
-                        creator: 'hangge'
-                    });
-                    if (height <= pageHeight) {
-                        PDF.text(20, 20, '我是标题');
-                        // 添加图片
-                        PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, concentHeight);
-                    } else {
-                        while (height > 0) {
-                            PDF.text(20, 20, '我是标题');
-                            PDF.addImage(pageData, 'JPEG', 10, position, concentWidth, concentHeight);
-                            height -= pageHeight;
-                            position -= pageHeight;
-                            if (height > 0) {
-                                PDF.addPage();
-                            }
-                        }
-                    }
+                    PDF.setTextColor(255, 255, 255);
+                    PDF.addImage(_this.$refs.coverImg.src, 'JPEG', 0, 0, 880, 524);
+                    PDF.setFontSize(40);
+                    PDF.text(73, 215, '多日分析');
+                    PDF.setFontSize(20);
+                    PDF.text(73, 255, '报告时间：2022.08.26');
+                    PDF.text(73, 285, '数据来源：绩效评估后台（多日分析）');
 
+                    PDF.addImage(_this.$refs.watermarkImg.src, 'JPEG', 0, 0, 880, 524);
+                    PDF.addPage();
+                    PDF.addImage(_this.$refs.backGr.src, 'JPEG', 0, 0, 880, 160);
+                    PDF.setFontSize(14);
+                    PDF.text(45, 80, '厂商：XXXXXX厂商');
+                    PDF.text(170, 80, '算法类型：日内回转');
+                    PDF.text(310, 80, '算法：日内回转1');
+                    PDF.text(435, 80, '用户ID：019822113');
+                    PDF.text(570, 80, '开始时间：2022-08-24');
+                    PDF.text(720, 80, '结束时间：2022-08-24');
+                    PDF.setFontSize(28);
+                    PDF.text(40, 50, '基本信息');
+                    PDF.text(40, 140, '收益概览');
+                    PDF.setDrawColor(0);
+                    PDF.setFillColor(40, 170, 233);
+                    PDF.rect(28, 35, 4, 15, 'FD');
+                    PDF.rect(28, 125, 4, 15, 'FD');
+                    PDF.addImage(pageData, 'JPEG', 0, 160, 880, 360);
+                    PDF.addImage(_this.$refs.watermarkImg.src, 'JPEG', 0, 0, 880, 524);
                     // 保存 pdf 文档
                     PDF.save(`${title}.pdf`);
                     resolve(true);
