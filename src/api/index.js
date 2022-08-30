@@ -72,3 +72,11 @@ export const loginApi = (query) => {
         data: query
     });
 };
+// 用户画像
+export const userProfileApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/user/profile',
+        method: 'post',
+        data: query
+    });
+};

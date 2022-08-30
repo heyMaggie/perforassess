@@ -173,7 +173,6 @@ import * as echarts from 'echarts';
 import { dashboardSummarydApi, optionListApi, dashboardAlgolistApi } from '@/api/index';
 import fiexdDate from '../../utils/fixeddate';
 import dayjs from 'dayjs';
-import { set } from 'vue';
 export default {
     name: 'dashBoard',
     data() {

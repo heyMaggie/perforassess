@@ -865,7 +865,6 @@ export default {
                     }
                 })
                 .catch((erro) => {
-                    console.log(999999999, erro);
                     this.generateChart([], 'main1');
                     this.generateChart([], 'main2');
                     this.getPieChart('pie1', []); //资金占比

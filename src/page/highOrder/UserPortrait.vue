@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>算法评估</el-breadcrumb-item>
+                <el-breadcrumb-item>高阶评估</el-breadcrumb-item>
                 <el-breadcrumb-item>用户画像</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -10,20 +10,17 @@
             <div class="input-area">
                 <el-form-item>
                     <el-select v-model="searchForm.provider" clearable placeholder="厂商">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                        <el-option v-for="item in providerList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_type" clearable placeholder="算法类型" @focus="selectAlgoType">
+                        <el-option v-for="item in algoTypeList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList">
+                        <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -34,7 +31,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-date-picker
-                        v-model="searchForm.timeRange"
+                        v-model="timeRange"
                         type="daterange"
                         range-separator="-"
                         start-placeholder="开始日期"
@@ -53,8 +50,8 @@
                     <div class="card-title">资金</div>
                     <div class="blue-card">
                         <span class="number"
-                            >100
-                            <div class="unit">(万元)</div></span
+                            >{{ summaryObj.fund }}
+                            <div class="unit">(元)</div></span
                         >
                     </div>
                 </div>
@@ -62,29 +59,34 @@
                     <div class="card-title">盈亏</div>
                     <div class="blue-card">
                         <span class="number"
-                            >-121121<span class="icon">亏损</span>
-                            <div class="unit">(万元)</div></span
+                            >{{ summaryObj.profit }}
+                            <el-badge
+                                :value="summaryObj.profit > 0 ? '盈利' : '亏损'"
+                                class="item"
+                                :type="summaryObj.profit > 0 ? 'danger' : 'success'"
+                            ></el-badge>
+                            <div class="unit">(元)</div></span
                         >
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-title">登录次数</div>
                     <div class="circular">
-                        <span class="number">100<span class="unit">(次)</span></span>
+                        <span class="number">{{ summaryObj.login_cnt }}<span class="unit">(次)</span></span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-title">交易次数</div>
                     <div class="circular">
-                        <span class="number">100<span class="unit">(次)</span></span>
+                        <span class="number">{{ summaryObj.trade_cnt }}<span class="unit">(次)</span></span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-title">当天交易金额</div>
                     <div class="blue-card">
                         <span class="number"
-                            >321,621.00
-                            <div class="unit">(万元)</div>
+                            >{{ summaryObj.cur_trade_vol }}
+                            <div class="unit">(元)</div>
                         </span>
                     </div>
                 </div>
@@ -92,7 +94,7 @@
                     <div class="card-title line-img">用户级别</div>
                     <img class="query-icon" src="../../assets/icon/query.png" />
                     <div class="circular special-pink">
-                        <span class="number">A<span class="unit">级</span></span>
+                        <span class="number">{{ summaryObj.user_grade }}<span class="unit">级</span></span>
                     </div>
                 </div>
                 <div class="card">
@@ -100,8 +102,8 @@
                     <img class="query-icon" src="../../assets/icon/query.png" />
                     <div class="blue-card">
                         <span class="number">
-                            128,321,6.00
-                            <div class="unit">(万元)</div>
+                            {{ summaryObj.cur_roll_hold }}
+                            <div class="unit">(元)</div>
                         </span>
                     </div>
                 </div>
@@ -111,51 +113,6 @@
                     <div id="water-polo" class="water-polo"></div>
                 </div>
             </div>
-            <!-- <div class="showBorder">
-                <div class="card">
-                    <div class="card-title">登录次数</div>
-                    <div class="circular">
-                        <span class="number">12<span class="unit">次</span></span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title">交易次数</div>
-                    <div class="circular special-green">
-                        <span class="number">12<span class="unit">次</span></span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title">当天交易金额</div>
-                    <div class="blue-card">
-                        <span class="number">
-                            128,321,6.00
-                            <div class="unit">(万元)</div>
-                        </span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title line">用户级别</div>
-                    <img class="query-icon" src="../../assets/icon/query.png" />
-                    <div class="circular">
-                        <span class="number">A<span class="unit">级</span></span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title line">完成度</div>
-                    <img class="query-icon" src="../../assets/icon/query.png" />
-                    <div id="water-polo" class="water-polo"></div>
-                </div>
-                <div class="card">
-                    <div class="card-title line">当天滚动持仓</div>
-                    <img class="query-icon" src="../../assets/icon/query.png" />
-                    <div class="blue-card">
-                        <span class="number">
-                            128,321,6.00
-                            <div class="unit">(万元)</div>
-                        </span>
-                    </div>
-                </div>
-            </div> -->
             <div class="showPortrait">
                 <div class="card" id="radar"></div>
                 <div class="card" id="main1"></div>
@@ -168,25 +125,15 @@
                         <el-rate class="rate" v-model="startValue" disabled> </el-rate>
                         <div class="rank-icon">3</div>
                     </div>
-                    <div class="dimensionality">
-                        <div class="title">算法绩效分析</div>
-                        <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈算法亏绩效成算绩</div>
-                    </div>
-                    <div class="dimensionality">
-                        <div class="title">算法绩效分析</div>
-                        <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                    </div>
-                    <div class="dimensionality">
-                        <div class="title">算法绩效分析</div>
-                        <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                    </div>
-                    <div class="dimensionality">
-                        <div class="title">算法绩效分析</div>
-                        <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
-                    </div>
-                    <div class="dimensionality">
-                        <div class="title">算法绩效分析</div>
-                        <div class="explain">T0算法盈亏绩效成绩为4.3，dead盈</div>
+                    <el-empty
+                        v-if="!dimensionalityList.length"
+                        description="暂无数据"
+                        class="medium-empty"
+                        :image="require('../../assets/img/empty.png')"
+                    ></el-empty>
+                    <div v-else class="dimensionality" v-for="item in dimensionalityList" :key="item.title">
+                        <div class="title">{{ item.title }}</div>
+                        <div class="explain" :title="item.desc">{{ item.desc }}</div>
                     </div>
                 </div>
                 <div class="card" id="main2"></div>
@@ -198,6 +145,10 @@
 
 <script>
 import * as echarts from 'echarts';
+import { userProfileApi, optionListApi } from '@/api/index';
+import dayjs from 'dayjs';
+import fiexdDate from '../../utils/fixeddate';
+
 export default {
     name: 'baseform',
     data() {
@@ -206,69 +157,128 @@ export default {
                 provider: '',
                 algo_type: '',
                 algo_id: '',
-                user_id: localStorage.getItem('ms_username'),
-                timeRange: []
+                user_id: localStorage.getItem('ms_username')
             },
-            tableData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    tag: '家'
-                },
-                {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄',
-                    tag: '家'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄',
-                    tag: '公司'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄',
-                    tag: '公司'
-                }
-            ],
+            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法绩效分析', '算法稳定性分析'],
+            timeRange: [new Date(), new Date()], //筛选时间范围 默认当天
+            providerList: [],
+            algoTypeList: [],
+            algoList: [],
             startValue: 3.5,
-            currentPage: 1
+            summaryObj: {
+                fund: 0,
+                profit: 0,
+                trade_cnt: 0,
+                cur_trade_vol: 0,
+                cur_roll_hold: 0,
+                progress: 0,
+                login_cnt: 0,
+                user_grade: 0
+            },
+            dimensions: [], //五个维度雷达图
+            dimensionalityList: [] // 综合评分列表
         };
     },
+    created() {
+        // 获取厂商列表
+        let query = {
+            choose_type: 1
+        };
+        this.getOptionList(query, 'providerList', 'provider');
+    },
+    watch: {
+        'searchForm.provider'(newV, oldV) {
+            if (!newV) {
+                this.searchForm = {
+                    provider: '',
+                    algo_type: '',
+                    algo_id: ''
+                };
+                this.algoTypeList = [];
+                this.algoList = [];
+            }
+        },
+        'searchForm.algo_type'(newV, oldV) {
+            if (!newV) {
+                this.searchForm.algo_id = '';
+                this.algoList = [];
+            }
+        }
+    },
     mounted() {
-        this.getWaterEchart('6.75');
-        this.getRadarChart();
-        let list = [
-            { x: 1, y: '1' },
-            { x: 2, y: '2' },
-            { x: 3, y: '3' },
-            { x: 4, y: '4' },
-            { x: 5, y: '5' },
-            { x: 6, y: '6' },
-            { x: 7, y: '7' },
-            { x: 8, y: '8' },
-            { x: 9, y: '9' },
-            { x: 10, y: '10' },
-            { x: 11, y: '11' },
-            { x: 12, y: '12' }
-        ];
-        this.generateChart(list, 'main1');
-        this.generateChart(list, 'main2');
-        this.getHistogramChart();
+        this.getUserPortaitData();
     },
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
+            this.getUserPortaitData();
+        },
+        getOptionList(query, type, list) {
+            optionListApi(query).then((res) => {
+                if (res.code == 200) {
+                    this[type] = res[list];
+                }
+            });
+        },
+        selectAlgoType() {
+            // 获取算法类型
+            let query = {
+                choose_type: 2,
+                provider: this.searchForm.provider
+            };
+            this.getOptionList(query, 'algoTypeList', 'algo_type');
+        },
+        selectAlgoList() {
+            // 获取算法
+            let query = {
+                choose_type: 3,
+                provider: this.searchForm.provider,
+                algo_type: this.searchForm.algo_type
+            };
+            this.getOptionList(query, 'algoList', 'algo_name');
+        },
+        getUserPortaitData() {
+            let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
+            let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 00:00`).getTime() / 1000;
+            let end_time = new Date(`${today2} 23:59`).getTime() / 1000;
+            let parmas = { end_time, start_time, user_id: localStorage.getItem('ms_username'), algo_name: this.searchForm.algo_id };
+            let radarList = [];
+            userProfileApi(parmas)
+                .then((res) => {
+                    this.summaryObj = res;
+                    if (res.code == 200) {
+                        //5个维度升序
+                        if (res.dimensions && res.dimensions.length) {
+                            this.dimensions = res.dimensions.sort((a, b) => {
+                                return a.profile_type - b.profile_type;
+                            });
+                            this.dimensions.forEach((item, i) => {
+                                this.dimensionalityList.push({
+                                    title: this.titleList[i],
+                                    desc: item.desc
+                                });
+                                radarList.push(item.score);
+                            });
+                        }
+                        this.getWaterEchart(this.summaryObj.progress);
+                        this.getRadarChart(radarList);
+                        this.generateChart(res.assess_line.point, 'main1');
+                        this.generateChart(res.progress_line.point, 'main2');
+                        this.getHistogramChart(res.fund_list);
+                    } else {
+                    }
+                })
+                .catch(() => {
+                    this.getWaterEchart(0);
+                    this.getRadarChart([]);
+                    this.generateChart([]);
+                    this.generateChart([]);
+                    this.getHistogramChart([]);
+                });
         },
         getWaterEchart(data) {
             data = Number(data).toFixed(1) / 100;
-            console.log(data, 'ddddddddd');
-            // data = (data.toFixed(2) / 100).toFixed(1);
-            // console.log((6.6564277985276).toFixed(2) / 100, 'dddddd');
             var chartDom = document.getElementById('water-polo');
             var myChart = echarts.init(chartDom);
             var option;
@@ -339,42 +349,38 @@ export default {
             };
             myChart.setOption(option, true);
         },
-        getRadarChart() {
+        getRadarChart(radarList) {
             let option = {
                 color: ['#3281FF', '#FACC14', '#2FC25B'],
                 radar: [
                     {
                         indicator: [
                             {
+                                name: '经济性',
+                                max: 10
+                            },
+                            {
                                 name: '完成度',
-                                max: 100
-                            },
-                            {
-                                name: '算法绩效',
-                                max: 100
-                            },
-                            {
-                                name: '贴合度',
-                                max: 100
+                                max: 10
                             },
                             {
                                 name: '风险度',
-                                max: 100
+                                max: 10
+                            },
+                            {
+                                name: '算法绩效',
+                                max: 10
                             },
                             {
                                 name: '绩效稳定性',
-                                max: 100
+                                max: 10
                             }
                         ],
                         center: ['50%', '50%'],
                         radius: 100,
-                        startAngle: 90,
-                        splitNumber: 3,
-                        orient: 'horizontal', // 图例列表的布局朝向,默认'horizontal'为横向,'c'为纵向.
-                        // shape: 'circle',
-                        // backgroundColor: {
-                        //     image:imgPath[0]
-                        // },
+                        // startAngle: 90,
+                        // splitNumber: 3,
+                        // orient: 'c', // 图例列表的布局朝向,默认'horizontal'为横向,'c'为纵向.
                         axisName: {
                             formatter: '{value}',
                             fontSize: 14, //外圈标签字体大小
@@ -388,10 +394,7 @@ export default {
                                 color: ['RGBA(224, 239, 255, .6)', '#F5F9FF', '#F5F9FF', '#F5F9FF', '#F5F9FF'] // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
                             }
                         },
-                        // axisLabel: {
-                        //     //展示刻度
-                        //     show: true
-                        // },
+
                         axisLine: {
                             //指向外圈文本的分隔线样式
                             lineStyle: {
@@ -420,7 +423,7 @@ export default {
                         data: [
                             {
                                 name: '算法',
-                                value: [85, 65, 55, 90, 82],
+                                value: radarList,
                                 areaStyle: {
                                     // 单项区域填充样式
                                     color: {
@@ -478,19 +481,25 @@ export default {
             option && myChart.setOption(option);
             myChart.resize();
         },
-        generateChart(list, type) {
-            if (list.length == 1) {
-                list.push({ x: '', y: list[0].y });
+        generateChart(list = [], type) {
+            list = !list ? [] : list;
+            let yDataList = [];
+            let isNull = true;
+            console.log(list);
+            if (!list.length) {
+                isNull = true;
+            } else {
+                isNull = false;
+                list.forEach((item) => {
+                    yDataList.push(item.score);
+                });
             }
             let lineObj = {
                 main1: { name: '绩效', color: '#83BDFF' },
                 main2: { name: '完成度', color: '#FCE75F' }
             };
-            let isNull = list.length ? false : true;
             let option = {
                 title: {
-                    // top: '4px',
-                    // left: '32px',
                     text: lineObj[type].name,
                     textStyle: {
                         color: '#333333',
@@ -510,20 +519,18 @@ export default {
                         color: '#fff'
                     }
                 },
-                dataset: {
-                    dimensions: ['x', 'y'],
-                    source: list
-                },
+
                 grid: {
                     left: '5px',
-                    right: '10px',
+                    right: '20px',
                     bottom: '0px',
-                    // top: '75px',
+                    top: '65px',
                     containLabel: true
                 },
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
+                    data: fiexdDate,
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -532,7 +539,8 @@ export default {
                         }
                     },
                     axisLabel: {
-                        // interval: 0,
+                        interval: 29,
+                        color: '#000'
                         // rotate: 30,
                     },
                     axisTick: {
@@ -542,8 +550,10 @@ export default {
                         }
                     },
                     axisLine: {
-                        // 刻度线的颜色
-                        show: false
+                        show: true,
+                        lineStyle: {
+                            color: '#E8E8E8'
+                        }
                     },
                     axisPointer: {
                         type: 'line',
@@ -559,7 +569,8 @@ export default {
                             show: false
                         },
                         nameTextStyle: {
-                            color: '#888'
+                            color: '#888',
+                            padding: [0, 0, 0, 30]
                         },
                         axisTick: {
                             show: false //隐藏X轴刻度
@@ -570,9 +581,6 @@ export default {
                                 color: '#E9E9E9',
                                 type: 'dashed'
                             }
-                        },
-                        nameTextStyle: {
-                            padding: [0, 0, 0, 25]
                         },
                         min: isNull ? 0 : null,
                         max: isNull ? 100 : null
@@ -585,11 +593,9 @@ export default {
                         smooth: true,
                         showSymbol: true,
                         showAllSymbol: true,
+                        data: yDataList,
                         itemStyle: {
                             color: lineObj[type].color
-                            // normal: {
-                            //     color: lineObj[type].color
-                            // }
                         },
                         areaStyle: {
                             color: new echarts.graphic.LinearGradient(
@@ -617,18 +623,23 @@ export default {
                 ]
             };
             var myChart = echarts.init(document.getElementById(type));
+            myChart.clear();
             myChart.setOption(option);
             myChart.resize();
         },
-        getHistogramChart() {
+        getHistogramChart(list = []) {
             var chartDom = document.getElementById('histogram');
             var myChart = echarts.init(chartDom);
             myChart.clear();
+            var data3 = []; //市值
+            var data4 = []; //成本
+            var datacity = []; //横坐标
+            list.forEach((item) => {
+                data3.push(item.hold);
+                data4.push(item.cost);
+                datacity.push(item.sec_name);
+            });
             var option;
-            // 指定图表的配置项和数据
-            var data3 = [20, 30, 20, 30, 20, 30, 20, 30, 20, 30];
-            var data4 = [9, 30, 9, 60, 70, 20, 59, 20, 49, 20];
-            var datacity = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
             var option = {
                 title: {
                     text: '持仓市值与成本',
@@ -647,9 +658,7 @@ export default {
                     icon: 'circle',
                     itemWidth: 6,
                     itemGap: 24,
-                    y: 'bottom',
-                    // top: '80px',
-                    // x: 'center',
+                    bottom: 30,
                     textStyle: {
                         color: '#999'
                     }
@@ -657,15 +666,14 @@ export default {
                 grid: {
                     left: '5px',
                     right: '10px',
-                    bottom: '45px',
-                    // top: '75px',
+                    bottom: '60px',
                     containLabel: true
                 },
                 yAxis: [
                     {
                         type: 'value',
                         type: 'value',
-                        name: `单位：（万元）`,
+                        name: `单位：（元）`,
                         axisLabel: {
                             show: true,
                             interval: 'auto',
@@ -729,6 +737,25 @@ export default {
                             //     borderRadius: [4, 4, 0, 0]
                             // }
                         }
+                    }
+                ],
+                dataZoom: [
+                    {
+                        height: '15px',
+                        bottom: 10,
+                        show: true,
+                        realtime: true,
+                        start: 0,
+                        end: 100,
+                        xAxisIndex: [0, 1, 2, 3]
+                    },
+                    {
+                        type: 'inside',
+                        realtime: true,
+                        start: 0,
+                        end: 100,
+                        bottom: '0px',
+                        xAxisIndex: [0, 1, 2, 3]
                     }
                 ]
             };
@@ -971,13 +998,16 @@ export default {
                     font-size: 12px;
                     color: #999999;
                     line-height: 18px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
         }
     }
     .showClounm {
         margin-top: 12px;
-        height: 355px;
+        height: 385px;
         width: 100%;
     }
 }
@@ -999,5 +1029,11 @@ export default {
     right: 5px;
     top: 25px;
     // margin-right: -20px;
+}
+/deep/.el-badge__content {
+    border-radius: 10px 10px 10px 0;
+    position: absolute;
+    top: -35px;
+    right: -25px;
 }
 </style>
