@@ -120,10 +120,10 @@
             <div class="showDate">
                 <div class="card grade-lump">
                     <div class="score">
-                        <div class="number">84</div>
+                        <div class="number">{{ summaryObj.total_score }}</div>
                         <div class="text">综合评分</div>
                         <el-rate class="rate" v-model="startValue" disabled> </el-rate>
-                        <div class="rank-icon">3</div>
+                        <div class="rank-icon">{{ summaryObj.ranking }}</div>
                     </div>
                     <el-empty
                         v-if="!dimensionalityList.length"
@@ -164,7 +164,7 @@ export default {
             providerList: [],
             algoTypeList: [],
             algoList: [],
-            startValue: 3.5,
+            startValue: 0,
             summaryObj: {
                 fund: 0,
                 profit: 0,
@@ -173,7 +173,9 @@ export default {
                 cur_roll_hold: 0,
                 progress: 0,
                 login_cnt: 0,
-                user_grade: 0
+                user_grade: 0,
+                total_score: 0,
+                ranking: 0
             },
             dimensions: [], //五个维度雷达图
             dimensionalityList: [] // 综合评分列表
@@ -261,6 +263,7 @@ export default {
                                 radarList.push(item.score);
                             });
                         }
+                        this.startValue = this.summaryObj.total_score / 20;
                         this.getWaterEchart(this.summaryObj.progress);
                         this.getRadarChart(radarList);
                         this.generateChart(res.assess_line.point, 'main1');
@@ -272,8 +275,8 @@ export default {
                 .catch(() => {
                     this.getWaterEchart(0);
                     this.getRadarChart([]);
-                    this.generateChart([]);
-                    this.generateChart([]);
+                    this.generateChart([], 'main1');
+                    this.generateChart([], 'main2');
                     this.getHistogramChart([]);
                 });
         },
@@ -484,16 +487,21 @@ export default {
         generateChart(list = [], type) {
             list = !list ? [] : list;
             let yDataList = [];
-            let isNull = true;
-            console.log(list);
+            let isNull;
+            yDataList.length = fiexdDate.length;
             if (!list.length) {
                 isNull = true;
             } else {
                 isNull = false;
-                list.forEach((item) => {
-                    yDataList.push(item.score);
+                list.forEach((params) => {
+                    fiexdDate.forEach((item, i) => {
+                        if (params.time_point == item) {
+                            yDataList[i] = params.score;
+                        }
+                    });
                 });
             }
+
             let lineObj = {
                 main1: { name: '绩效', color: '#83BDFF' },
                 main2: { name: '完成度', color: '#FCE75F' }
@@ -597,6 +605,7 @@ export default {
                         itemStyle: {
                             color: lineObj[type].color
                         },
+                        connectNulls: true,
                         areaStyle: {
                             color: new echarts.graphic.LinearGradient(
                                 0,

@@ -299,15 +299,19 @@ export default {
         },
         generateChart(list = [], type) {
             list = !list ? [] : list;
+            let isNull;
             let yDataList = [];
-            let isNull = true;
-            console.log(list);
+            yDataList.length = fiexdDate.length;
             if (!list.length) {
                 isNull = true;
             } else {
                 isNull = false;
-                list.forEach((item) => {
-                    yDataList.push(item.score);
+                list.forEach((params) => {
+                    fiexdDate.forEach((item, i) => {
+                        if (params.time_point == item) {
+                            yDataList[i] = params.score;
+                        }
+                    });
                 });
             }
 
@@ -415,6 +419,7 @@ export default {
                         itemStyle: {
                             color: lineObj[type].color
                         },
+                        connectNulls: true,
                         areaStyle: {
                             color: new echarts.graphic.LinearGradient(
                                 0,

@@ -193,16 +193,26 @@ export default {
                 });
         },
         generateChart(list, type) {
+            let isNull = list.length ? false : true;
             let yDataList = [];
-            list.forEach((item) => {
-                yDataList.push(item.score);
-            });
+            yDataList.length = fiexdDate.length;
+            if (!list.length) {
+                isNull = true;
+            } else {
+                isNull = false;
+                list.forEach((params) => {
+                    fiexdDate.forEach((item, i) => {
+                        if (params.time_point == item) {
+                            yDataList[i] = params.score;
+                        }
+                    });
+                });
+            }
             let lineObj = {
                 main1: { name: '算法绩效', color: '#83BDFF' },
                 main2: { name: '算法风险度', color: '#59CC7F' },
                 main3: { name: '算法完成度', color: '#FCE75F' }
             };
-            let isNull = list.length ? false : true;
             let option = {
                 title: {
                     // top: '4px',
@@ -305,6 +315,7 @@ export default {
                         itemStyle: {
                             color: lineObj[type].color
                         },
+                        connectNulls: true,
                         areaStyle: {
                             color: new echarts.graphic.LinearGradient(
                                 0,
