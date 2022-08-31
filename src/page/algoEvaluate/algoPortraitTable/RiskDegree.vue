@@ -53,6 +53,7 @@
                 :image="require('../../../assets/img/empty.png')"
             ></el-empty>
             <el-table v-else :data="tableData" size="medium " :row-style="{ height: '56px' }" height="695px">
+                <el-table-column prop="user_id" label="用户ID"> </el-table-column>
                 <el-table-column prop="algo_name" label="算法名称"> </el-table-column>
                 <el-table-column prop="min_jonit_rate" label="最小贴合度"> </el-table-column>
                 <el-table-column prop="profit_rate" label="收益率">
