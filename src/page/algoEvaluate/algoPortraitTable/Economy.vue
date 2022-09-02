@@ -71,7 +71,7 @@
                     <template slot-scope="scope"> {{ scope.row.cancel_rate }}% </template>
                 </el-table-column>
                 <el-table-column prop="min_split_order" label="最小拆单单位"> </el-table-column>
-                <el-table-column prop="create_time" label="创建时间" show-overflow-tooltip> </el-table-column>
+                <el-table-column width="180px" prop="create_time" label="创建时间" show-overflow-tooltip> </el-table-column>
             </el-table>
             <el-pagination
                 background

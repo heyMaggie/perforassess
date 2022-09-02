@@ -79,7 +79,8 @@ export default {
             pageTotal: 0,
             providerList: [],
             algoTypeList: [],
-            algoList: []
+            algoList: [],
+            cross_day: false
         };
     },
     created() {
@@ -160,6 +161,7 @@ export default {
                 .then((res) => {
                     if (res.code == 200) {
                         list = res.data;
+                        this.cross_day = res.cross_day;
                         if (!list.length) {
                             this.generateChart([], 'main1');
                             this.generateChart([], 'main2');
@@ -195,21 +197,24 @@ export default {
         generateChart(list, type) {
             let isNull = list.length ? false : true;
             let yDataList = [];
-            yDataList.length = fiexdDate.length;
-            console.log(list, 'manyDays');
+            let xDataList = !this.cross_day ? fiexdDate : this.getCrossDateTime();
             if (!list.length) {
                 isNull = true;
             } else {
+                if (!this.cross_day) {
+                    yDataList.length = fiexdDate.length;
+                } else {
+                    yDataList.length = xDataList.length;
+                }
                 isNull = false;
                 list.forEach((params) => {
-                    fiexdDate.forEach((item, i) => {
+                    xDataList.forEach((item, i) => {
                         if (params.time_point == item) {
                             yDataList[i] = params.score;
                         }
                     });
                 });
             }
-            console.log(yDataList, 'yDataList');
             let lineObj = {
                 main1: { name: '算法绩效', color: '#83BDFF' },
                 main2: { name: '算法风险度', color: '#59CC7F' },
@@ -217,8 +222,6 @@ export default {
             };
             let option = {
                 title: {
-                    // top: '4px',
-                    // left: '32px',
                     text: lineObj[type].name,
                     textStyle: {
                         color: '#333333',
@@ -248,7 +251,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: fiexdDate,
+                    data: xDataList,
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -257,7 +260,7 @@ export default {
                         }
                     },
                     axisLabel: {
-                        interval: 29,
+                        interval: !this.cross_day ? 29 : null,
                         color: '#000'
                         // rotate: 30,
                     },
@@ -350,6 +353,10 @@ export default {
         },
         createPDF(title) {
             let _this = this;
+            let today = dayjs().format('YYYY-MM-DD');
+            let { provider, algo_type, algo_id, user_id } = this.searchForm;
+            let start = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
+            let end = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
             return new Promise((resolve) => {
                 html2Canvas(document.querySelector('#resultsHuiZongTableId'), {
                     allowTaint: false,
@@ -374,19 +381,19 @@ export default {
                     PDF.setFontSize(40);
                     PDF.text(73, 215, '多日分析');
                     PDF.setFontSize(20);
-                    PDF.text(73, 255, '报告时间：2022.08.26');
+                    PDF.text(73, 255, `报告时间：${today}`);
                     PDF.text(73, 285, '数据来源：绩效评估后台（多日分析）');
 
                     PDF.addImage(_this.$refs.watermarkImg.src, 'JPEG', 0, 0, 880, 524);
                     PDF.addPage();
                     PDF.addImage(_this.$refs.backGr.src, 'JPEG', 0, 0, 880, 160);
                     PDF.setFontSize(14);
-                    PDF.text(45, 80, '厂商：XXXXXX厂商');
-                    PDF.text(170, 80, '算法类型：日内回转');
-                    PDF.text(310, 80, '算法：日内回转1');
-                    PDF.text(435, 80, '用户ID：019822113');
-                    PDF.text(570, 80, '开始时间：2022-08-24');
-                    PDF.text(720, 80, '结束时间：2022-08-24');
+                    PDF.text(45, 80, `厂商：${provider}`);
+                    PDF.text(160, 80, `算法类型：${algo_type}`);
+                    PDF.text(310, 80, `算法：${algo_id}`);
+                    PDF.text(435, 80, `用户ID：${user_id}`);
+                    PDF.text(570, 80, `开始时间：${start}`);
+                    PDF.text(720, 80, `结束时间：${end}`);
                     PDF.setFontSize(28);
                     PDF.text(40, 50, '基本信息');
                     PDF.text(40, 140, '收益概览');
@@ -401,6 +408,24 @@ export default {
                     resolve(true);
                 });
             });
+        },
+        // 获取跨天数的X轴
+        getCrossDateTime() {
+            let xDataList = [];
+            let startDate = dayjs(this.timeRange[0]).format('YYYYMMDD');
+            let endDate = dayjs(this.timeRange[1]).format('YYYYMMDD');
+            let diffData = dayjs(this.timeRange[1]).diff(this.timeRange[0], 'day') + 1; //两个日期之间相差的天数
+            let nextDate = startDate;
+            for (let i = 0; i < diffData; i++) {
+                if (nextDate === startDate) {
+                    xDataList.push(dayjs(nextDate).format('MM/DD'));
+                }
+                if (nextDate < endDate) {
+                    nextDate = dayjs(nextDate).add(1, 'day').format('YYYYMMDD');
+                    xDataList.push(dayjs(nextDate).format('MM/DD'));
+                }
+            }
+            return xDataList;
         }
     }
 };

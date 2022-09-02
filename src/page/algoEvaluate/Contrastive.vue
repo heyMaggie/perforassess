@@ -481,9 +481,18 @@ export default {
             var myChart = echarts.init(document.getElementById('main2'));
             option && myChart.setOption(option);
             myChart.resize();
+            let { algo_type, algo_id_list } = this.searchForm;
+            algo_id_list.join(',');
+            console.log(algo_id_list);
         },
         createPDF(title) {
             let _this = this;
+            let today = dayjs().format('YYYY-MM-DD');
+            let { algo_type, algo_id_list } = this.searchForm;
+            let algo_id_listStr = algo_id_list.toString();
+            let user_id = localStorage.getItem('ms_username');
+            let start = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
+            let end = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
             return new Promise((resolve) => {
                 html2Canvas(document.querySelector('#resultsHuiZongTableId'), {
                     allowTaint: false,
@@ -503,19 +512,18 @@ export default {
                     PDF.setFontSize(40);
                     PDF.text(73, 215, '对比分析');
                     PDF.setFontSize(20);
-                    PDF.text(73, 255, '报告时间：2022.08.26');
+                    PDF.text(73, 255, `报告时间：${today}`);
                     PDF.text(73, 285, '数据来源：绩效评估后台（对比分析）');
 
                     PDF.addImage(_this.$refs.watermarkImg.src, 'JPEG', 0, 0, 880, 524);
                     PDF.addPage();
                     PDF.addImage(_this.$refs.backGr.src, 'JPEG', 0, 0, 880, 160);
                     PDF.setFontSize(14);
-                    PDF.text(45, 80, '厂商：XXXXXX厂商');
-                    PDF.text(170, 80, '算法类型：日内回转');
-                    PDF.text(310, 80, '算法：日内回转1');
-                    PDF.text(435, 80, '用户ID：019822113');
-                    PDF.text(570, 80, '开始时间：2022-08-24');
-                    PDF.text(720, 80, '结束时间：2022-08-24');
+                    PDF.text(45, 80, `算法类型：${algo_type}`);
+                    PDF.text(170, 80, `选择对比算法：${algo_id_listStr}`);
+                    PDF.text(45, 100, `用户ID：${user_id}`);
+                    PDF.text(170, 100, `开始时间：${start}`);
+                    PDF.text(310, 100, `结束时间：${end}`);
                     PDF.setFontSize(28);
                     PDF.text(40, 50, '基本信息');
                     PDF.text(40, 140, '收益概览');

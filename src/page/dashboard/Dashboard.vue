@@ -936,7 +936,7 @@ export default {
             let today = dayjs().format('YYYY-MM-DD');
             let start_time = new Date(`${today} 00:00`).getTime() / 1000;
             let end_time = new Date(`${today} 23:59`).getTime() / 1000;
-            let query = { start_time, end_time };
+            let query = { start_time, end_time, user_id: localStorage.getItem('ms_username') };
             dashboardSummarydApi(query)
                 .then((res) => {
                     // if (res.code == 200) {
@@ -979,7 +979,8 @@ export default {
                 end_time: end_time,
                 algo_type_name: this.algo_nameList[this.activeName],
                 page: pageObj.page,
-                limit: pageObj.pageNum
+                limit: pageObj.pageNum,
+                user_id: localStorage.getItem('ms_username')
             };
             dashboardAlgolistApi(query)
                 .then((res) => {
