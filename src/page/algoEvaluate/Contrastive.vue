@@ -481,9 +481,6 @@ export default {
             var myChart = echarts.init(document.getElementById('main2'));
             option && myChart.setOption(option);
             myChart.resize();
-            let { algo_type, algo_id_list } = this.searchForm;
-            algo_id_list.join(',');
-            console.log(algo_id_list);
         },
         createPDF(title) {
             let _this = this;
