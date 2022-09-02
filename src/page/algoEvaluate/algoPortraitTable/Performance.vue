@@ -54,6 +54,7 @@
             ></el-empty>
             <el-table v-else :data="tableData" size="medium " :row-style="{ height: '56px' }" height="695px">
                 <el-table-column prop="user_id" label="用户ID"> </el-table-column>
+                <el-table-column prop="provider" label="算法厂商"> </el-table-column>
                 <el-table-column prop="algo_name" label="算法名称"> </el-table-column>
                 <el-table-column prop="vwap_dev" label="VWAP滑点值">
                     <template slot-scope="scope"> {{ scope.row.vwap_dev }}% </template>

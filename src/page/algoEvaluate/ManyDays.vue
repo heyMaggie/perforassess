@@ -196,6 +196,7 @@ export default {
             let isNull = list.length ? false : true;
             let yDataList = [];
             yDataList.length = fiexdDate.length;
+            console.log(list, 'manyDays');
             if (!list.length) {
                 isNull = true;
             } else {
@@ -208,6 +209,7 @@ export default {
                     });
                 });
             }
+            console.log(yDataList, 'yDataList');
             let lineObj = {
                 main1: { name: '算法绩效', color: '#83BDFF' },
                 main2: { name: '算法风险度', color: '#59CC7F' },
