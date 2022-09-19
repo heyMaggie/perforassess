@@ -116,9 +116,9 @@ export default {
                 .then((res) => {
                     if (res.code == 200) {
                         this.tableData = res.progress ? res.progress : [];
-                        this.tableData.map((item) => {
-                            item.create_time = dayjs(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss');
-                        });
+                        // this.tableData.map((item) => {
+                        //     item.create_time = dayjs(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss');
+                        // });
                         this.pageTotal = res.total;
                     } else {
                         this.$message.error('查询失败！');

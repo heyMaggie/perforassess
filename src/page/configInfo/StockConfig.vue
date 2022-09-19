@@ -10,8 +10,12 @@
             <div class="transfer">
                 <div class="tips"></div>
                 <div class="">
-                    <el-button class="first" size="medium" type="text" icon="el-icon-delete">股票信息上传</el-button>
-                    <el-button type="text" size="medium" icon="el-icon-delete">股票信息导出</el-button>
+                    <el-button class="first" size="medium" type="text"
+                        ><img src="../../assets/icon/upDt.png" class="icon-button" />股票信息上传</el-button
+                    >
+                    <el-button type="text" size="medium"
+                        ><img src="../../assets/icon/downDt.png" class="icon-button" />股票信息导出</el-button
+                    >
                 </div>
             </div>
             <div class="title">股票配置</div>
@@ -36,13 +40,13 @@
                     <el-table-column prop="sec_name" label="股票名称"> </el-table-column>
                     <el-table-column prop="fund_type" label="市值">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.fund_type }}</span>
+                            <span>{{ scope.row.fund_type | tableDic('marketType') }}</span>
                             <i class="el-icon-edit row-edit" @click="openEditDaiolg(2, 'market', scope.row)"></i>
                         </template>
                     </el-table-column>
                     <el-table-column prop="stock_type" label="股价类型">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.stock_type }}</span>
+                            <span>{{ scope.row.stock_type | tableDic('sharesType') }}</span>
                             <i class="el-icon-edit row-edit" @click="openEditDaiolg(2, 'shares', scope.row)"></i>
                         </template>
                     </el-table-column>
@@ -183,6 +187,9 @@ export default {
                 .then((res) => {
                     if (res.code == 200) {
                         this.$message.success(this.editTypeStr + '成功');
+                        if (oper_type == 1) {
+                            this.getTableData();
+                        }
                     } else {
                         this.$message.error(this.editTypeStr + '失败');
                     }
@@ -218,6 +225,11 @@ export default {
         }
         .first {
             margin-right: 10px;
+        }
+        .icon-button {
+            width: 14px;
+            height: 14px;
+            margin-right: 5px;
         }
     }
     .title {

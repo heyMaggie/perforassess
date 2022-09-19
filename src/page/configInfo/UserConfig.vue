@@ -11,8 +11,12 @@
             <div class="transfer">
                 <div class="tips">关于用户级别的说明******</div>
                 <div class="">
-                    <el-button class="first" size="medium" type="text" icon="el-icon-delete">用户信息上传</el-button>
-                    <el-button type="text" size="medium" icon="el-icon-delete">用户信息导出</el-button>
+                    <el-button class="first" size="medium" type="text"
+                        ><img src="../../assets/icon/upDt.png" class="icon-button" />用户信息上传</el-button
+                    >
+                    <el-button type="text" size="medium"
+                        ><img src="../../assets/icon/downDt.png" class="icon-button" />用户信息导出</el-button
+                    >
                 </div>
             </div>
             <div class="operate">
@@ -220,6 +224,11 @@ export default {
         }
         .first {
             margin-right: 10px;
+        }
+        .icon-button {
+            width: 14px;
+            height: 14px;
+            margin-right: 5px;
         }
     }
     .operate {
