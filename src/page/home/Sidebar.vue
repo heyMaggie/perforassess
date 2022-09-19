@@ -100,6 +100,25 @@ export default {
                             title: '排行榜'
                         }
                     ]
+                },
+                {
+                    icon: 'icon3',
+                    index: '4',
+                    title: '配置信息',
+                    subs: [
+                        {
+                            index: 'stockConfig',
+                            title: '股票配置'
+                        },
+                        // {
+                        //     index: 'algoConfig',
+                        //     title: '算法配置'
+                        // },
+                        {
+                            index: 'userConfig',
+                            title: '用户配置'
+                        }
+                    ]
                 }
             ]
         };

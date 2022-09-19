@@ -86,6 +86,21 @@ export default new Router({
                     meta: { title: '用户画像' }
                 },
                 {
+                    path: '/algoConfig',
+                    component: () => import('../page/configInfo/AlgoConfig.vue'),
+                    meta: { title: '股票配置' }
+                },
+                {
+                    path: '/stockConfig',
+                    component: () => import('../page/configInfo/StockConfig.vue'),
+                    meta: { title: '算法配置' }
+                },
+                {
+                    path: '/userConfig',
+                    component: () => import('../page/configInfo/UserConfig.vue'),
+                    meta: { title: '用户配置' }
+                },
+                {
                     // 权限页面
                     path: '/permission',
                     component: () => import('../page/Permission.vue'),

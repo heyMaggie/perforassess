@@ -80,3 +80,36 @@ export const userProfileApi = (query) => {
         data: query
     });
 };
+// 股票配置列表查询
+export const stockConfigListApi = (query) => {
+    return request({
+        // url: '/algo-assess/v1/config/serurity-list',
+        url: '/algo-assess/v1/assess/security-list',
+        method: 'post',
+        data: query
+    });
+};
+// 股票配置更新
+export const stockUpdateApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/config/security/update',
+        method: 'post',
+        data: query
+    });
+};
+// 用户配置列表查询
+export const userConfigListApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/config/user/list',
+        method: 'post',
+        data: query
+    });
+};
+// 用户配置列表查询
+export const userUpdateApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/config/user/update',
+        method: 'post',
+        data: query
+    });
+};

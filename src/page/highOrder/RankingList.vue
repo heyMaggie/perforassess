@@ -47,7 +47,7 @@
                             @current-change="handleCurrentChangeStock"
                             :current-page="stockCurrentPage"
                             :page-sizes="[10, 20, 30, 40]"
-                            :page-size="10"
+                            :page-size="pageObj.pageNum"
                             layout=" ->, prev, pager, next, total, jumper"
                             :total="stockRankListTotal"
                         >
@@ -90,7 +90,7 @@
                             @current-change="handleCurrentChangeUser"
                             :current-page="userCurrentPage"
                             :page-sizes="[10, 20, 30, 40]"
-                            :page-size="10"
+                            :page-size="pageObj.pageNum"
                             layout=" ->, prev, pager, next, total, jumper"
                             :total="userRankListTotal"
                         >
