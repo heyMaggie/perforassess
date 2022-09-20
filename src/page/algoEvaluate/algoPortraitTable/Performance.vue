@@ -109,21 +109,16 @@ export default {
     },
     watch: {
         'searchForm.provider'(newV, oldV) {
-            if (!newV) {
-                this.searchForm = {
-                    provider: '',
-                    algo_type: '',
-                    algo_id: ''
-                };
-                this.algoTypeList = [];
-                this.algoList = [];
-            }
+            this.searchForm.algo_type = '';
+            this.searchForm.algo_id = '';
+            this.algoTypeList = [];
+            this.algoList = [];
         },
         'searchForm.algo_type'(newV, oldV) {
-            if (!newV) {
-                this.searchForm.algo_id = '';
-                this.algoList = [];
-            }
+            // if (!newV) {
+            this.searchForm.algo_id = '';
+            this.algoList = [];
+            // }
         }
     },
     methods: {
