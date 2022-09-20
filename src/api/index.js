@@ -97,6 +97,23 @@ export const stockUpdateApi = (query) => {
         data: query
     });
 };
+// 股票配置导出
+export const exportSecurityApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/config/security/export',
+        method: 'post',
+        data: query
+    });
+};
+// 股票配置导入
+export const importSecurityApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/config/security/import',
+        method: 'post',
+        data: query,
+        timeout: 30000
+    });
+};
 // 用户配置列表查询
 export const userConfigListApi = (query) => {
     return request({
@@ -111,5 +128,22 @@ export const userUpdateApi = (query) => {
         url: '/algo-assess/v1/config/user/update',
         method: 'post',
         data: query
+    });
+};
+// 用户配置列表导出
+export const exporUsertApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/config/user/export',
+        method: 'post',
+        data: query
+    });
+};
+// 用户配置导入
+export const imporUsereApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/config/user/import',
+        method: 'post',
+        data: query,
+        timeout: 30000
     });
 };

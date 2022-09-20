@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 
 let baseURL = '';
+let path = ''; //传入的请求地址
 // process.env.NODE_ENV === 'development' 来判断是否开发环境
 if (process.env.NODE_ENV === 'development') {
     // 开发环境
@@ -27,6 +28,7 @@ const service = axios.create({
 // 文档中的统一设置post请求头。下面会说到post请求的几种'Content-Type'
 service.interceptors.request.use(
     (config) => {
+        path = config.url;
         return config;
     },
     (error) => {
@@ -38,6 +40,9 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     (response) => {
         if (response.status === 200) {
+            if (response.headers['content-disposition']) {
+                return response; //拿响应头
+            }
             return response.data;
         } else {
             Promise.reject();

@@ -10,11 +10,20 @@
             <div class="title">用户配置</div>
             <div class="transfer">
                 <div class="tips">关于用户级别的说明******</div>
-                <div class="">
-                    <el-button class="first" size="medium" type="text"
-                        ><img src="../../assets/icon/upDt.png" class="icon-button" />用户信息上传</el-button
+                <div class="transfile">
+                    <el-upload
+                        action=""
+                        :show-file-list="false"
+                        :on-change="handleUpload"
+                        :auto-upload="false"
+                        accept=".xml"
+                        class="upload-demo first"
                     >
-                    <el-button type="text" size="medium"
+                        <el-button size="medium" type="text" slot="trigger"
+                            ><img src="../../assets/icon/upDt.png" class="icon-button" />用户信息上传</el-button
+                        ></el-upload
+                    >
+                    <el-button type="text" size="medium" @click="exportFile"
                         ><img src="../../assets/icon/downDt.png" class="icon-button" />用户信息导出</el-button
                     >
                 </div>
@@ -27,6 +36,7 @@
             </div>
             <div class="table-box">
                 <el-table
+                    v-loading="uploading"
                     :data="tableData"
                     size="medium "
                     :row-style="{ height: '48px', background: '#fff' }"
@@ -98,7 +108,8 @@
 </template>
 
 <script>
-import { userConfigListApi, userUpdateApi } from '@/api/index';
+import { userConfigListApi, userUpdateApi, exporUsertApi, imporUsereApi } from '@/api/index';
+import { Upload } from 'element-ui';
 export default {
     data() {
         return {
@@ -115,7 +126,8 @@ export default {
             },
             oper_type: null, //1-新增2-修改
             editTypeStr: null, //1-新增2-修改
-            rowEditType: null //编辑的类型
+            rowEditType: null, //编辑的类型
+            uploading: false //上传状态
         };
     },
     created() {
@@ -144,6 +156,7 @@ export default {
             this.dialogFormVisible = true;
         },
         getTableData(pageObj = { page: 1, limit: 10 }) {
+            this.uploading = true;
             userConfigListApi({ ...pageObj, user_id: this.user_id })
                 .then((res) => {
                     if (res.code == 200) {
@@ -154,6 +167,9 @@ export default {
                 .catch(() => {
                     this.tableData = [];
                     this.pageTotal = 0;
+                })
+                .finally(() => {
+                    this.uploading = false;
                 });
         },
         cancelEdit() {
@@ -179,6 +195,39 @@ export default {
                 .catch((error) => {
                     // this.$message.error(this.editTypeStr + '失败');
                 });
+        },
+        handleUpload(file) {
+            this.uploading = true;
+            let formData = new FormData();
+            formData.append('file', file.raw);
+            formData.append('key', file.name);
+            imporUsereApi(formData)
+                .then((res) => {
+                    if (res.code == 200) {
+                        this.$message.success('上传成功');
+                        this.getTableData();
+                        this.uploading = false;
+                    }
+                })
+                .catch(() => {
+                    this.uploading = false;
+                });
+        },
+        exportFile() {
+            exporUsertApi().then((res) => {
+                let title = res.headers['content-disposition'];
+                title = title.substring(title.indexOf('=') + 1);
+                let blob = new Blob([res.data], {
+                    type: 'text/xml;charset=utf-8' // 这边的类型需要改
+                });
+                let url = window.URL.createObjectURL(blob);
+                let link = document.createElement('a');
+                link.style.display = 'none';
+                link.setAttribute('download', title);
+                link.href = url;
+                document.body.appendChild(link);
+                link.click();
+            });
         }
     }
 };
@@ -224,6 +273,9 @@ export default {
         }
         .first {
             margin-right: 10px;
+        }
+        .transfile {
+            display: flex;
         }
         .icon-button {
             width: 14px;
