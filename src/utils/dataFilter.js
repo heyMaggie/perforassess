@@ -21,9 +21,9 @@ const filters = {
      * @returns {String} 转换后的字典
      */
     tableDic: function (date, dictList) {
-        console.log(date, dictList);
+        // console.log(date, dictList);
         if (!date) {
-            return '-';
+            return date;
         }
         let dictArr = dict[dictList];
         for (let j = 0; j < dictArr.length; j++) {

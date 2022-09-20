@@ -1,139 +1,119 @@
 <template>
     <div class="sidebar">
-        <el-menu class="sidebar-el-menu apiview" :default-active="onRoutes" router :default-openeds="['2', '3', '2-2']">
-            <template v-for="item in items">
-                <template v-if="item.subs">
-                    <el-submenu :index="item.index" :key="item.index">
-                        <template slot="title">
-                            <i :class="item.icon"></i>
-                            <span slot="title" class="span4">{{ item.title }}</span>
-                        </template>
-                        <template v-for="subItem in item.subs">
-                            <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index" :default-openeds="['economy']">
-                                <template slot="title">{{ subItem.title }}</template>
-                                <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.index">{{
-                                    threeItem.title
-                                }}</el-menu-item>
-                            </el-submenu>
-                            <el-menu-item v-else :index="subItem.index" :key="subItem.index + 'i'">{{ subItem.title }}</el-menu-item>
-                        </template>
-                    </el-submenu>
-                </template>
-                <template v-else>
-                    <el-menu-item :index="item.index" :key="item.index">
-                        <i :class="item.icon"></i>
-                        <span slot="title">{{ item.title }}</span>
-                    </el-menu-item>
-                </template>
-            </template>
+        <!-- default-active="dashboard"  -->
+        <el-menu
+            class="sidebar-el-menu apiview"
+            :default-active="activeIndex"
+            router
+            :default-openeds="['dashboard', '2', '2-2', '3', '4']"
+            @select="handleSelect"
+        >
+            <!-- 引入组件 -->
+            <menu-tree :menuData="menuList"></menu-tree>
         </el-menu>
     </div>
 </template>
 
 <script>
-import bus from '@/utils/bus';
+import MenuTree from '../components/MentTree.vue';
 export default {
+    components: {
+        MenuTree
+    },
     data() {
         return {
-            items: [
+            activeIndex: 'dashboard',
+            menuList: [
                 {
                     icon: 'icon1',
                     index: 'dashboard',
-                    title: 'Dashboard'
+                    name: 'Dashboard'
                 },
                 {
                     icon: 'icon2',
                     index: '2',
-                    title: '算法评估',
-                    subs: [
+                    name: '算法评估',
+                    children: [
                         {
                             index: 'algoDynamic',
-                            title: '算法动态'
+                            name: '算法动态'
                         },
                         {
                             index: '2-2',
-                            title: '算法画像',
-                            subs: [
+                            name: '算法画像',
+                            children: [
                                 {
                                     index: 'economy',
-                                    title: '经济性'
+                                    name: '经济性'
                                 },
                                 {
                                     index: 'completeness',
-                                    title: '完成度'
+                                    name: '完成度'
                                 },
                                 {
                                     index: 'riskDegree',
-                                    title: '风险度'
+                                    name: '风险度'
                                 },
                                 {
                                     index: 'performance',
-                                    title: '绩效'
+                                    name: '绩效'
                                 },
                                 {
                                     index: 'stability',
-                                    title: '稳定性'
+                                    name: '稳定性'
                                 }
                             ]
                         },
                         {
                             index: 'manyDays',
-                            title: '多日分析'
+                            name: '多日分析'
                         },
                         {
                             index: 'contrastive',
-                            title: '对比分析'
+                            name: '对比分析'
                         }
                     ]
                 },
                 {
                     icon: 'icon3',
                     index: '3',
-                    title: '高阶评估',
-                    subs: [
+                    name: '高阶评估',
+                    children: [
                         {
                             index: 'userPortrait',
-                            title: '用户画像'
+                            name: '用户画像'
                         },
                         {
                             index: 'rankingList',
-                            title: '排行榜'
+                            name: '排行榜'
                         }
                     ]
                 },
                 {
                     icon: 'icon3',
                     index: '4',
-                    title: '配置信息',
-                    subs: [
+                    name: '配置信息',
+                    children: [
                         {
                             index: 'stockConfig',
-                            title: '股票配置'
+                            name: '股票配置'
                         },
                         // {
                         //     index: 'algoConfig',
-                        //     title: '算法配置'
+                        //     name: '算法配置'
                         // },
                         {
                             index: 'userConfig',
-                            title: '用户配置'
+                            name: '用户配置'
                         }
                     ]
                 }
             ]
         };
     },
-    computed: {
-        onRoutes() {
-            return this.$route.path.replace('/', '');
-        }
-    },
+    computed: {},
     created() {
-        // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-        bus.$on('collapse', (msg) => {
-            this.collapse = msg;
-            bus.$emit('collapse-content', msg);
-        });
+        this.activeIndex = this.$route.path.replace('/', '');
     },
     methods: {}
 };
