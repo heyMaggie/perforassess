@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import MenuTree from '../components/MentTree.vue';
+import MenuTree from '../../components/MentTree.vue';
 export default {
     components: {
         MenuTree

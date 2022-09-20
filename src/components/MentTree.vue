@@ -89,7 +89,7 @@ export default {
 }
 
 .icon1 {
-    background: url(../../assets/icon/dash.png);
+    background: url(../assets/icon/dash.png);
     background-repeat: no-repeat;
     background-size: 16px 16px;
     width: 16px;
@@ -97,7 +97,7 @@ export default {
     margin-right: 10px;
 }
 .icon2 {
-    background: url(../../assets/icon/algo.png);
+    background: url(../assets/icon/algo.png);
     background-repeat: no-repeat;
     background-size: 16px 16px;
     width: 16px;
@@ -105,7 +105,7 @@ export default {
     margin-right: 10px;
 }
 .icon3 {
-    background: url(../../assets/icon/high.png);
+    background: url(../assets/icon/high.png);
     background-repeat: no-repeat;
     background-size: 16px 16px;
     width: 16px;
