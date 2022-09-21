@@ -40,7 +40,7 @@
                     :data="tableData"
                     size="medium "
                     :row-style="{ height: '48px', background: '#fff' }"
-                    height="620px"
+                    height="624px"
                     :header-cell-style="{
                         background: '#F2F3F5 !important'
                     }"
@@ -70,10 +70,10 @@
             </div>
         </div>
         <el-dialog :title="editTypeStr" :visible.sync="dialogFormVisible" width="789px">
-            <el-form :model="editForm" label-position="top" ref="editFormId">
+            <el-form :model="editForm" label-position="top" ref="formName" :rules="rules">
                 <el-row>
                     <el-col :span="11"
-                        ><el-form-item label="用户ID">
+                        ><el-form-item label="用户ID" prop="user_id">
                             <el-input
                                 v-model="editForm.user_id"
                                 :disabled="oper_type == 2"
@@ -81,13 +81,13 @@
                             ></el-input> </el-form-item></el-col
                     ><el-col :span="2"><div>&nbsp;</div></el-col>
                     <el-col :span="11">
-                        <el-form-item label="用户名称">
+                        <el-form-item label="用户名称" prop="user_name">
                             <el-input v-model="editForm.user_name" :disabled="oper_type == 2" placeholder="请输入用户名称"></el-input>
                         </el-form-item> </el-col
                 ></el-row>
                 <el-row>
                     <el-col :span="11"
-                        ><el-form-item label="固定用户级别">
+                        ><el-form-item label="固定用户级别" prop="grade">
                             <el-select
                                 v-model="editForm.grade"
                                 placeholder="请选择用户级别"
@@ -100,7 +100,7 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="cancelEdit">取 消</el-button>
+                <el-button @click="closeEdit">取 消</el-button>
                 <el-button type="primary" @click="submitEdit">确 定</el-button>
             </div>
         </el-dialog>
@@ -109,12 +109,11 @@
 
 <script>
 import { userConfigListApi, userUpdateApi, exporUsertApi, imporUsereApi } from '@/api/index';
-import { Upload } from 'element-ui';
 export default {
     data() {
         return {
             user_id: '',
-            pageObj: { page: 1, limit: 10 },
+            pageObj: { page: 1, limit: 12 },
             pageTotal: 10,
             tableData: [],
             gradeType: dict.gradeType,
@@ -127,7 +126,12 @@ export default {
             oper_type: null, //1-新增2-修改
             editTypeStr: null, //1-新增2-修改
             rowEditType: null, //编辑的类型
-            uploading: false //上传状态
+            uploading: false, //上传状态
+            rules: {
+                user_id: [{ required: true, message: '请输入用户ID', trigger: 'blur' }],
+                user_name: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
+                grade: [{ required: true, message: '请选择用户级别', trigger: 'blur' }]
+            }
         };
     },
     created() {
@@ -141,7 +145,7 @@ export default {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-            let pageObj = { page: val / 1, limit: 10 };
+            let pageObj = { page: val / 1, limit: this.pageObj.limit };
             this.getTableData(pageObj);
         },
         openEditDaiolg(type, editStr, rowItem) {
@@ -149,19 +153,24 @@ export default {
             if (type == 2) {
                 this.editTypeStr = '修改';
                 this.rowEditType = editStr;
-                this.editForm = rowItem;
+                this.$nextTick(() => {
+                    // 这里开始赋值
+                    let rowData = JSON.parse(JSON.stringify(rowItem));
+                    this.editForm = rowData;
+                });
             } else {
                 this.editTypeStr = '新增';
             }
             this.dialogFormVisible = true;
         },
-        getTableData(pageObj = { page: 1, limit: 10 }) {
+        getTableData(pageObj = { page: 1, limit: this.pageObj.limit }) {
             this.uploading = true;
             userConfigListApi({ ...pageObj, user_id: this.user_id })
                 .then((res) => {
                     if (res.code == 200) {
                         this.tableData = res.infos;
                         this.pageTotal = res.total;
+                        this.pageObj = pageObj;
                     }
                 })
                 .catch(() => {
@@ -172,29 +181,31 @@ export default {
                     this.uploading = false;
                 });
         },
-        cancelEdit() {
-            this.$nextTick(() => {
-                this.$refs['editFormId'].clearValidate();
-                this.$refs['editFormId'].resetFields();
-            });
+        closeEdit() {
             this.dialogFormVisible = false;
+            this.$refs['formName'].resetFields();
         },
         submitEdit() {
             let oper_type = this.oper_type;
-            userUpdateApi({ lists: [this.editForm], oper_type })
-                .then((res) => {
-                    if (res.code == 200) {
-                        this.$message.success(this.editTypeStr + '成功');
-                    } else {
-                        this.$message.error(this.editTypeStr + '失败');
-                    }
-                    console.log(this.$refs['editFormId']);
-                    this.$refs['editFormId'].clearValidate();
-                    this.dialogFormVisible = false;
-                })
-                .catch((error) => {
-                    // this.$message.error(this.editTypeStr + '失败');
-                });
+            this.$refs['formName'].validate((valid) => {
+                if (valid) {
+                    userUpdateApi({ lists: [this.editForm], oper_type })
+                        .then((res) => {
+                            if (res.code == 200) {
+                                this.$message.success(this.editTypeStr + '成功');
+                                this.getTableData(this.pageObj); // 关闭窗口
+                                this.closeEdit();
+                            } else {
+                                this.$message.error(this.editTypeStr + '失败');
+                            }
+                        })
+                        .catch((error) => {
+                            // this.$message.error(this.editTypeStr + '失败');
+                        });
+                } else {
+                    return false;
+                }
+            });
         },
         handleUpload(file) {
             this.uploading = true;

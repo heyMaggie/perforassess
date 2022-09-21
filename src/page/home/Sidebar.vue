@@ -6,7 +6,6 @@
             :default-active="activeIndex"
             router
             :default-openeds="['dashboard', '2', '2-2', '3', '4']"
-            @select="handleSelect"
         >
             <!-- 引入组件 -->
             <menu-tree :menuData="menuList"></menu-tree>
