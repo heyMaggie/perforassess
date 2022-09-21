@@ -147,3 +147,11 @@ export const imporUsereApi = (query) => {
         timeout: 30000
     });
 };
+// 用户画像列表导出
+export const exportProfileApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/profile/export',
+        method: 'post',
+        data: query
+    });
+};

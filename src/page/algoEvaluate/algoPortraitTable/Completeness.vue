@@ -19,7 +19,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList">
+                    <el-select v-model="searchForm.algo_name" clearable placeholder="算法" @focus="selectAlgoList">
                         <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { fiveDimensionsApi, optionListApi } from '@/api/index';
+import { fiveDimensionsApi, optionListApi, exportProfileApi } from '@/api/index';
 import dayjs from 'dayjs';
 import { export2Excel } from '../../../utils/exportExcel';
 export default {
@@ -82,7 +82,7 @@ export default {
             searchForm: {
                 provider: '',
                 algo_type: '',
-                algo_id: '',
+                algo_name: '',
                 user_id: localStorage.getItem('ms_username')
             },
             timeRange: [dayjs().day(-5), new Date()], //筛选时间范围 默认当天
@@ -103,6 +103,20 @@ export default {
         };
         this.getOptionList(query, 'providerList', 'provider');
     },
+    watch: {
+        'searchForm.provider'(newV, oldV) {
+            this.searchForm.algo_type = '';
+            this.searchForm.algo_name = '';
+            this.algoTypeList = [];
+            this.algoList = [];
+        },
+        'searchForm.algo_type'(newV, oldV) {
+            // if (!newV) {
+            this.searchForm.algo_name = '';
+            this.algoList = [];
+            // }
+        }
+    },
     methods: {
         getTableData(pageObj = { page: 1, pageNum: 10 }) {
             this.pageObj = pageObj;
@@ -119,6 +133,7 @@ export default {
                         // this.tableData.map((item) => {
                         //     item.create_time = dayjs(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss');
                         // });
+                        this.pageObj = pageObj;
                         this.pageTotal = res.total;
                     } else {
                         this.$message.error('查询失败！');
@@ -126,6 +141,7 @@ export default {
                 })
                 .catch(() => {
                     this.tableData = [];
+                    this.pageTotal = 0;
                     this.$message.error('查询失败！');
                 });
         },
@@ -159,16 +175,23 @@ export default {
             this.getTableData();
         },
         downLoad() {
-            export2Excel(
-                [
-                    { title: '用户ID', key: 'user_id' },
-                    { title: '算法名称', key: 'algo_name' },
-                    { title: '完成度', key: 'progress' },
-                    { title: '创建时间', key: 'create_time' }
-                ],
-                this.tableData,
-                '完成度列表'
-            );
+            let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
+            let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
+            let start_time = new Date(`${today} 00:00`).getTime() / 1000;
+            let end_time = new Date(`${today2} 23:59`).getTime() / 1000;
+            let query = { profile_type: 2, start_time, end_time, ...this.searchForm };
+            console.log(query);
+            exportProfileApi(query)
+                .then((res) => {
+                    if (res.code == 200) {
+                        console.log(res);
+                    } else {
+                        this.$message.error('导出失败！');
+                    }
+                })
+                .catch((error) => {
+                    this.$message.error('导出失败！');
+                });
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
