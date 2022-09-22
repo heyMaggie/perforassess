@@ -256,7 +256,7 @@ export default {
                     text: '算法绩效',
                     textStyle: {
                         color: '#333333',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: 500
                     }
                 },
@@ -283,7 +283,7 @@ export default {
                     left: '5px',
                     right: '15px',
                     bottom: '30px',
-                    top: '65px',
+                    top: '60px',
                     containLabel: true
                 },
                 xAxis: {

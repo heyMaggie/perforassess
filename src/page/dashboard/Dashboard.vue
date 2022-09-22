@@ -86,14 +86,8 @@
                 </div>
             </div>
             <div class="showClounm">
-                <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-empty
-                        v-if="!algo_nameList.length"
-                        description="暂无数据"
-                        style="height: 210px"
-                        :image="require('../../assets/img/empty.png')"
-                    ></el-empty>
-                    <el-tab-pane v-else v-for="(item, i) in algo_nameList" :key="item" :label="item" :name="i + ''">
+                <el-tabs v-if="algo_nameList.length" v-model="activeName" @tab-click="handleClick">
+                    <el-tab-pane v-for="(item, i) in algo_nameList" :key="item" :label="item" :name="i + ''">
                         <!-- 空状态 -->
                         <div v-if="!assessList.length" class="empty-card pane-card">
                             <div class="rowlist">

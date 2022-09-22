@@ -304,7 +304,7 @@ export default {
                     text: lineObj[type].name,
                     textStyle: {
                         color: '#333333',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: 500
                     }
                 },
@@ -325,7 +325,7 @@ export default {
                     left: '5px',
                     right: '20px',
                     bottom: '0px',
-                    top: '65px',
+                    top: '60px',
                     containLabel: true
                 },
                 xAxis: {
