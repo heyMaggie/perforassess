@@ -185,18 +185,9 @@ export default {
             let start_time = new Date(`${today} 00:00`).getTime() / 1000;
             let end_time = new Date(`${today2} 23:59`).getTime() / 1000;
             let query = { profile_type: 3, start_time, end_time, ...this.searchForm };
-            console.log(query);
-            exportProfileApi(query)
-                .then((res) => {
-                    if (res.code == 200) {
-                        console.log(res);
-                    } else {
-                        this.$message.error('导出失败！');
-                    }
-                })
-                .catch((error) => {
-                    this.$message.error('导出失败！');
-                });
+            query = JSON.stringify(query).replace('{', '').replace('}', '').replace(/,/g, '&').replace(/:/g, '=').replace(/"/g, '');
+            // console.log(`${window.baseURL}/algo-assess/v1/assess/profile/download?${query}`);
+            window.location.href = `${window.baseURL}/algo-assess/v1/profile/export?${query}`;
             // export2Excel(
             //     [
             //         { title: '算法名称', key: 'algo_name' },

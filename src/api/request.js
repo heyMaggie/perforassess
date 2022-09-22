@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
 
-let baseURL = '';
+window.baseURL = '';
 let path = ''; //传入的请求地址
 // process.env.NODE_ENV === 'development' 来判断是否开发环境
 if (process.env.NODE_ENV === 'development') {
