@@ -81,8 +81,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-title line-img">完成度X</div>
-                    <img class="query-icon" src="../../assets/icon/query.png" />
+                    <div class="card-title line-img">完成度</div>
                     <div id="water-polo" class="water-polo"></div>
                 </div>
             </div>

@@ -323,12 +323,12 @@ export default {
                             textStyle: {
                                 rich: {
                                     b: {
-                                        fontSize: 48,
+                                        fontSize: 28,
                                         fontWeight: 'bold',
                                         color: '#000'
                                     },
                                     c: {
-                                        fontSize: 16,
+                                        fontSize: 12,
                                         color: '#000'
                                     }
                                 }
@@ -778,8 +778,14 @@ export default {
     .showBorder {
         .card {
             margin-right: 12px;
-            width: 196px;
-            height: 220px;
+            width: 164px;
+            height: 158px;
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(5),
+            &:nth-child(7) {
+                width: 228px;
+            }
             &:nth-child(8) {
                 margin-right: 0px;
             }
@@ -787,13 +793,13 @@ export default {
                 display: inline-block;
             }
             .water-polo {
-                margin-top: 19px;
-                height: 135px;
+                margin-top: 10px;
+                height: 100px;
             }
             .circular {
-                margin: 20px auto;
-                width: 135px;
-                height: 135px;
+                margin: 10px auto;
+                width: 100px;
+                height: 100px;
                 border-radius: 50%;
                 background-color: #e8f1ff;
                 padding-top: 13px;
@@ -801,8 +807,8 @@ export default {
                 &::after {
                     content: '';
                     display: block;
-                    width: 109px;
-                    height: 110px;
+                    width: 74px;
+                    height: 75px;
                     border-radius: 50%;
                     background-color: #fff;
                     box-shadow: 0px 4px 6px 0px rgba(50, 129, 255, 0.32);
@@ -811,14 +817,14 @@ export default {
                 .number {
                     float: left;
                     margin: auto;
-                    line-height: 36px;
+                    line-height: 28px;
                     text-align: center;
                     width: 100%;
-                    font-size: 46px;
+                    font-size: 32px;
                     font-family: DINAlternate-Bold, DINAlternate;
                     font-weight: bold;
                     color: #333333;
-                    margin-top: 24px;
+                    margin-top: 12px;
                 }
                 .unit {
                     display: block;
@@ -842,7 +848,7 @@ export default {
                 }
             }
             .gather {
-                margin-top: 24px;
+                margin-top: 10px;
                 display: flex;
                 justify-content: space-between;
                 flex-wrap: wrap;
@@ -879,7 +885,7 @@ export default {
                 width: 161px;
                 height: 136px;
                 background: #fafbff;
-                margin-top: 24px;
+                margin-top: 10px;
 
                 &::after {
                     content: '';
@@ -899,25 +905,25 @@ export default {
         .blue-card {
             // width: 100%;
             position: relative;
-            height: 126px;
+            height: 104px;
             background: #fafbff;
             border-radius: 8px;
             // margin-top: 24px;
-            margin: 24px -12px 0;
+            margin: 10px -12px 0;
             text-align: center;
             .number {
                 font-size: 26px;
                 font-family: DINAlternate-Bold, DINAlternate;
                 font-weight: bold;
                 color: rgba(0, 0, 0, 0.85);
-                margin-top: 35px;
+                margin-top: 16px;
                 display: inline-block;
             }
             .unit {
                 font-size: 14px;
                 color: #999999;
                 font-weight: 500;
-                margin-top: 10px;
+                margin-top: 6px;
             }
         }
     }
