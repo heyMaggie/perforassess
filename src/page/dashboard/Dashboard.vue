@@ -8,13 +8,19 @@
         <div class="echart-container">
             <div class="showBorder">
                 <div class="card">
-                    <div class="card-title">用户数量</div>
+                    <div class="card-title line-img">用户数量</div>
+                    <el-tooltip content="说明：用户总数量" placement="top">
+                        <img class="query-icon" src="../../assets/icon/query.png"
+                    /></el-tooltip>
                     <div class="circular">
                         <span class="number">{{ summaryObj.user_cnt }}<span class="unit">(个)</span></span>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-title">算法数量</div>
+                    <div class="card-title line-img">算法数量</div>
+                    <el-tooltip content="说明：算法总数量" placement="top">
+                        <img class="query-icon" src="../../assets/icon/query.png"
+                    /></el-tooltip>
                     <div class="circular special-green">
                         <span class="number">{{ summaryObj.algo_cnt }}<span class="unit">(个)</span></span>
                     </div>
@@ -29,7 +35,10 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-title">订单数</div>
+                    <div class="card-title line-img">订单数</div>
+                    <el-tooltip content="说明：订单总数量" placement="top">
+                        <img class="query-icon" src="../../assets/icon/query.png"
+                    /></el-tooltip>
                     <div class="circular">
                         <span class="number">{{ summaryObj.order_cnt }}<span class="unit">(个)</span></span>
                     </div>
@@ -39,7 +48,10 @@
                     <div class="medium-blue-card" id="pie2"></div>
                 </div>
                 <div class="card">
-                    <div class="card-title">厂商总数</div>
+                    <div class="card-title line-img">厂商总数</div>
+                    <el-tooltip content="说明：XXX" placement="top">
+                        <img class="query-icon" src="../../assets/icon/query.png"
+                    /></el-tooltip>
                     <div class="circular special-pink">
                         <span class="number">{{ summaryObj.provider_cnt }}<span class="unit">(个)</span></span>
                     </div>
@@ -69,7 +81,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-title line-img">完成度</div>
+                    <div class="card-title line-img">完成度X</div>
                     <img class="query-icon" src="../../assets/icon/query.png" />
                     <div id="water-polo" class="water-polo"></div>
                 </div>
@@ -79,68 +91,98 @@
                     <el-empty
                         v-if="!algo_nameList.length"
                         description="暂无数据"
-                        style="height: 532px"
+                        style="height: 210px"
                         :image="require('../../assets/img/empty.png')"
                     ></el-empty>
                     <el-tab-pane v-else v-for="(item, i) in algo_nameList" :key="item" :label="item" :name="i + ''">
-                        <el-empty
+                        <!-- 空状态 -->
+                        <div v-if="!assessList.length" class="empty-card pane-card">
+                            <div class="rowlist">
+                                <div class="rowtitle">厂商 —</div>
+                                <div class="blue-mincard">
+                                    <div class="tit"><img src="../../assets/icon/1aa.png" />用户数量</div>
+                                    <div class="number empty-number">—</div>
+                                </div>
+                                <div class="blue-mincard">
+                                    <div class="tit"><img src="../../assets/icon/2bb.png" />交易量</div>
+                                    <div class="number empty-number">—</div>
+                                </div>
+                                <div class="blue-mincard">
+                                    <div class="tit"><img src="../../assets/icon/3cc.png" />收益率</div>
+                                    <div class="number empty-number">—</div>
+                                </div>
+                                <div class="blue-mincard">
+                                    <div class="tit"><img src="../../assets/icon/4dd.png" />订单数量</div>
+                                    <div class="number empty-number">—</div>
+                                </div>
+                                <div class="blue-mincard">
+                                    <div class="tit"><img src="../../assets/icon/5ee.png" />买卖占比</div>
+                                    <div class="number empty-number">—</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <el-empty
                             v-if="!assessList.length"
                             description="暂无数据"
                             class="empty-card"
                             :image="require('../../assets/img/empty.png')"
-                        ></el-empty>
-                        <div v-else class="pane-card">
-                            <div v-for="(sonItem, j) in assessList" :key="sonItem.provider">
-                                <div class="rowtitle">{{ sonItem.provider }}</div>
-                                <div class="rowlist">
-                                    <div class="blue-mincard">
-                                        <div class="tit"><img src="../../assets/icon/1aa.png" />用户数量</div>
-                                        <div class="number">{{ sonItem.user_cnt }}</div>
-                                    </div>
-                                    <div class="blue-mincard">
-                                        <div class="tit"><img src="../../assets/icon/2bb.png" />交易量</div>
-                                        <div class="number"><span class="symbol">￥</span>{{ Number(sonItem.trade_vol).toFixed(2) }}</div>
-                                    </div>
-                                    <div class="blue-mincard">
-                                        <div class="tit"><img src="../../assets/icon/3cc.png" />收益率</div>
-                                        <el-badge
-                                            :value="sonItem.profit_rate > 0 ? '盈利' : '亏损'"
-                                            class="item"
-                                            :type="sonItem.profit_rate > 0 ? 'danger' : 'success'"
-                                        >
+                        ></el-empty> -->
+                        <div v-else>
+                            <div class="pane-card">
+                                <div v-for="(sonItem, j) in assessList" :key="sonItem.provider">
+                                    <div class="rowlist">
+                                        <div class="rowtitle">{{ sonItem.provider }}</div>
+                                        <div class="blue-mincard">
+                                            <div class="tit"><img src="../../assets/icon/1aa.png" />用户数量</div>
+                                            <div class="number">{{ sonItem.user_cnt }}</div>
+                                        </div>
+                                        <div class="blue-mincard">
+                                            <div class="tit"><img src="../../assets/icon/2bb.png" />交易量</div>
                                             <div class="number">
-                                                <span class="symbol">{{ sonItem.profit_rate > 0 ? '+' : ' ' }}</span
-                                                >{{ Number(sonItem.profit_rate).toFixed(1) }}<span class="unit">%</span>
+                                                <span class="symbol">￥</span>{{ Number(sonItem.trade_vol).toFixed(2) }}
                                             </div>
-                                        </el-badge>
-                                    </div>
-                                    <div class="blue-mincard">
-                                        <div class="tit"><img src="../../assets/icon/4dd.png" />订单数量</div>
-                                        <div class="number">{{ sonItem.order_cnt }}</div>
-                                    </div>
-                                    <div class="blue-mincard">
-                                        <div class="tit"><img src="../../assets/icon/5ee.png" />买卖占比</div>
-                                        <div
-                                            :style="{ height: '50px', width: '300px' }"
-                                            :id="`pieList${j}${i}`"
-                                            :ref="`pieList${j}${i}`"
-                                        ></div>
+                                        </div>
+                                        <div class="blue-mincard">
+                                            <div class="tit"><img src="../../assets/icon/3cc.png" />收益率</div>
+                                            <el-badge
+                                                :value="sonItem.profit_rate > 0 ? '盈利' : '亏损'"
+                                                class="item"
+                                                :type="sonItem.profit_rate > 0 ? 'danger' : 'success'"
+                                            >
+                                                <div class="number">
+                                                    <span class="symbol">{{ sonItem.profit_rate > 0 ? '+' : ' ' }}</span
+                                                    >{{ Number(sonItem.profit_rate).toFixed(1) }}<span class="unit">%</span>
+                                                </div>
+                                            </el-badge>
+                                        </div>
+                                        <div class="blue-mincard">
+                                            <div class="tit"><img src="../../assets/icon/4dd.png" />订单数量</div>
+                                            <div class="number">{{ sonItem.order_cnt }}</div>
+                                        </div>
+                                        <div class="blue-mincard">
+                                            <div class="tit"><img src="../../assets/icon/5ee.png" />买卖占比</div>
+                                            <div
+                                                :style="{ height: '50px', width: '300px' }"
+                                                :id="`pieList${j}${i}`"
+                                                :ref="`pieList${j}${i}`"
+                                            ></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <el-pagination
+                                background
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :page-sizes="[10, 20, 30, 40]"
+                                :current-page="pageObj.page"
+                                :page-size="pageObj.pageNum"
+                                layout=" ->, prev, pager, next, total, jumper"
+                                :total="pageTotal"
+                                style="margin-top: 20px"
+                            >
+                            </el-pagination>
                         </div>
-                        <el-pagination
-                            background
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :page-sizes="[10, 20, 30, 40]"
-                            :current-page="pageObj.page"
-                            :page-size="pageObj.pageNum"
-                            layout=" ->, prev, pager, next, total, jumper"
-                            :total="pageTotal"
-                            style="margin-top: 20px"
-                        >
-                        </el-pagination>
                     </el-tab-pane>
                 </el-tabs>
             </div>
@@ -255,12 +297,12 @@ export default {
                             textStyle: {
                                 rich: {
                                     b: {
-                                        fontSize: 48,
+                                        fontSize: 28,
                                         fontWeight: 'bold',
                                         color: '#000'
                                     },
                                     c: {
-                                        fontSize: 16,
+                                        fontSize: 12,
                                         color: '#000'
                                     }
                                 }
@@ -586,7 +628,7 @@ export default {
                         endAngle: 0,
                         min: 0,
                         max: 100,
-                        radius: '45%',
+                        radius: '50%',
                         progress: {
                             show: true,
                             width: 6,
@@ -637,7 +679,7 @@ export default {
                         },
                         detail: {
                             valueAnimation: true,
-                            fontSize: 26,
+                            fontSize: 22,
                             lineHeight: 10,
                             color: '#333333',
                             fontWeight: 'bold',
@@ -651,7 +693,7 @@ export default {
                                 },
                                 a: {
                                     color: '#999',
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: '400',
                                     padding: [-20, 132, 0, 0]
                                 }
@@ -671,7 +713,7 @@ export default {
                         endAngle: 0,
                         min: 0,
                         max: 100,
-                        radius: '45%',
+                        radius: '50%',
                         progress: {
                             show: true,
                             width: 6,
@@ -722,7 +764,7 @@ export default {
                         },
                         detail: {
                             valueAnimation: true,
-                            fontSize: 26,
+                            fontSize: 22,
                             lineHeight: 10,
                             color: '#333333',
                             fontWeight: 'bold',
@@ -736,7 +778,7 @@ export default {
                                 },
                                 a: {
                                     color: '#999',
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: '400',
                                     padding: [-20, 132, 0, 0]
                                 }
@@ -1026,22 +1068,35 @@ export default {
     .showBorder {
         .card {
             margin-right: 12px;
-            width: 196px;
-            height: 220px;
+            width: 163px;
+            height: 158px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            // padding: 12px 16px;
+            &:nth-child(3) {
+                width: 269px;
+            }
+            &:nth-child(5),
+            &:nth-child(7) {
+                width: 240px;
+            }
             &:nth-child(8) {
                 margin-right: 0px;
+            }
+            .card-title {
+                font-size: 16px;
             }
             .line-img {
                 display: inline-block;
             }
             .water-polo {
                 margin-top: 19px;
-                height: 135px;
+                height: 100px;
             }
             .circular {
-                margin: 20px auto;
-                width: 135px;
-                height: 135px;
+                margin: 10px auto;
+                width: 100px;
+                height: 100px;
                 border-radius: 50%;
                 background-color: #e8f1ff;
                 padding-top: 13px;
@@ -1049,8 +1104,8 @@ export default {
                 &::after {
                     content: '';
                     display: block;
-                    width: 109px;
-                    height: 110px;
+                    width: 74px;
+                    height: 75px;
                     border-radius: 50%;
                     background-color: #fff;
                     box-shadow: 0px 4px 6px 0px rgba(50, 129, 255, 0.32);
@@ -1059,14 +1114,14 @@ export default {
                 .number {
                     float: left;
                     margin: auto;
-                    line-height: 36px;
+                    line-height: 30px;
                     text-align: center;
                     width: 100%;
-                    font-size: 46px;
+                    font-size: 32px;
                     font-family: DINAlternate-Bold, DINAlternate;
                     font-weight: bold;
                     color: #333333;
-                    margin-top: 24px;
+                    margin-top: 12px;
                 }
                 .unit {
                     display: block;
@@ -1090,28 +1145,28 @@ export default {
                 }
             }
             .gather {
-                margin-top: 24px;
                 display: flex;
                 justify-content: space-between;
                 flex-wrap: wrap;
-                width: 170px;
-                margin: 24px -11px 0;
+                // width: 170px;
+                margin-top: 10px;
                 .min-blue-card {
-                    width: 76px;
-                    height: 64px;
+                    width: 100px;
+                    height: 48px;
                     background: #fafbff;
                     text-align: center;
+                    margin-left: -5px;
                     margin-bottom: 8px;
                     .number {
-                        width: 21px;
-                        font-size: 28px;
+                        // width: 21px;
+                        font-size: 20px;
                         font-family: DINAlternate-Bold, DINAlternate;
                         font-weight: bold;
                         color: #333333;
-                        line-height: 32px;
+                        line-height: 22px;
                     }
                     .unit {
-                        font-size: 14px;
+                        font-size: 12px;
                     }
                     .explain {
                         font-size: 14px;
@@ -1124,10 +1179,10 @@ export default {
                 }
             }
             .medium-blue-card {
-                width: 161px;
-                height: 136px;
+                width: 100%;
+                height: 100px;
                 background: #fafbff;
-                margin-top: 24px;
+                margin-top: 8px;
 
                 &::after {
                     content: '';
@@ -1135,7 +1190,7 @@ export default {
                     width: 100%;
                     height: 8px;
                     position: relative;
-                    bottom: 68px;
+                    bottom: 52px;
                     background-color: #fff;
                 }
             }
@@ -1146,25 +1201,25 @@ export default {
         }
         .blue-card {
             // width: 100%;
-            height: 126px;
+            height: 104px;
             background: #fafbff;
             border-radius: 8px;
             // margin-top: 24px;
-            margin: 24px -12px 0;
+            margin: 10px -12px 0;
             text-align: center;
             .number {
                 font-size: 26px;
                 font-family: DINAlternate-Bold, DINAlternate;
                 font-weight: bold;
                 color: rgba(0, 0, 0, 0.85);
-                margin-top: 35px;
+                margin-top: 18px;
                 display: inline-block;
             }
             .unit {
                 font-size: 14px;
                 color: #999999;
                 font-weight: 500;
-                margin-top: 10px;
+                margin-top: 6px;
             }
         }
     }
@@ -1174,35 +1229,43 @@ export default {
         // height: 615px;
         // background-color: #fff;
         .pane-card {
-            height: 532px;
+            height: 367px;
         }
         .empty-card {
-            height: 532px;
+            height: 124px;
         }
-        .rowtitle {
-            height: 20px;
-            font-size: 14px;
-            font-family: SourceHanSansSC-Medium, SourceHanSansSC;
-            font-weight: 500;
-            color: #333333;
-            line-height: 20px;
-        }
+
         .rowlist {
             display: flex;
             flex-wrap: nowrap;
             justify-content: space-between;
             margin-bottom: 12px;
+            .rowtitle {
+                font-size: 14px;
+                font-family: SourceHanSansSC-Medium, SourceHanSansSC;
+                font-weight: 500;
+                color: #333333;
+                line-height: 80px;
+                text-align: center;
+                width: 80px;
+                height: 80px;
+                background: rgba(234, 239, 255, 0.68);
+                border-radius: 80px;
+            }
             .blue-mincard {
                 // background: red;
                 background: #fafbff;
-                padding: 14px 8px 16px;
-                margin-top: 8px;
+                padding: 12px 8px 0px;
+                // margin-top: 8px;
                 // height: 92px;
                 min-width: 156px;
-                &:nth-child(2) {
+                &:nth-child(3) {
                     width: 244px;
                 }
-                &:nth-child(5) {
+                // &:nth-child(5) {
+                //     width: 244px;
+                // }
+                &:nth-child(6) {
                     width: 316px;
                     padding: 8px 8px 0px;
                     .tit {
@@ -1225,12 +1288,12 @@ export default {
                     height: 12px;
                 }
                 .number {
-                    height: 32px;
-                    font-size: 28px;
+                    height: 26px;
+                    font-size: 22px;
                     font-family: DINAlternate-Bold, DINAlternate;
                     font-weight: bold;
                     color: #333333;
-                    line-height: 32px;
+                    line-height: 26px;
                     margin-top: 12px;
                     margin-left: 18px;
 
@@ -1242,6 +1305,9 @@ export default {
                         font-size: 16px;
                     }
                 }
+                .empty-number {
+                    font-weight: 400;
+                }
             }
         }
 
@@ -1250,7 +1316,8 @@ export default {
         }
         /deep/.el-tabs__header {
             // padding-top: 4px;
-            margin-bottom: 12px;
+            margin-bottom: 0px;
+            border-bottom: 1px solid #efefef;
         }
         /deep/.el-tabs__item {
             font-size: 16px;
@@ -1259,13 +1326,14 @@ export default {
         }
         /deep/.el-tabs__nav-wrap {
             background: #fff;
-            border-radius: 8px;
+            border-radius: 12px 12px 0 0;
             padding: 2px 24px 0;
+            border-bottom: 1px solid #efefef;
         }
         /deep/.el-tabs__content {
             background: #fff;
-            padding: 16px 24px;
-            border-radius: 12px;
+            padding: 16px 24px 12px;
+            border-radius: 0 0 12px 12px;
             // min-height: 615px;
         }
         /deep/.el-badge__content {
@@ -1296,7 +1364,7 @@ export default {
             }
         }
         .card-title {
-            font-size: 20px;
+            font-size: 16px;
             .more {
                 float: right;
                 font-size: 12px;

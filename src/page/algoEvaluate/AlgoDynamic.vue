@@ -903,7 +903,7 @@ export default {
 <style scoped lang="less">
 .container {
     .card {
-        margin-bottom: 12px;
+        margin-bottom: 11px;
         display: inline-block;
         overflow: hidden;
         &:nth-child(1) {
