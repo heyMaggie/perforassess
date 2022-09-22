@@ -13,7 +13,7 @@
                         <!-- <el-button slot="prepend" icon="el-icon-lx-lock"></el-button> -->
                     </el-input>
                 </el-form-item>
-                <el-checkbox v-model="checkedPass" class="holdCheck" @keyup.enter.native="login">记住密码</el-checkbox>
+                <el-checkbox v-model="checkedPass" class="holdCheck">记住密码</el-checkbox>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
@@ -29,14 +29,14 @@ export default {
     data: function () {
         return {
             param: {
-                user_name: 'aUser0000065',
-                password: 'usrpwd_0000044'
+                user_name: localStorage.getItem('ms_username') || '',
+                password: localStorage.getItem('ms_passWord') || ''
             },
             rules: {
                 user_name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
             },
-            checkedPass: true
+            checkedPass: localStorage.getItem('ms_passWord') ? true : false
         };
     },
     methods: {
@@ -48,7 +48,12 @@ export default {
                             if (res.allow === 1) {
                                 this.$message.success('登录成功');
                                 localStorage.setItem('ms_username', this.param.user_name);
+                                localStorage.setItem('ms_passWord', this.param.password);
                                 this.$router.push('/');
+                                // 不记住密码
+                                if (!this.checkedPass) {
+                                    localStorage.removeItem('ms_passWord');
+                                }
                             } else {
                                 this.$message.error('登录失败');
                             }
@@ -60,7 +65,7 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    this.$message.error('登录失败');
+                    // this.$message.error('登录失败');
                 });
         }
     }
@@ -107,6 +112,7 @@ export default {
         margin-bottom: 16px !important;
     }
     /deep/.holdCheck {
+        margin-top: 5px;
     }
 }
 
