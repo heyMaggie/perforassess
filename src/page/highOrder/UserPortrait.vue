@@ -566,7 +566,7 @@ export default {
                 yAxis: [
                     {
                         type: 'value',
-                        name: `单位：（%）`,
+                        name: `单位：（分数）`,
                         // nameLocation: 'start',
                         axisLine: {
                             show: false
@@ -586,7 +586,7 @@ export default {
                             }
                         },
                         min: isNull ? 0 : null,
-                        max: isNull ? 100 : null
+                        max: isNull ? 10 : null
                     }
                 ],
                 series: [

@@ -4,12 +4,18 @@
             <div class="ms-title">欢迎使用绩效管理平台</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="user_name" class="bto">
-                    <el-input v-model="param.user_name" placeholder="请输入账号">
+                    <el-input v-model="param.user_name" placeholder="请输入账号" maxlength="18">
                         <!-- <el-button slot="prepend" icon="el-icon-lx-people"></el-button> -->
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="请输入密码" v-model="param.password" @keyup.enter.native="submitForm()">
+                    <el-input
+                        type="password"
+                        placeholder="请输入密码"
+                        v-model="param.password"
+                        @keyup.enter.native="submitForm()"
+                        maxlength="18"
+                    >
                         <!-- <el-button slot="prepend" icon="el-icon-lx-lock"></el-button> -->
                     </el-input>
                 </el-form-item>
