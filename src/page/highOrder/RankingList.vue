@@ -20,7 +20,7 @@
                             <table v-else border="0">
                                 <tr>
                                     <th>排名</th>
-                                    <th>算法名称</th>
+                                    <th>证券名称</th>
                                     <th>分数</th>
                                     <th>证券代码</th>
                                 </tr>
