@@ -46,7 +46,7 @@
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
                     <el-table-column prop="id" label="序号"> </el-table-column>
-                    <el-table-column prop="sec_id" label="ID"> </el-table-column>
+                    <el-table-column prop="sec_id" label="股票ID"> </el-table-column>
                     <el-table-column prop="sec_name" label="股票名称"> </el-table-column>
                     <el-table-column prop="fund_type" label="市值">
                         <template slot-scope="scope">
@@ -79,7 +79,7 @@
             <el-form :model="editForm" label-position="top" ref="formName" :rules="rules">
                 <el-row>
                     <el-col :span="11"
-                        ><el-form-item label="ID" prop="sec_id">
+                        ><el-form-item label="股票ID" prop="sec_id">
                             <el-input
                                 v-model="editForm.sec_id"
                                 :disabled="oper_type == 2"
@@ -130,7 +130,7 @@ export default {
         return {
             sec_id: '',
             pageObj: { page: 1, limit: 12 },
-            pageTotal: 10,
+            pageTotal: 0,
             tableData: [],
             marketType: dict.marketType,
             sharesType: dict.sharesType,

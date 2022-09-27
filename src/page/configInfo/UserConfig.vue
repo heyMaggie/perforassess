@@ -114,7 +114,7 @@ export default {
         return {
             user_id: '',
             pageObj: { page: 1, limit: 12 },
-            pageTotal: 10,
+            pageTotal: 0,
             tableData: [],
             gradeType: dict.gradeType,
             dialogFormVisible: false,

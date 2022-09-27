@@ -101,6 +101,26 @@ export default new Router({
                     meta: { title: '用户配置' }
                 },
                 {
+                    path: '/szMarket',
+                    component: () => import('../page/repairData/SzMarket.vue'),
+                    meta: { title: '深市行情' }
+                },
+                {
+                    path: '/huMarket',
+                    component: () => import('../page/repairData/HuMarket.vue'),
+                    meta: { title: '沪市行情' }
+                },
+                {
+                    path: '/busketInfo',
+                    component: () => import('../page/repairData/BusketInfo.vue'),
+                    meta: { title: '母单信息' }
+                },
+                {
+                    path: '/subInfo',
+                    component: () => import('../page/repairData/SubInfo.vue'),
+                    meta: { title: '子单信息' }
+                },
+                {
                     // 权限页面
                     path: '/permission',
                     component: () => import('../page/Permission.vue'),

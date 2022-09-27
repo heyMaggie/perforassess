@@ -5,7 +5,7 @@
             class="sidebar-el-menu apiview"
             :default-active="activeIndex"
             router
-            :default-openeds="['dashboard', '2', '2-2', '3', '4']"
+            :default-openeds="['dashboard', '2', '2-2', '3', '4', '5']"
         >
             <!-- 引入组件 -->
             <menu-tree :menuData="menuList"></menu-tree>
@@ -104,6 +104,29 @@ export default {
                         {
                             index: 'userConfig',
                             name: '用户配置'
+                        }
+                    ]
+                },
+                {
+                    icon: 'icon3',
+                    index: '5',
+                    name: '修复数据',
+                    children: [
+                        {
+                            index: 'szMarket',
+                            name: '深市行情'
+                        },
+                        {
+                            index: 'huMarket',
+                            name: '沪市行情'
+                        },
+                        {
+                            index: 'busketInfo',
+                            name: '母单信息'
+                        },
+                        {
+                            index: 'subInfo',
+                            name: '子单信息'
                         }
                     ]
                 }

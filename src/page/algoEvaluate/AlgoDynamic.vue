@@ -459,7 +459,7 @@ export default {
                         }
                     },
                     {
-                        text: '（分数）',
+                        text: '（%）',
                         x: '24%',
                         top: '50%',
                         textStyle: {
