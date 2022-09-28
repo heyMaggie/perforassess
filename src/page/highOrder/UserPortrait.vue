@@ -585,8 +585,10 @@ export default {
                                 type: 'dashed'
                             }
                         },
-                        min: isNull ? 0 : null,
-                        max: isNull ? 10 : null
+                        // min: isNull ? 0 : null,
+                        // max: isNull ? 10 : null
+                        min: 0,
+                        max: 10
                     }
                 ],
                 series: [
@@ -696,8 +698,10 @@ export default {
                             show: false
                         },
                         nameTextStyle: {
-                            padding: [0, 0, 0, 20]
-                        }
+                            padding: [0, 0, 0, 26]
+                        },
+                        min: !list.length ? 0 : null,
+                        max: !list.length ? 10 : null
                     }
                 ],
                 xAxis: [

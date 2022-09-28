@@ -299,9 +299,11 @@ export default {
                         axisLabel: {
                             color: '#000'
                         },
-                        nameTextStyle: { color: '#888', padding: [0, 0, 0, 25] },
-                        min: isNull ? 0 : null,
-                        max: isNull ? 10 : null
+                        nameTextStyle: { color: '#888', padding: [0, 0, 0, 30] },
+                        // min: isNull ? 0 : null,
+                        // max: isNull ? 10 : null
+                        min: 0,
+                        max: 10
                     }
                 ],
                 series: [

@@ -589,8 +589,10 @@ export default {
                             color: '#888',
                             padding: [0, 0, 0, 35]
                         },
-                        min: isNull ? 0 : null,
-                        max: isNull ? 10 : null
+                        // min: isNull ? 0 : null,
+                        // max: isNull ? 10 : null
+                        min: 0,
+                        max: 10
                     }
                 ],
                 series: seriesList

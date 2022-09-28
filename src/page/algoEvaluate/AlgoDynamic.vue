@@ -383,8 +383,10 @@ export default {
                                 type: 'dashed'
                             }
                         },
-                        min: isNull ? 0 : null,
-                        max: isNull ? 10 : null
+                        // min: isNull ? 0 : null,
+                        // max: isNull ? 10 : null
+                        min: 0,
+                        max: 10
                     }
                 ],
                 series: [
