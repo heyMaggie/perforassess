@@ -147,3 +147,11 @@ export const imporUsereApi = (query) => {
         timeout: 30000
     });
 };
+// 退出登录
+export const logoutApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/logout',
+        method: 'post',
+        data: query
+    });
+};

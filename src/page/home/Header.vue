@@ -24,7 +24,7 @@
     </div>
 </template>
 <script>
-import bus from '@/utils/bus';
+import { logoutApi } from '@/api/index';
 export default {
     data() {
         return {
@@ -44,8 +44,19 @@ export default {
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {
-                // localStorage.removeItem('ms_username');
-                this.$router.push('/login');
+                let username = localStorage.getItem('ms_username');
+                let params = {
+                    user_name: username
+                };
+                logoutApi(params).then((res) => {
+                    if (res.code == 200) {
+                        sessionStorage.removeItem('token');
+                        sessionStorage.removeItem('role');
+                        this.$router.push('/login');
+                    } else {
+                        this.$message.error('出错了');
+                    }
+                });
             }
         }
     },
