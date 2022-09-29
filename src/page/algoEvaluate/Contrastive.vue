@@ -97,7 +97,8 @@ export default {
         return {
             searchForm: {
                 algo_type: '',
-                algo_id_list: []
+                algo_id_list: [],
+                user_id: localStorage.getItem('ms_username')
             },
             timeRange: [new Date(), new Date()], //筛选时间范围 默认当天
             currentPage: 1,

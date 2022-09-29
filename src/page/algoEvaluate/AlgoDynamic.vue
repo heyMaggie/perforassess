@@ -93,7 +93,8 @@ export default {
             searchForm: {
                 provider: '',
                 algo_type: '',
-                algo_id: ''
+                algo_id: '',
+                user_id: localStorage.getItem('ms_username')
             },
             providerList: [],
             algoTypeList: [],
