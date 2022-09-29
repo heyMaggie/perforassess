@@ -21,5 +21,10 @@ window.dict = {
         { key: 2, value: 'B' },
         { key: 3, value: 'C' },
         { key: 4, value: 'D' }
+    ],
+    roleList: [
+        { key: 1, value: '普通用户' },
+        { key: 2, value: '算法厂商' },
+        { key: 3, value: '管理员' }
     ]
 };

@@ -21,7 +21,7 @@
                 </el-form-item>
                 <el-checkbox v-model="checkedPass" class="holdCheck">记住密码</el-checkbox>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm()">登录</el-button>
+                    <el-button type="primary" @click="submitForm()" :loading="loginLoading">登录</el-button>
                 </div>
                 <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
             </el-form>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import md5 from 'js-md5';
 import { loginApi } from '@/api/index';
 export default {
     data: function () {
@@ -42,37 +43,45 @@ export default {
                 user_name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
             },
-            checkedPass: localStorage.getItem('ms_passWord') ? true : false
+            checkedPass: localStorage.getItem('ms_passWord') ? true : false,
+            loginLoading: false
         };
+    },
+    created() {
+        console.log(md5('md5加密'), '555');
     },
     methods: {
         submitForm() {
-            this.$refs.login
-                .validate((valid) => {
-                    if (valid) {
-                        loginApi(this.param).then((res) => {
-                            if (res.allow === 1) {
-                                this.$message.success('登录成功');
-                                localStorage.setItem('ms_username', this.param.user_name);
-                                localStorage.setItem('ms_passWord', this.param.password);
-                                this.$router.push('/');
-                                // 不记住密码
-                                if (!this.checkedPass) {
-                                    localStorage.removeItem('ms_passWord');
-                                }
-                            } else {
-                                this.$message.error('登录失败');
+            this.$refs.login.validate((valid) => {
+                if (valid) {
+                    this.loginLoading = true;
+                    // this.param.password = md5(this.param.password);
+                    loginApi(this.param).then((res) => {
+                        if (res.allow === 1) {
+                            this.$message.success('登录成功');
+                            localStorage.setItem('ms_username', this.param.user_name);
+                            localStorage.setItem('ms_passWord', this.param.password);
+                            sessionStorage.setItem('token', res.token);
+                            sessionStorage.setItem('role', res.role);
+                            localStorage.setItem('ms_passWord', this.param.password);
+                            this.$router.push('/');
+                            // 不记住密码
+                            if (!this.checkedPass) {
+                                localStorage.removeItem('ms_passWord');
                             }
-                        });
-                    } else {
-                        this.$message.error('请输入账号和密码');
-                        console.log('error submit!!');
-                        return false;
-                    }
-                })
-                .catch((error) => {
-                    // this.$message.error('登录失败');
-                });
+                        } else {
+                            this.$message.error('登陆失败，请检查用户名或密码');
+                        }
+                    });
+                    setTimeout(() => {
+                        this.loginLoading = false;
+                    }, 2500);
+                } else {
+                    this.$message.error('请输入账号和密码');
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         }
     }
 };

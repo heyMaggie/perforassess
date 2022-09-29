@@ -88,37 +88,37 @@ export default new Router({
                 {
                     path: '/algoConfig',
                     component: () => import('../page/configInfo/AlgoConfig.vue'),
-                    meta: { title: '股票配置' }
+                    meta: { title: '股票配置', isAdmin: true }
                 },
                 {
                     path: '/stockConfig',
                     component: () => import('../page/configInfo/StockConfig.vue'),
-                    meta: { title: '算法配置' }
+                    meta: { title: '算法配置', isAdmin: true }
                 },
                 {
                     path: '/userConfig',
                     component: () => import('../page/configInfo/UserConfig.vue'),
-                    meta: { title: '用户配置' }
+                    meta: { title: '用户配置', isAdmin: true }
                 },
                 {
                     path: '/szMarket',
                     component: () => import('../page/repairData/SzMarket.vue'),
-                    meta: { title: '深市行情' }
+                    meta: { title: '深市行情', isAdmin: true }
                 },
                 {
                     path: '/huMarket',
                     component: () => import('../page/repairData/HuMarket.vue'),
-                    meta: { title: '沪市行情' }
+                    meta: { title: '沪市行情', isAdmin: true }
                 },
                 {
                     path: '/busketInfo',
                     component: () => import('../page/repairData/BusketInfo.vue'),
-                    meta: { title: '母单信息' }
+                    meta: { title: '母单信息', isAdmin: true }
                 },
                 {
                     path: '/subInfo',
                     component: () => import('../page/repairData/SubInfo.vue'),
-                    meta: { title: '子单信息' }
+                    meta: { title: '子单信息', isAdmin: true }
                 },
                 {
                     // 权限页面
