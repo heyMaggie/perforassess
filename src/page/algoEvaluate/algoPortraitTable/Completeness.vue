@@ -53,7 +53,9 @@
                 <el-table-column prop="user_id" label="用户ID"> </el-table-column>
                 <el-table-column prop="provider" label="算法厂商"> </el-table-column>
                 <el-table-column prop="algo_name" label="算法名称"> </el-table-column>
-                <el-table-column prop="progress" label="完成度(%)"> </el-table-column>
+                <el-table-column prop="progress" label="完成度">
+                    <template slot-scope="scope"> {{ scope.row.progress }}% </template>
+                </el-table-column>
                 <el-table-column prop="create_time" label="创建时间"> </el-table-column>
             </el-table>
             <el-pagination

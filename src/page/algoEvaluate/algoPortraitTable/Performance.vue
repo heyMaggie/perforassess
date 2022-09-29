@@ -52,7 +52,7 @@
                 <el-table-column prop="provider" label="算法厂商"> </el-table-column>
                 <el-table-column prop="algo_name" label="算法名称"> </el-table-column>
                 <el-table-column prop="vwap_dev" label="VWAP滑点值">
-                    <template slot-scope="scope"> {{ scope.row.vwap_dev }}% </template>
+                    <template slot-scope="scope"> {{ scope.row.vwap_dev }} </template>
                 </el-table-column>
                 <el-table-column prop="profit_rate" label="绩效收益率">
                     <template slot-scope="scope"> {{ scope.row.profit_rate }}% </template>
