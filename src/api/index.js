@@ -155,3 +155,52 @@ export const logoutApi = (query) => {
         data: query
     });
 };
+// 深市行情
+// export const logoutApi = (query) => {
+//     return request({
+//         url: '/algo-assess/v1/assess/logout',
+//         method: 'post',
+//         data: query
+//     });
+// };
+// // 沪市行情
+// export const logoutApi = (query) => {
+//     return request({
+//         url: '/algo-assess/v1/assess/logout',
+//         method: 'post',
+//         data: query
+//     });
+// };
+// 母单信息
+export const queryAlgoApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/performance/query-algo',
+        // url: 'http://192.168.7.56:20080/algo-assess/v1/assess/performance/query-algo',
+        method: 'post',
+        data: query
+    });
+};
+// 上传母单信息
+export const algoFixApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/performance/algo-fix',
+        method: 'post',
+        data: query
+    });
+};
+// 子单信息
+export const queryChildApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/performance/query-child',
+        method: 'post',
+        data: query
+    });
+};
+// 上传子单信息
+export const childFixApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/performance/child-fix',
+        method: 'post',
+        data: query
+    });
+};

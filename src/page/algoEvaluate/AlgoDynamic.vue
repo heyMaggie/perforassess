@@ -445,7 +445,7 @@ export default {
             // ];
             let pieObj = {
                 pie1: { name1: '资 金 占 比', colorList: ['#F78B7F', '#FACC14', '#7CB3FF', '#2FC25B'] },
-                pie4: { name1: '交易量占比', colorList: ['#83E3FF', '#FACC14', '#32B7FF', '#7CB3FF'] }
+                pie4: { name1: '交易量占比', colorList: ['#83E3FF', '#FACC14', '#32B7FF'] }
             };
             option = {
                 title: [

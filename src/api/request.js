@@ -6,9 +6,10 @@ let path = ''; //传入的请求地址
 // process.env.NODE_ENV === 'development' 来判断是否开发环境
 if (process.env.NODE_ENV === 'development') {
     // 开发环境
-    // baseURL = 'http://192.168.2.27:20080';
+    // baseURL = 'http://192.168.2.105:20080';//志辉
+    baseURL = 'http://192.168.2.27:20080'; //洪万
     // baseURL = 'http://192.168.2.212:20080';
-    baseURL = 'http://192.168.1.84:20080';
+    // baseURL = 'http://192.168.1.84:20080';
 } else {
     //生产环境
     baseURL = '/api';

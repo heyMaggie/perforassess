@@ -55,15 +55,18 @@ export default {
             this.$refs.login.validate((valid) => {
                 if (valid) {
                     this.loginLoading = true;
+                    let parmasObj = {
+                        user_name: this.param.user_name,
+                        password: md5(this.param.password)
+                    };
                     // this.param.password = md5(this.param.password);
-                    loginApi(this.param).then((res) => {
+                    loginApi(parmasObj).then((res) => {
                         if (res.allow === 1) {
                             this.$message.success('登录成功');
-                            localStorage.setItem('ms_username', this.param.user_name);
-                            localStorage.setItem('ms_passWord', this.param.password);
+                            localStorage.setItem('ms_username', parmasObj.user_name);
+                            localStorage.setItem('ms_passWord', parmasObj.password);
                             sessionStorage.setItem('token', res.token);
                             sessionStorage.setItem('role', res.role);
-                            localStorage.setItem('ms_passWord', this.param.password);
                             this.$router.push('/');
                             // 不记住密码
                             if (!this.checkedPass) {
