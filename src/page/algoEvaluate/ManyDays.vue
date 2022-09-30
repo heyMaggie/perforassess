@@ -86,7 +86,8 @@ export default {
     created() {
         // 获取厂商列表
         let query = {
-            choose_type: 1
+            choose_type: 1,
+            user_id: localStorage.getItem('ms_username')
         };
         this.getOptionList(query, 'providerList', 'provider');
         this.getAnalyseAlgoData();
@@ -126,7 +127,8 @@ export default {
             // 获取算法类型
             let query = {
                 choose_type: 2,
-                provider: this.searchForm.provider
+                provider: this.searchForm.provider,
+                user_id: localStorage.getItem('ms_username')
             };
             this.getOptionList(query, 'algoTypeList', 'algo_type');
         },
@@ -135,7 +137,8 @@ export default {
             let query = {
                 choose_type: 3,
                 provider: this.searchForm.provider,
-                algo_type: this.searchForm.algo_type
+                algo_type: this.searchForm.algo_type,
+                user_id: localStorage.getItem('ms_username')
             };
             this.getOptionList(query, 'algoList', 'algo_name');
         },
