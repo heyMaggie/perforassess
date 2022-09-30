@@ -27,12 +27,12 @@
             <div class="title">子单信息</div>
             <div class="operate">
                 <div>
-                    <span class="label-text">股票ID：</span>
-                    <el-input v-model="sec_id" class="selectInput" placeholder="请输入股票ID" maxlength="8"></el-input>
-                    <span class="label-text" style="margin-left: 32px">母单ID：</span>
-                    <el-input v-model="sec_id" class="selectInput" placeholder="请输入母单ID" maxlength="16"></el-input>
+                    <span class="label-text">用户ID：</span>
+                    <el-input v-model="searchForm.userId" class="selectInput" placeholder="请输入用户ID" maxlength="16"></el-input>
+                    <span class="label-text" style="margin-left: 32px">证券代码：</span>
+                    <el-input v-model="searchForm.securityId" class="selectInput" placeholder="请输入证券代码" maxlength="8"></el-input>
                     <span class="label-text" style="margin-left: 32px">订单ID：</span>
-                    <el-input v-model="sec_id" class="selectInput" placeholder="请输入订单ID" maxlength="16"></el-input>
+                    <el-input v-model="searchForm.childOrderId" class="selectInput" placeholder="请输入订单ID" maxlength="16"></el-input>
                 </div>
 
                 <el-button type="" plain @click="queryData">查询</el-button>
@@ -49,26 +49,26 @@
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
                     <el-table-column prop="id" width="80" label="序号"> </el-table-column>
-                    <el-table-column prop="sec_id" label="订单ID"> </el-table-column>
-                    <el-table-column prop="sec_id" label="母单ID"> </el-table-column>
-                    <el-table-column prop="sec_id" label="算法类型"> </el-table-column>
-                    <el-table-column prop="update_time" label="算法ID"> </el-table-column>
-                    <el-table-column prop="update_time" label="用户ID"> </el-table-column>
-                    <el-table-column prop="sec_name" label="证券代码"> </el-table-column>
-                    <el-table-column prop="sec_name" label="证券ID"> </el-table-column>
-                    <el-table-column prop="sec_name" label="买卖方向"> </el-table-column>
-                    <el-table-column prop="sec_name" label="委托订单数量"> </el-table-column>
-                    <el-table-column prop="sec_name" label="委托订单价格"> </el-table-column>
-                    <el-table-column prop="sec_name" label="订单类型"> </el-table-column>
-                    <el-table-column prop="sec_name" label="成交价格"> </el-table-column>
-                    <el-table-column prop="sec_name" label="成交数量"> </el-table-column>
-                    <el-table-column prop="sec_name" label="累计成交数量"> </el-table-column>
-                    <el-table-column prop="update_time" label="累计成交数量"> </el-table-column>
-                    <el-table-column prop="update_time" label="手续费"> </el-table-column>
-                    <el-table-column prop="update_time" label="订单状态 "> </el-table-column>
-                    <el-table-column prop="update_time" label="交易时间"> </el-table-column>
-                    <el-table-column prop="update_time" label="处理状态"> </el-table-column>
-                    <el-table-column prop="update_time" label="创建时间"> </el-table-column>
+                    <el-table-column prop="childOrderId" label="订单ID"> </el-table-column>
+                    <el-table-column prop="algoOrderId" label="母单ID"> </el-table-column>
+                    <el-table-column prop="algorithmType" label="算法类型"> </el-table-column>
+                    <el-table-column prop="algorithmId" label="算法ID"> </el-table-column>
+                    <el-table-column prop="userId" label="用户ID" width="120"> </el-table-column>
+                    <el-table-column prop="usecurityId" label="证券ID"> </el-table-column>
+                    <el-table-column prop="securityId" label="证券代码"> </el-table-column>
+                    <el-table-column prop="tradeSide" label="买卖方向"> </el-table-column>
+                    <el-table-column prop="orderQty" label="委托订单数量" width="110"> </el-table-column>
+                    <el-table-column prop="price" label="委托订单价格" width="110"> </el-table-column>
+                    <el-table-column prop="orderType" label="订单类型"> </el-table-column>
+                    <el-table-column prop="lastPx" label="成交价格"> </el-table-column>
+                    <el-table-column prop="lastQty" label="成交数量"> </el-table-column>
+                    <el-table-column prop="comQty" label="累计成交数量" width="110"> </el-table-column>
+                    <el-table-column prop="arrivedPrice" label="到达价格"> </el-table-column>
+                    <el-table-column prop="totalFee" label="手续费"> </el-table-column>
+                    <el-table-column prop="ordStatus" label="订单状态 "> </el-table-column>
+                    <el-table-column prop="transactAt" label="交易时间" width="150"> </el-table-column>
+                    <el-table-column prop="procStatus" label="处理状态"> </el-table-column>
+                    <el-table-column prop="createTime" label="创建时间" width="150"> </el-table-column>
                 </el-table>
                 <el-pagination
                     background
@@ -87,11 +87,15 @@
 </template>
 
 <script>
-import { stockConfigListApi, importSecurityApi } from '@/api/index';
+import { queryChildApi, childFixApi } from '@/api/index';
 export default {
     data() {
         return {
-            sec_id: '',
+            searchForm: {
+                userId: '',
+                securityId: '',
+                childOrderId: ''
+            },
             pageObj: { page: 1, limit: 12 },
             pageTotal: 0,
             tableData: [],
@@ -104,10 +108,16 @@ export default {
     methods: {
         getTableData(pageObj = { page: 1, limit: this.pageObj.limit }) {
             this.uploading = true;
-            stockConfigListApi({ ...pageObj, sec_id: this.sec_id })
+            let pageQuery = {
+                pageId: pageObj.page,
+                pageNum: pageObj.limit
+            };
+            let { userId, securityId, childOrderId } = this.searchForm;
+            let transChildOrderId = !childOrderId ? 0 : childOrderId / 1;
+            queryChildApi({ ...pageQuery, userId, securityId, childOrderId: transChildOrderId })
                 .then((res) => {
-                    if (res.code == 200) {
-                        this.tableData = res.infos;
+                    if (res.code == 200 || res.code == 0) {
+                        this.tableData = res.data;
                         this.pageTotal = res.total;
                         this.pageObj = pageObj;
                     }
@@ -137,10 +147,10 @@ export default {
             let formData = new FormData();
             formData.append('file', file.raw);
             formData.append('key', file.name);
-            importSecurityApi(formData)
+            childFixApi(formData)
                 .then((res) => {
-                    if (res.code == 200) {
-                        this.$message.success('上传成功');
+                    if (res.code == 0) {
+                        this.$message.success(res.msg);
                         this.getTableData();
                         this.uploading = false;
                     }

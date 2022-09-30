@@ -27,10 +27,16 @@
             <div class="title">母单信息</div>
             <div class="operate">
                 <div>
-                    <span class="label-text">股票ID：</span>
-                    <el-input v-model="sec_id" class="selectInput" placeholder="请输入股票ID" maxlength="8"></el-input>
+                    <span class="label-text">证券ID：</span>
+                    <el-input v-model="searchForm.secId" class="selectInput" placeholder="请输入股票ID" maxlength="8"></el-input>
                     <span class="label-text" style="margin-left: 32px">母单ID：</span>
-                    <el-input v-model="sec_id" class="selectInput" placeholder="请输入母单ID" maxlength="16"></el-input>
+                    <el-input
+                        v-model="searchForm.algoId"
+                        class="selectInput"
+                        placeholder="请输入母单ID"
+                        maxlength="16"
+                        onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)));"
+                    ></el-input>
                 </div>
 
                 <el-button type="" plain @click="queryData">查询</el-button>
@@ -47,16 +53,16 @@
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
                     <el-table-column prop="id" width="80" label="序号"> </el-table-column>
-                    <el-table-column prop="sec_id" label="篮子ID"> </el-table-column>
-                    <el-table-column prop="sec_id" label="母单ID"> </el-table-column>
-                    <el-table-column prop="update_time" label="算法ID"> </el-table-column>
+                    <el-table-column prop="basketId" label="篮子ID"> </el-table-column>
+                    <el-table-column prop="algoId" label="母单ID"> </el-table-column>
+                    <el-table-column prop="algorithmId" label="算法ID"> </el-table-column>
                     <el-table-column prop="sec_name" label="证券代码"> </el-table-column>
-                    <el-table-column prop="sec_name" label="证券ID"> </el-table-column>
-                    <el-table-column prop="sec_name" label="订单数量"> </el-table-column>
-                    <el-table-column prop="update_time" label="交易时间"> </el-table-column>
-                    <el-table-column prop="update_time" label="母单开始时间"> </el-table-column>
-                    <el-table-column prop="update_time" label="母单结束时间"> </el-table-column>
-                    <el-table-column prop="update_time" label="算法ID"> </el-table-column>
+                    <el-table-column prop="secId" label="证券ID"> </el-table-column>
+                    <el-table-column prop="algoOrderQty" label="订单数量"> </el-table-column>
+                    <el-table-column prop="transTime" label="交易时间"> </el-table-column>
+                    <el-table-column prop="startTime" label="母单开始时间"> </el-table-column>
+                    <el-table-column prop="endTime" label="母单结束时间"> </el-table-column>
+                    <el-table-column prop="createTime" label="创建时间" width="180"> </el-table-column>
                 </el-table>
                 <el-pagination
                     background
@@ -75,11 +81,14 @@
 </template>
 
 <script>
-import { stockConfigListApi, importSecurityApi } from '@/api/index';
+import { queryAlgoApi, algoFixApi } from '@/api/index';
 export default {
     data() {
         return {
-            sec_id: '',
+            searchForm: {
+                algoId: '',
+                secId: ''
+            },
             pageObj: { page: 1, limit: 12 },
             pageTotal: 0,
             tableData: [],
@@ -92,10 +101,16 @@ export default {
     methods: {
         getTableData(pageObj = { page: 1, limit: this.pageObj.limit }) {
             this.uploading = true;
-            stockConfigListApi({ ...pageObj, sec_id: this.sec_id })
+            let pageQuery = {
+                pageId: pageObj.page,
+                pageNum: pageObj.limit
+            };
+            let { algoId, secId } = this.searchForm;
+            let transAlgoId = !algoId ? 0 : algoId;
+            queryAlgoApi({ ...pageQuery, secId, algoId: transAlgoId / 1 })
                 .then((res) => {
-                    if (res.code == 200) {
-                        this.tableData = res.infos;
+                    if (res.code == 200 || res.code == 0) {
+                        this.tableData = res.data;
                         this.pageTotal = res.total;
                         this.pageObj = pageObj;
                     }
@@ -125,10 +140,10 @@ export default {
             let formData = new FormData();
             formData.append('file', file.raw);
             formData.append('key', file.name);
-            importSecurityApi(formData)
+            algoFixApi(formData)
                 .then((res) => {
-                    if (res.code == 200) {
-                        this.$message.success('上传成功');
+                    if (res.code == 0) {
+                        this.$message.success(res.msg);
                         this.getTableData();
                         this.uploading = false;
                     }
