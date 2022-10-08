@@ -56,14 +56,14 @@
                 <el-table-column prop="profit_rate" label="收益率">
                     <template slot-scope="scope">
                         <el-tag :type="scope.row.profit_rate > 0 ? 'danger' : 'success'"
-                            >{{ scope.row.profit_rate > 0 ? '+' : '' }}{{ scope.row.profit_rate }}%</el-tag
+                            >{{ scope.row.profit_rate > 0 ? '+' : '' }}{{ scope.row.profit_rate | toFixedNum(2) }}%</el-tag
                         >
                     </template>
                 </el-table-column>
                 <el-table-column prop="total_fee" label="手续费"> </el-table-column>
                 <el-table-column prop="cross_fee" label="流量费"> </el-table-column>
                 <el-table-column prop="cancel_rate" label="撤单率">
-                    <template slot-scope="scope"> {{ scope.row.cancel_rate }}% </template>
+                    <template slot-scope="scope"> {{ scope.row.cancel_rate | toFixedNum(2) }}% </template>
                 </el-table-column>
                 <el-table-column prop="min_split_order" label="最小拆单单位"> </el-table-column>
                 <el-table-column width="180px" prop="create_time" label="创建时间" show-overflow-tooltip> </el-table-column>

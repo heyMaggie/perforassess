@@ -55,7 +55,7 @@
                     <template slot-scope="scope"> {{ scope.row.vwap_dev }} </template>
                 </el-table-column>
                 <el-table-column prop="profit_rate" label="绩效收益率">
-                    <template slot-scope="scope"> {{ scope.row.profit_rate }}% </template>
+                    <template slot-scope="scope"> {{ scope.row.profit_rate | toFixedNum(2) }}% </template>
                 </el-table-column>
                 <el-table-column prop="create_time" label="创建时间"> </el-table-column>
             </el-table>

@@ -52,13 +52,13 @@
                 <el-table-column prop="provider" label="算法厂商"> </el-table-column>
                 <el-table-column prop="algo_name" label="算法名称"> </el-table-column>
                 <el-table-column prop="" label="VWAP滑点值标准差">
-                    <template slot-scope="scope"> {{ scope.row.vwap_std_dev }} </template>
+                    <template slot-scope="scope"> {{ scope.row.vwap_std_dev | toFixedNum(2) }} </template>
                 </el-table-column>
                 <el-table-column prop="" label="收益率标准差">
-                    <template slot-scope="scope"> {{ scope.row.profit_rate_std }} </template>
+                    <template slot-scope="scope"> {{ scope.row.profit_rate_std | toFixedNum(2) }} </template>
                 </el-table-column>
                 <el-table-column prop="joint_rate" label="贴合度">
-                    <template slot-scope="scope"> {{ scope.row.joint_rate }}% </template>
+                    <template slot-scope="scope"> {{ scope.row.joint_rate | toFixedNum(2) }}% </template>
                 </el-table-column>
                 <el-table-column prop="create_time" label="创建时间"> </el-table-column>
             </el-table>

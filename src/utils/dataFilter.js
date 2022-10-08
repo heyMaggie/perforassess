@@ -31,6 +31,17 @@ const filters = {
                 return dictArr[j].value;
             }
         }
+    },
+    /**
+     * 功能：数字精度保留位数
+     * @param {Number} date 需要转换的值
+     * @returns {String} 转换后的字典
+     */
+    toFixedNum: function (date, num = 2) {
+        // if (!date) {
+        //     return '-';
+        // }
+        return date.toFixed(num); // 使用 dayjs 格式化时间
     }
 };
 export default Object.keys(filters).forEach((key) => {
