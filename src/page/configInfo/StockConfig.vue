@@ -81,14 +81,14 @@
                     <el-col :span="11"
                         ><el-form-item label="股票ID" prop="sec_id">
                             <el-input
-                                v-model="editForm.sec_id"
+                                v-mode.trim="editForm.sec_id"
                                 :disabled="oper_type == 2"
                                 placeholder="请输入股票代码"
                             ></el-input> </el-form-item></el-col
                     ><el-col :span="2"><div>&nbsp;</div></el-col>
                     <el-col :span="11">
                         <el-form-item label="股票名称" prop="sec_name">
-                            <el-input v-model="editForm.sec_name" :disabled="oper_type == 2" placeholder="请输入股票名称"></el-input>
+                            <el-input v-model.trim="editForm.sec_name" :disabled="oper_type == 2" placeholder="请输入股票名称"></el-input>
                         </el-form-item> </el-col
                 ></el-row>
                 <el-row>

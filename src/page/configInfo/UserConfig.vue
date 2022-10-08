@@ -75,14 +75,14 @@
                     <el-col :span="11"
                         ><el-form-item label="用户ID" prop="user_id">
                             <el-input
-                                v-model="editForm.user_id"
+                                v-model.trim="editForm.user_id"
                                 :disabled="oper_type == 2"
                                 placeholder="请输入用户ID"
                             ></el-input> </el-form-item></el-col
                     ><el-col :span="2"><div>&nbsp;</div></el-col>
                     <el-col :span="11">
                         <el-form-item label="用户名称" prop="user_name">
-                            <el-input v-model="editForm.user_name" :disabled="oper_type == 2" placeholder="请输入用户名称"></el-input>
+                            <el-input v-model.trim="editForm.user_name" :disabled="oper_type == 2" placeholder="请输入用户名称"></el-input>
                         </el-form-item> </el-col
                 ></el-row>
                 <el-row>
