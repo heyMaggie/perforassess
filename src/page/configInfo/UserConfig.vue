@@ -54,7 +54,7 @@
                             <i class="el-icon-edit row-edit" @click="openEditDaiolg(2, 'market', scope.row)"></i>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="edit_time" label="修改时间"> </el-table-column>
+                    <el-table-column prop="update_time" label="修改时间"> </el-table-column>
                 </el-table>
                 <el-pagination
                     background

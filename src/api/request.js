@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
+import router from '../router';
 
 window.baseURL = '';
-let path = ''; //传入的请求地址
+let nowTime = Math.round(new Date().getTime() / 1000);
+let login_expire = sessionStorage.getItem('login_expire') || '';
 // process.env.NODE_ENV === 'development' 来判断是否开发环境
 if (process.env.NODE_ENV === 'development') {
     // 开发环境
@@ -29,8 +31,17 @@ const service = axios.create({
 // 文档中的统一设置post请求头。下面会说到post请求的几种'Content-Type'
 service.interceptors.request.use(
     (config) => {
-        path = config.url;
-        config.headers.Authorization = sessionStorage.getItem('token');
+        config.headers.Authorization = sessionStorage.getItem('token') || '';
+        // 判断是否超时
+        if (sessionStorage.getItem('token') && login_expire < nowTime) {
+            Message({
+                message: '登录时间过期，请重新登录',
+                type: 'error'
+            });
+            sessionStorage.removeItem('token');
+            router.push('/login');
+        }
+
         return config;
     },
     (error) => {

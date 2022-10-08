@@ -9,7 +9,7 @@
             <div class="showBorder">
                 <div class="card">
                     <div class="card-title line-img">用户数量</div>
-                    <el-tooltip content="说明：用户总数量" placement="top">
+                    <el-tooltip :content="`用户总数量：${summaryObj.total_user_cnt}`" placement="top">
                         <img class="query-icon" src="../../assets/icon/query.png"
                     /></el-tooltip>
                     <div class="circular">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="card">
                     <div class="card-title line-img">算法数量</div>
-                    <el-tooltip content="说明：算法总数量" placement="top">
+                    <el-tooltip :content="`算法总数量：${summaryObj.total_algo_cnt}`" placement="top">
                         <img class="query-icon" src="../../assets/icon/query.png"
                     /></el-tooltip>
                     <div class="circular special-green">
@@ -36,9 +36,9 @@
                 </div>
                 <div class="card">
                     <div class="card-title line-img">订单数</div>
-                    <el-tooltip content="说明：订单总数量" placement="top">
+                    <!-- <el-tooltip content="说明：订单总数量" placement="top">
                         <img class="query-icon" src="../../assets/icon/query.png"
-                    /></el-tooltip>
+                    /></el-tooltip> -->
                     <div class="circular">
                         <span class="number">{{ summaryObj.order_cnt }}<span class="unit">(个)</span></span>
                     </div>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="card">
                     <div class="card-title line-img">厂商总数</div>
-                    <el-tooltip content="说明：XXX" placement="top">
+                    <el-tooltip :content="`厂商总数量：${summaryObj.total_provider_cnt}`" placement="top">
                         <img class="query-icon" src="../../assets/icon/query.png"
                     /></el-tooltip>
                     <div class="circular special-pink">
@@ -58,9 +58,9 @@
                 </div>
                 <div class="card">
                     <div class="card-title line-img">资金占比</div>
-                    <el-tooltip content="说明：XXX" placement="top">
+                    <!-- <el-tooltip content="说明：XXX" placement="top">
                         <img class="query-icon" src="../../assets/icon/query.png"
-                    /></el-tooltip>
+                    /></el-tooltip> -->
                     <div class="gather">
                         <div class="min-blue-card">
                             <span class="number">{{ Number(market_rate.huge).toFixed(1) }}<span class="unit">%</span></span>
@@ -218,7 +218,8 @@ export default {
                 algo_cnt: '0',
                 trade_vol: '0',
                 order_cnt: '0',
-                provider_cnt: '0'
+                provider_cnt: '0',
+                total_user_cnt: ''
             },
             market_rate: {
                 huge: '0',
@@ -995,7 +996,7 @@ export default {
             optionListApi(query)
                 .then((res) => {
                     if (res.code == 200) {
-                        this.algo_nameList = res.algo_type;
+                        this.algo_nameList = res.algo_type || [];
                         this.getFerfAlgolist();
                     } else {
                         return Promise.reject(new Error('请求异常'));

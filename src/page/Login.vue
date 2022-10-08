@@ -48,7 +48,7 @@ export default {
         };
     },
     created() {
-        console.log(md5('md5加密'), '555');
+        sessionStorage.removeItem('token');
     },
     methods: {
         submitForm() {
@@ -63,8 +63,9 @@ export default {
                     loginApi(parmasObj).then((res) => {
                         if (res.allow === 1) {
                             this.$message.success('登录成功');
-                            localStorage.setItem('ms_username', parmasObj.user_name);
-                            localStorage.setItem('ms_passWord', parmasObj.password);
+                            localStorage.setItem('ms_username', this.param.user_name);
+                            localStorage.setItem('ms_passWord', this.param.password);
+                            sessionStorage.setItem('login_expire', res.expire);
                             sessionStorage.setItem('token', res.token);
                             sessionStorage.setItem('role', res.role);
                             this.$router.push('/');
