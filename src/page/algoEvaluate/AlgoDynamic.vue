@@ -496,13 +496,13 @@ export default {
                 },
                 series: [
                     {
-                        name: pieObj[type].name1 + '（分数）',
+                        name: pieObj[type].name1 + '（%）',
                         type: 'pie',
                         radius: ['60%', '80%'],
                         itemStyle: {
                             borderRadius: 0,
                             borderColor: '#fafbff',
-                            borderWidth: 5,
+                            borderWidth: 0,
                             color: function (colors) {
                                 var colorList = pieObj[type].colorList;
                                 return colorList[colors.dataIndex];
