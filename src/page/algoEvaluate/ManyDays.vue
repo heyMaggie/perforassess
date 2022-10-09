@@ -241,7 +241,7 @@ export default {
                 },
                 grid: {
                     left: '5px',
-                    right: '15px',
+                    right: '16px',
                     bottom: '0px',
                     top: '60px',
                     containLabel: true
