@@ -187,7 +187,7 @@
                             >查看更多<span class="icon el-icon-arrow-right"></span
                         ></span>
                     </div>
-                    <div class="main1" id="main1"></div>
+                    <div class="dashboardMain1" id="dashboardMain1"></div>
                 </div>
                 <div class="card">
                     <div class="card-title">
@@ -1003,7 +1003,7 @@ export default {
                     }
                 })
                 .catch(() => {
-                    this.generateChart([], 'main1');
+                    this.generateChart([], 'dashboardMain1');
                     this.getRadarChart([]);
                 });
         },
@@ -1026,7 +1026,7 @@ export default {
                         this.assessList = res.list ? res.list : [];
                         this.algoContrastList = res.assess;
                         this.pageTotal = res.total;
-                        this.generateChart(this.algoContrastList, 'main1');
+                        this.generateChart(this.algoContrastList, 'dashboardMain1');
                         this.getRadarChart(this.algoContrastList);
                         if (this.assessList.length) {
                             this.$nextTick(() => {
@@ -1042,12 +1042,12 @@ export default {
                             });
                         }
                     } else {
-                        this.generateChart([], 'main1');
+                        this.generateChart([], 'dashboardMain1');
                         this.getRadarChart([]);
                     }
                 })
                 .catch((erro) => {
-                    this.generateChart([], 'main1');
+                    this.generateChart([], 'dashboardMain1');
                     this.getRadarChart([]);
                 });
         }
@@ -1375,7 +1375,7 @@ export default {
                 }
             }
         }
-        .main1 {
+        .dashboardMain1 {
             height: 280px;
         }
         .radarCard {

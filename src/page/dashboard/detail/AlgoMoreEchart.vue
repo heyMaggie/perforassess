@@ -8,7 +8,7 @@
         </div>
         <div class="card">
             <div @click="goBack" class="backRow"><span class="backIcon icon el-icon-arrow-left"></span>返回</div>
-            <div class="main1" id="main1"></div>
+            <div class="algoMoreMain1" id="algoMoreMain1"></div>
             <div class="blue-card">
                 <a
                     class="minW-card"
@@ -68,7 +68,7 @@ export default {
                     this.optAlgoList = this.algoNameList[0];
                     this.getMulitAnalyseData();
                 } else {
-                    this.generateChart([], 'main1');
+                    this.generateChart([], 'algoMoreMain1');
                 }
             });
         },
@@ -86,7 +86,7 @@ export default {
             mulitAnalyseApi(query).then((res) => {
                 if (res.code == 200) {
                     list = res.list ? res.list : [];
-                    this.generateChart(list, 'main1');
+                    this.generateChart(list, 'algoMoreMain1');
                 } else {
                     this.$message.error('请求错误');
                 }
@@ -286,7 +286,7 @@ export default {
             margin-right: 10px;
         }
     }
-    .main1 {
+    .algoMoreMain1 {
         height: 326px;
         width: 100%;
         margin-top: 16px;

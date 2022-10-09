@@ -115,7 +115,7 @@
             </div>
             <div class="showPortrait">
                 <div class="card" id="radar"></div>
-                <div class="card" id="main1"></div>
+                <div class="card" id="userPortraitMain1"></div>
             </div>
             <div class="showDate">
                 <div class="card grade-lump">
@@ -136,7 +136,7 @@
                         <div class="explain" :title="item.desc">{{ item.desc }}</div>
                     </div>
                 </div>
-                <div class="card" id="main2"></div>
+                <div class="card" id="userPortraitMain2"></div>
             </div>
             <div class="showClounm card" id="histogram"></div>
         </div>
@@ -264,8 +264,8 @@ export default {
                         this.startValue = this.summaryObj.total_score / 20;
                         this.getWaterEchart(this.summaryObj.progress);
                         this.getRadarChart(radarList);
-                        this.generateChart(res.assess_line.point, 'main1');
-                        this.generateChart(res.progress_line.point, 'main2');
+                        this.generateChart(res.assess_line.point, 'userPortraitMain1');
+                        this.generateChart(res.progress_line.point, 'userPortraitMain2');
                         this.getHistogramChart(res.fund_list);
                     } else {
                     }
@@ -273,8 +273,8 @@ export default {
                 .catch(() => {
                     this.getWaterEchart(0);
                     this.getRadarChart([]);
-                    this.generateChart([], 'main1');
-                    this.generateChart([], 'main2');
+                    this.generateChart([], 'userPortraitMain1');
+                    this.generateChart([], 'userPortraitMain2');
                     this.getHistogramChart([]);
                 });
         },
@@ -501,8 +501,8 @@ export default {
             }
 
             let lineObj = {
-                main1: { name: '绩效', color: '#83BDFF' },
-                main2: { name: '完成度', color: '#FCE75F' }
+                userPortraitMain1: { name: '绩效', color: '#83BDFF' },
+                userPortraitMain2: { name: '完成度', color: '#FCE75F' }
             };
             let option = {
                 title: {

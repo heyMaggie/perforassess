@@ -43,11 +43,11 @@
             </div>
         </el-form>
         <div class="container" id="resultsHuiZongTableId">
-            <div class="card" id="main1"></div>
+            <div class="card" id="contrastiveMain1"></div>
             <div class="card p-bottom">
                 <div class="card-title">算法能力分析</div>
                 <div class="right-row">
-                    <div class="bulue-card radar" id="main2"></div>
+                    <div class="bulue-card radar" id="ContrastiveMain2"></div>
                     <div class="bulue-card grade">
                         <el-empty
                             v-if="!mulitAnalyList.length"
@@ -179,14 +179,14 @@ export default {
                         this.mulitAnalyList.forEach((item) => {
                             item.startValue = item.composite_score / 20;
                         });
-                        this.generateChart(list, 'main1');
+                        this.generateChart(list, 'contrastiveMain1');
                         this.getRadarChart(list);
                     } else {
                         return Promise.reject(new Error('请求异常'));
                     }
                 })
                 .catch(() => {
-                    this.generateChart([], 'main1');
+                    this.generateChart([], 'contrastiveMain1');
                     this.getRadarChart([]);
                 });
         },
@@ -481,7 +481,7 @@ export default {
                     }
                 ]
             };
-            var myChart = echarts.init(document.getElementById('main2'));
+            var myChart = echarts.init(document.getElementById('ContrastiveMain2'));
             option && myChart.setOption(option);
             myChart.resize();
         },

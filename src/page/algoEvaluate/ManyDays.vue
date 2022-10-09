@@ -46,9 +46,9 @@
             </div>
         </el-form>
         <div class="container" id="resultsHuiZongTableId">
-            <div class="card" id="main1"></div>
-            <div class="card" id="main2"></div>
-            <div class="card" id="main3"></div>
+            <div class="card" id="manyMain1"></div>
+            <div class="card" id="manyMain2"></div>
+            <div class="card" id="manyMain3"></div>
         </div>
         <!-- 用于导出报告 -->
         <img src="../../assets/img/importCover.png" v-show="false" alt="" ref="coverImg" />
@@ -161,35 +161,35 @@ export default {
                         list = res.data;
                         this.cross_day = res.cross_day;
                         if (!list.length) {
-                            this.generateChart([], 'main1');
-                            this.generateChart([], 'main2');
-                            this.generateChart([], 'main3');
+                            this.generateChart([], 'manyMain1');
+                            this.generateChart([], 'manyMain2');
+                            this.generateChart([], 'manyMain3');
                         } else {
                             list.forEach((item) => {
                                 item.point = item.point ? item.point : [];
                                 switch (item.profile_type) {
                                     case 4: //绩效
-                                        this.generateChart(item.point, 'main1');
+                                        this.generateChart(item.point, 'manyMain1');
                                         break;
                                     case 3: //风险度
-                                        this.generateChart(item.point, 'main2');
+                                        this.generateChart(item.point, 'manyMain2');
                                         break;
                                     case 2: //完成度
-                                        this.generateChart(item.point, 'main3');
+                                        this.generateChart(item.point, 'manyMain3');
                                         break;
                                 }
                             });
                         }
                     } else {
-                        this.generateChart([], 'main1');
-                        this.generateChart([], 'main2');
-                        this.generateChart([], 'main3');
+                        this.generateChart([], 'manyMain1');
+                        this.generateChart([], 'manyMain2');
+                        this.generateChart([], 'manyMain3');
                     }
                 })
                 .catch(() => {
-                    this.generateChart([], 'main1');
-                    this.generateChart([], 'main2');
-                    this.generateChart([], 'main3');
+                    this.generateChart([], 'manyMain1');
+                    this.generateChart([], 'manyMain2');
+                    this.generateChart([], 'manyMain3');
                 });
         },
         generateChart(list, type) {
@@ -214,9 +214,9 @@ export default {
                 });
             }
             let lineObj = {
-                main1: { name: '算法绩效', color: '#83BDFF' },
-                main2: { name: '算法风险度', color: '#59CC7F' },
-                main3: { name: '算法完成度', color: '#FCE75F' }
+                manyMain1: { name: '算法绩效', color: '#83BDFF' },
+                manyMain2: { name: '算法风险度', color: '#59CC7F' },
+                manyMain3: { name: '算法完成度', color: '#FCE75F' }
             };
             let option = {
                 title: {
