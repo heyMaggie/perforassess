@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">欢迎使用绩效管理平台</div>
+            <div class="ms-title"><img src="../assets/img/logo2.png" class="min-logo" />欢迎使用绩效管理平台</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="user_name" class="bto">
                     <el-input v-model="param.user_name" placeholder="请输入账号" maxlength="18">
@@ -110,14 +110,22 @@ export default {
     font-weight: 500;
     color: #333333;
     line-height: 29px;
-    padding: 32px 28px 0;
+    padding: 40px 28px 0;
+
+    .min-logo {
+        width: 37px;
+        height: 28px;
+        margin-right: 12px;
+        margin-bottom: -5px;
+        // line-height: 18px;
+    }
 }
 .ms-login {
     position: absolute;
-    left: 59.9%;
+    left: 62.4%;
     top: 30%;
-    width: 340px;
-    height: 412px;
+    width: 398px;
+    height: 380px;
     background: #ffffff;
     box-shadow: 0px 4px 20px 0px #e4efff;
     border-radius: 16px;
@@ -129,7 +137,7 @@ export default {
         margin-bottom: 9px;
     }
     .bto {
-        margin-bottom: 16px !important;
+        margin-bottom: 20px !important;
     }
     /deep/.holdCheck {
         margin-top: 5px;
@@ -141,9 +149,9 @@ export default {
 }
 .login-btn button {
     position: absolute;
-    width: 284px;
-    height: 36px;
-    bottom: 25px;
+    width: 342px;
+    height: 32px;
+    bottom: 48px;
     left: 28px;
 }
 .login-tips {
