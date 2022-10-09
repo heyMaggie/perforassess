@@ -31,11 +31,17 @@ const i18n = new VueI18n({
 router.beforeEach((to, from, next) => {
     document.title = `绩效评估平台`;
     const role = sessionStorage.getItem('role');
-    if (to.meta.isAdmin) {
-        // 如果是管理员权限则可进入
-        role == 3 ? next() : next('/403');
+    const token = sessionStorage.getItem('token');
+    // 没有登陆
+    if (!token && to.fullPath != '/login') {
+        next('/login');
     } else {
-        next();
+        if (to.meta.isAdmin) {
+            // 如果是管理员权限则可进入
+            role == 3 ? next() : next('/403');
+        } else {
+            next();
+        }
     }
 });
 

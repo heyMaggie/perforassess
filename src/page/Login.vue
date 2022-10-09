@@ -69,7 +69,7 @@ export default {
                             sessionStorage.setItem('login_expire', res.expire);
                             sessionStorage.setItem('token', res.token);
                             sessionStorage.setItem('role', res.role);
-                            this.$router.push('/');
+                            this.$router.push('/dashboard');
                             // 不记住密码
                             if (!this.checkedPass) {
                                 localStorage.removeItem('ms_passWord');
