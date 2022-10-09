@@ -49,6 +49,7 @@ export default {
     },
     created() {
         sessionStorage.removeItem('token');
+        sessionStorage.removeItem('login_expire');
     },
     methods: {
         submitForm() {

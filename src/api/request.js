@@ -4,7 +4,6 @@ import router from '../router';
 
 window.baseURL = '';
 let nowTime = Math.round(new Date().getTime() / 1000);
-let login_expire = sessionStorage.getItem('login_expire') || '';
 // process.env.NODE_ENV === 'development' 来判断是否开发环境
 if (process.env.NODE_ENV === 'development') {
     // 开发环境
@@ -32,13 +31,16 @@ const service = axios.create({
 service.interceptors.request.use(
     (config) => {
         config.headers.Authorization = sessionStorage.getItem('token') || '';
+        let login_expire = sessionStorage.getItem('login_expire') || 0;
         // 判断是否超时
-        if (sessionStorage.getItem('token') && login_expire < nowTime) {
+        if (config.headers.Authorization && login_expire < nowTime) {
+            // console.log(login_expire, nowTime, config.url, 1111);
             Message({
                 message: '登录时间过期，请重新登录',
                 type: 'error'
             });
             sessionStorage.removeItem('token');
+            sessionStorage.removeItem('login_expire');
             router.push('/login');
         }
 
