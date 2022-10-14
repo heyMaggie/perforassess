@@ -35,7 +35,7 @@ const dayjs = require('dayjs');
 export default {
     data() {
         return {
-            colorList: ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'],
+            colorList: ['#65A6FF', '#0be2ff', '#59CC7F', '#FAD337'],
             algoNameList: [],
             optAlgoList: [], //选中的
             selectIndex: 0
@@ -117,7 +117,7 @@ export default {
                 list.forEach((params) => {
                     seriesList.push(singelLine(params));
                 });
-                let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
+                let colorList = ['#65A6FF', '#0be2ff', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
                     // 有值
                     if (item.data.some((item) => item)) {

@@ -218,7 +218,7 @@ export default {
                         isNull = true;
                     }
                 });
-                let colorList = ['#65A6FF', '#34B7FE', '#59CC7F', '#FAD337'];
+                let colorList = ['#65A6FF', '#0be2ff', '#59CC7F', '#FAD337'];
                 seriesList.forEach((item, i) => {
                     item.type = 'line';
                     item.smooth = true;
