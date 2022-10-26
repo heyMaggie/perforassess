@@ -16,6 +16,8 @@
 <script>
 import MenuTree from '../../components/MentTree.vue';
 import { roleType } from '../../utils/roleMenuList.js';
+import { roleAuthMenu } from '@/api/index';
+
 export default {
     components: {
         MenuTree
@@ -27,12 +29,56 @@ export default {
         };
     },
     computed: {},
+    created() {
+        let params = { oper_type: 1 };
+        roleAuthMenu(params).then((res) => {
+            if (res.code == 200) {
+                let role_auth = JSON.parse(res.role_auth).list;
+                let allMenuList = this.doubleCircul(role_auth, roleType());
+                this.menuList = JSON.parse(JSON.stringify(allMenuList));
+                // this.memuCircul(this.menuList);
+                sessionStorage.setItem('allMenuList', JSON.stringify(allMenuList));
+            } else {
+                this.$router.push('/404');
+                this.menuList = [];
+            }
+        });
+    },
     mounted() {
         this.activeIndex = this.$route.path.replace('/', '');
-        let role = sessionStorage.getItem('role');
-        this.menuList = roleType(role);
+        console.log(JSON.parse(sessionStorage.getItem('allMenuList')), '目录');
     },
-    methods: {}
+    methods: {
+        // 递归获取控件目录
+        doubleCircul(arr, roleArr) {
+            arr.forEach((item, i) => {
+                roleArr.forEach((jtem, j) => {
+                    if (item.name == jtem.name) {
+                        arr[i] = { ...item, icon: jtem.icon || null, index: jtem.index };
+                    }
+
+                    if (item.children && jtem.children) {
+                        this.doubleCircul(item.children, jtem.children);
+                        return;
+                    }
+                });
+            });
+            return arr;
+        },
+        // 递归获取菜单目录
+        memuCircul(arr) {
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i].auth == 0) {
+                    arr.splice(i, 1);
+                    i = i - 1;
+                } else {
+                    if (arr[i].children) {
+                        this.memuCircul(arr[i].children);
+                    }
+                }
+            }
+        }
+    }
 };
 </script>
 

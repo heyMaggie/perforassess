@@ -99,7 +99,7 @@ export default {
             providerList: [],
             algoTypeList: [],
             algoList: [],
-            pageObj: { page: 1, pageNum: 5 }
+            pageObj: { page: 1, pageNum: 10 }
         };
     },
     created() {
@@ -126,7 +126,7 @@ export default {
         }
     },
     methods: {
-        getTableData(pageObj = { page: 1, pageNum: 5 }) {
+        getTableData(pageObj = { page: 1, pageNum: 10 }) {
             this.pageObj = pageObj;
             let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
             let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
@@ -209,7 +209,7 @@ export default {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-            let pageObj = { page: val / 1, pageNum: 5 };
+            let pageObj = { page: val / 1, pageNum: 10 };
             this.getTableData(pageObj);
         }
     }

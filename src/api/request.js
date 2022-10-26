@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'development') {
     // baseURL = 'http://192.168.2.105:20080';//志辉
     baseURL = 'http://192.168.2.27:20080'; //洪万
     // baseURL = 'http://192.168.2.212:20080';
-    // baseURL = 'http://192.168.1.84:20080';
+    // baseURL = 'http://192.168.1.85:8001';
 } else {
     //生产环境
     baseURL = '/api';

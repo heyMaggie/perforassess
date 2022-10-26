@@ -121,6 +121,16 @@ export default new Router({
                     meta: { title: '子单信息', isAdmin: true }
                 },
                 {
+                    path: '/roleManagement',
+                    component: () => import('../page/limitManagement/roleManagement.vue'),
+                    meta: { title: '角色管理', isAdmin: true }
+                },
+                {
+                    path: '/systemUser',
+                    component: () => import('../page/limitManagement/systemUser.vue'),
+                    meta: { title: '系统用户', isAdmin: true }
+                },
+                {
                     // 权限页面
                     path: '/permission',
                     component: () => import('../page/Permission.vue'),
