@@ -15,7 +15,7 @@
                         :show-file-list="false"
                         :on-change="handleUpload"
                         :auto-upload="false"
-                        accept=".xml"
+                        accept=".xml,.text"
                         class="upload-demo"
                     >
                         <el-button size="medium" type="text" slot="trigger"
@@ -28,7 +28,7 @@
             <div class="operate">
                 <div>
                     <span class="label-text">股票ID：</span>
-                    <el-input v-model="sec_id" class="selectInput" placeholder="请输入股票ID" maxlength="8"></el-input>
+                    <el-input v-model="securityId" class="selectInput" placeholder="请输入股票ID" maxlength="8"></el-input>
                 </div>
 
                 <el-button type="" plain @click="queryData">查询</el-button>
@@ -45,24 +45,24 @@
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
                     <el-table-column prop="id" width="80" label="序号"> </el-table-column>
-                    <el-table-column prop="sec_id" label="股票ID"> </el-table-column>
-                    <el-table-column prop="update_time" label="快照时间"> </el-table-column>
-                    <el-table-column prop="sec_name" label="最新价"> </el-table-column>
-                    <el-table-column prop="sec_name" label="申卖价"> </el-table-column>
-                    <el-table-column prop="sec_name" label="申卖量"> </el-table-column>
-                    <el-table-column prop="sec_name" label="申买价"> </el-table-column>
-                    <el-table-column prop="sec_name" label="申买量"> </el-table-column>
-                    <el-table-column prop="sec_name" label="成交总量"> </el-table-column>
-                    <el-table-column prop="sec_name" label="委托买入总量"> </el-table-column>
-                    <el-table-column prop="sec_name" label="委托卖出总量"> </el-table-column>
+                    <el-table-column prop="seculityId" label="股票ID"> </el-table-column>
+                    <el-table-column prop="orgiTime" label="快照时间"> </el-table-column>
+                    <el-table-column prop="lastPrice" label="最新价"> </el-table-column>
+                    <el-table-column prop="askPrice" label="申卖价"> </el-table-column>
+                    <el-table-column prop="askVol" label="申卖量"> </el-table-column>
+                    <el-table-column prop="bidPrice" label="申买价"> </el-table-column>
+                    <el-table-column prop="bidVol" label="申买量"> </el-table-column>
+                    <el-table-column prop="totalTradeVol" label="成交总量"> </el-table-column>
+                    <el-table-column prop="totalAskVol" label="委托买入总量"> </el-table-column>
+                    <el-table-column prop="totalBidVol" label="委托卖出总量"> </el-table-column>
                 </el-table>
                 <el-pagination
                     background
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :current-page="pageObj.page"
-                    :page-size="pageObj.limit"
+                    :pageId-sizes="[10, 20, 30, 40]"
+                    :current-pageId="pageObj.pageId"
+                    :pageId-size="pageObj.pageNum"
                     layout=" ->, prev, pager, next, total, jumper"
                     :total="pageTotal"
                 >
@@ -73,12 +73,12 @@
 </template>
 
 <script>
-import { stockConfigListApi, importSecurityApi } from '@/api/index';
+import { queryShApi, uploadShApi } from '@/api/index';
 export default {
     data() {
         return {
-            sec_id: '',
-            pageObj: { page: 1, limit: 12 },
+            securityId: '688686',
+            pageObj: { pageId: 1, pageNum: 12 },
             pageTotal: 0,
             tableData: [],
             uploading: false //上传状态
@@ -88,12 +88,12 @@ export default {
         this.getTableData();
     },
     methods: {
-        getTableData(pageObj = { page: 1, limit: this.pageObj.limit }) {
+        getTableData(pageObj = { pageId: 1, pageNum: this.pageObj.pageNum }) {
             this.uploading = true;
-            stockConfigListApi({ ...pageObj, sec_id: this.sec_id })
+            queryShApi({ ...pageObj, securityId: this.securityId })
                 .then((res) => {
                     if (res.code == 200) {
-                        this.tableData = res.infos;
+                        this.tableData = res.data;
                         this.pageTotal = res.total;
                         this.pageObj = pageObj;
                     }
@@ -111,7 +111,7 @@ export default {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
-            let pageObj = { page: val / 1, limit: this.pageObj.limit };
+            let pageObj = { pageId: val / 1, pageNum: this.pageObj.pageNum };
             this.getTableData(pageObj);
         },
         queryData() {
@@ -123,7 +123,7 @@ export default {
             let formData = new FormData();
             formData.append('file', file.raw);
             formData.append('key', file.name);
-            importSecurityApi(formData)
+            uploadShApi(formData)
                 .then((res) => {
                     if (res.code == 200) {
                         this.$message.success('上传成功');

@@ -28,7 +28,7 @@
             <div class="operate">
                 <div>
                     <span class="label-text">证券ID：</span>
-                    <el-input v-model="searchForm.secId" class="selectInput" placeholder="请输入股票ID" maxlength="8"></el-input>
+                    <el-input v-model="searchForm.secId" class="selectInput" placeholder="请输入证券ID" maxlength="8"></el-input>
                     <span class="label-text" style="margin-left: 32px">母单ID：</span>
                     <el-input
                         v-model="searchForm.algoId"
@@ -56,7 +56,7 @@
                     <el-table-column prop="basketId" label="篮子ID"> </el-table-column>
                     <el-table-column prop="algoId" label="母单ID"> </el-table-column>
                     <el-table-column prop="algorithmId" label="算法ID"> </el-table-column>
-                    <el-table-column prop="sec_name" label="证券代码"> </el-table-column>
+                    <!-- <el-table-column prop="sec_name" label="证券代码"> </el-table-column> -->
                     <el-table-column prop="secId" label="证券ID"> </el-table-column>
                     <el-table-column prop="algoOrderQty" label="订单数量"> </el-table-column>
                     <el-table-column prop="transTime" label="交易时间"> </el-table-column>

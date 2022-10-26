@@ -156,21 +156,38 @@ export const logoutApi = (query) => {
     });
 };
 // 深市行情
-// export const logoutApi = (query) => {
-//     return request({
-//         url: '/algo-assess/v1/assess/logout',
-//         method: 'post',
-//         data: query
-//     });
-// };
+export const querySzApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/performance/query-sz-level',
+        // url: 'http://192.168.2.105:20080/algo-assess/v1/assess/performance/query-sz-level',
+        method: 'post',
+        data: query
+    });
+};
+// 上传深市行情
+export const uploadSzApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/upload-sz-level',
+        method: 'post',
+        data: query
+    });
+};
 // // 沪市行情
-// export const logoutApi = (query) => {
-//     return request({
-//         url: '/algo-assess/v1/assess/logout',
-//         method: 'post',
-//         data: query
-//     });
-// };
+export const queryShApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/performance/query-sh-level',
+        method: 'post',
+        data: query
+    });
+};
+// 上传沪市行情
+export const uploadShApi = (query) => {
+    return request({
+        url: '/algo-assess/v1/assess/upload-sh-level',
+        method: 'post',
+        data: query
+    });
+};
 // 母单信息
 export const queryAlgoApi = (query) => {
     return request({
