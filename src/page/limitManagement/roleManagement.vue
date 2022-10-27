@@ -51,7 +51,13 @@
                 </el-pagination>
             </div>
         </div>
-        <el-dialog :title="editTypeStr" :visible.sync="dialogFormVisible" width="668px">
+        <el-dialog
+            :title="editTypeStr"
+            :visible.sync="dialogFormVisible"
+            width="668px"
+            :close-on-click-modal="false"
+            :before-close="closeEdit"
+        >
             <el-form :model="editForm" label-position="top" ref="roleFormName" :rules="roleRules">
                 <el-row>
                     <el-col :span="11"

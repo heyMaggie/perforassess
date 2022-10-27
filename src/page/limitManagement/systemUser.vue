@@ -33,7 +33,7 @@
                             {{ scope.row.user_name }}
                         </template></el-table-column
                     >
-                    <el-table-column prop="role_id" label="角色"> </el-table-column>
+                    <el-table-column prop="role_name" label="角色"> </el-table-column>
                     <el-table-column prop="status" label="状态"> </el-table-column>
                     <el-table-column prop="create_time" label="创建时间"> </el-table-column>
                     <el-table-column label="操作" width="100">
@@ -56,30 +56,29 @@
                 </el-pagination>
             </div>
         </div>
-        <!--  :close-on-click-modal="false" -->
-        <el-dialog :title="editTypeStr" :visible.sync="dialogFormVisible" width="668px">
-            <el-form :model="editForm" label-position="top" ref="editFormName">
-                <el-form-item label="用户ID（*ID名称只能为字母或字母与数字的组合）" prop="user_name">
+        <el-dialog
+            :title="editTypeStr"
+            :visible.sync="dialogFormVisible"
+            width="668px"
+            :close-on-click-modal="false"
+            :before-close="closeEdit"
+        >
+            <el-form :model="editForm" label-position="top" ref="editFormName" :rules="rules">
+                <el-form-item label="用户ID（*ID名称只能为字母或字母与数字的组合）" prop="user_id">
                     <el-input v-model.trim="editForm.user_id" :disabled="oper_type == 2" placeholder="请输入用户ID"></el-input>
                 </el-form-item>
                 <el-form-item label="用户名称" prop="user_name">
                     <el-input v-model.trim="editForm.user_name" placeholder="请输入用户名称"></el-input>
                 </el-form-item>
-                <el-form-item label="角色" prop="role_id">
-                    <el-select v-model="editForm.role_id" placeholder="请选择角色" style="width: 100%">
-                        <el-option
-                            v-for="item in optionRoleList"
-                            :key="item.user_id"
-                            :label="item.role_name"
-                            :value="item.role_id"
-                        ></el-option>
+                <el-form-item label="角色" prop="role">
+                    <el-select v-model="editForm.role" placeholder="请选择角色" style="width: 100%" value-key="role_name">
+                        <el-option v-for="item in optionRoleList" :key="item.role_id" :label="item.role_name" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
-                <!--  v-if="oper_type == 2" -->
-                <el-form-item label="旧密码" prop="oldPassword">
+                <el-form-item label="原密码" prop="oldPassword" v-if="oper_type == 2">
                     <el-input v-model.trim="editForm.oldPassword" placeholder="请输入原密码" show-password></el-input>
                 </el-form-item>
-                <el-form-item label="设置密码" prop="newPassword">
+                <el-form-item label="设置密码" prop="newPassword" :rules="oper_type == 2 ? newPasswordEdit : newPasswordCreate">
                     <el-input v-model.trim="editForm.newPassword" placeholder="请设置新密码" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="verifyPassword">
@@ -100,25 +99,35 @@ import { authUserListApi, authUserModifyApi, authRoleListApi, checkPasswordApi }
 
 export default {
     data() {
-        var validateVerifyPass = (rule, value, callback) => {
-            if (value === '' && this.editForm.newPassword) {
-                callback(new Error('请再次输入密码'));
-            } else if (this.editForm.verifyPassword != this.editForm.newPassword) {
+        var verifyPass = (rule, value, callback) => {
+            if (!value && this.editForm.newPassword) {
+                callback(new Error('请再次确认设置密码！'));
+            } else if (value != this.editForm.newPassword) {
                 callback(new Error('两次输入密码不一致!'));
             } else {
                 callback();
             }
         };
-        var validatePass = (rule, value, callback) => {
-            if (value === '111') {
-                callback(new Error('请输入密码'));
+        var newPassvali = (rule, value, callback) => {
+            if (value && !this.editForm.oldPassword) {
+                callback(new Error('请先输入原密码！'));
             } else {
                 callback();
             }
         };
-        var validatePass2 = (rule, value, callback) => {
-            if (value === '222') {
-                callback(new Error('请输入密码'));
+        var oldPassvali = (rule, value, callback) => {
+            let params = {
+                user_id: this.editForm.user_id,
+                ori_passwd: md5(value)
+            };
+            if (value) {
+                checkPasswordApi(params).then((res) => {
+                    if (res.code == 200) {
+                        callback();
+                    } else {
+                        callback(new Error('原密码错误，请重新输入！'));
+                    }
+                });
             } else {
                 callback();
             }
@@ -134,7 +143,7 @@ export default {
             editForm: {
                 user_id: '',
                 user_name: '',
-                role_id: '',
+                role: {},
                 oldPassword: '',
                 newPassword: '',
                 verifyPassword: ''
@@ -144,26 +153,13 @@ export default {
             uploading: false, //上传状态
             rules: {
                 user_id: [{ required: true, message: '请输入角色代码', trigger: 'blur' }],
-                user_name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
-                role_id: [{ required: true, message: '请选择角色', trigger: 'blur' }],
-                // oldPassword: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
-                // newPassword: [{ required: true, message: '请选择角色', trigger: 'blur' }],
-                // oldPassword: [{ required: true }, { required: true, validator: validatePass, trigger: 'blur' }],
-                // newPassword: [{ required: true }, { required: true, validator: validatePass2, trigger: 'blur' }],
-                // verifyPassword: [{ required: true }, { required: true, validator: validateVerifyPass, trigger: 'blur' }]
-                oldPassword: [
-                    { required: true, message: '请选择角色', trigger: 'blur' },
-                    { validator: validatePass, trigger: 'blur' }
-                ],
-                newPassword: [
-                    { required: true, message: '请选择角色', trigger: 'blur' },
-                    { validator: validatePass2, trigger: 'blur' }
-                ],
-                verifyPassword: [
-                    { required: true, message: '请选择角色', trigger: 'blur' },
-                    { validator: validateVerifyPass, trigger: 'blur' }
-                ]
+                user_name: [{ required: true, message: '请输入角色名称', trigger: 'change' }],
+                role: [{ required: true, message: '请选择角色', trigger: 'blur' }],
+                oldPassword: [{ validator: oldPassvali, trigger: 'blur' }],
+                verifyPassword: [{ validator: verifyPass, trigger: 'blur' }]
             },
+            newPasswordCreate: [{ required: true, message: '请设置密码！', trigger: 'blur' }],
+            newPasswordEdit: [{ validator: newPassvali, trigger: 'blur' }],
             optionRoleList: [] // 角色选项
         };
     },
@@ -208,36 +204,24 @@ export default {
             this.oper_type = type;
             if (type == 2) {
                 this.editTypeStr = '修改用户';
-                this.editForm = rowItem;
-                // this.$nextTick(() => {
-                //     let rowData = JSON.parse(JSON.stringify(rowItem));
-                //     this.editForm = rowData;
-                // });
+                this.$nextTick(() => {
+                    let { user_name, user_id } = rowItem;
+                    this.editForm = { ...this.editForm, user_name, user_id, role: { role_name: rowItem.role_name } };
+                });
             } else {
-                this.editForm = {
-                    user_id: '',
-                    user_name: '',
-                    role_id: '',
-                    oldPassword: '',
-                    newPassword: '',
-                    verifyPassword: ''
-                };
-
                 this.editTypeStr = '新增用户';
             }
             this.dialogFormVisible = true;
         },
         closeEdit() {
-            this.dialogFormVisible = false;
             this.$refs['editFormName'].resetFields();
-            // this.$nextTick(() => {
-
-            // });
+            this.dialogFormVisible = false;
         },
         submitEdit(editFormName) {
             let oper_type = this.oper_type;
-            let { user_name, user_id, role_id, newPassword } = this.editForm;
-            let params = { oper_type, user_name, user_id, role_id, password: md5(newPassword) };
+            let { user_name, user_id, role, newPassword } = this.editForm;
+            let password = newPassword ? md5(newPassword) : '';
+            let params = { oper_type, user_name, user_id, role_id: role.role_id, role_name: role.role_name, password };
             this.$refs[editFormName].validate((valid) => {
                 if (valid) {
                     authUserModifyApi(params)
@@ -245,8 +229,8 @@ export default {
                         .then((res) => {
                             if (res.code == 200) {
                                 this.$message.success(this.editTypeStr + '成功');
-                                this.getTableData(this.pageObj);
                                 this.closeEdit();
+                                this.getTableData(this.pageObj);
                             } else {
                                 this.$message.error(this.editTypeStr + '失败');
                             }
@@ -293,7 +277,9 @@ export default {
                     this.tableData = [];
                 })
                 .finally(() => {});
-        }
+        },
+        // 密码校验
+        checkValidity(value) {}
     }
 };
 </script>

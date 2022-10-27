@@ -45,16 +45,16 @@
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
                     <el-table-column prop="id" width="80" label="序号"> </el-table-column>
-                    <el-table-column prop="seculityId" label="股票ID"> </el-table-column>
-                    <el-table-column prop="orgiTime" label="快照时间"> </el-table-column>
-                    <el-table-column prop="lastPrice" label="最新价"> </el-table-column>
-                    <el-table-column prop="askPrice" label="申卖价"> </el-table-column>
-                    <el-table-column prop="askVol" label="申卖量"> </el-table-column>
-                    <el-table-column prop="bidPrice" label="申买价"> </el-table-column>
-                    <el-table-column prop="bidVol" label="申买量"> </el-table-column>
-                    <el-table-column prop="totalTradeVol" label="成交总量"> </el-table-column>
-                    <el-table-column prop="totalAskVol" label="委托买入总量"> </el-table-column>
-                    <el-table-column prop="totalBidVol" label="委托卖出总量"> </el-table-column>
+                    <el-table-column prop="seculityId" width="100" label="股票ID"> </el-table-column>
+                    <el-table-column prop="orgiTime" width="120" label="快照时间"> </el-table-column>
+                    <el-table-column prop="lastPrice" width="80" label="最新价"> </el-table-column>
+                    <el-table-column prop="askPrice" label="申卖价" :show-overflow-tooltip="true"> </el-table-column>
+                    <el-table-column prop="askVol" label="申卖量" :show-overflow-tooltip="true"> </el-table-column>
+                    <el-table-column prop="bidPrice" label="申买价" :show-overflow-tooltip="true"> </el-table-column>
+                    <el-table-column prop="bidVol" label="申买量" :show-overflow-tooltip="true"> </el-table-column>
+                    <el-table-column prop="totalTradeVol" label="成交总量" width="100"> </el-table-column>
+                    <el-table-column prop="totalAskVol" label="委托买入总量" width="120"> </el-table-column>
+                    <el-table-column prop="totalBidVol" label="委托卖出总量" width="110"> </el-table-column>
                 </el-table>
                 <el-pagination
                     background
@@ -77,7 +77,7 @@ import { queryShApi, uploadShApi } from '@/api/index';
 export default {
     data() {
         return {
-            securityId: '688686',
+            securityId: '',
             pageObj: { pageId: 1, pageNum: 12 },
             pageTotal: 0,
             tableData: [],
