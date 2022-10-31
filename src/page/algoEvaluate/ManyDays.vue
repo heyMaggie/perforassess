@@ -313,7 +313,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '算法单数',
+                        name: '算法分数',
                         type: 'line',
                         smooth: true,
                         showSymbol: true,
