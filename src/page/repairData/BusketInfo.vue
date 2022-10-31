@@ -9,7 +9,7 @@
         <div class="container">
             <div class="transfer">
                 <div class="tips"></div>
-                <div class="transfile">
+                <div class="transfile" v-has="3">
                     <el-upload
                         action=""
                         :show-file-list="false"

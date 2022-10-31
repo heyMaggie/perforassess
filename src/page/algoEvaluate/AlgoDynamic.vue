@@ -26,7 +26,7 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button
-                ><el-button type="plain" @click="onGoHistory">查看历史</el-button>
+                ><el-button type="plain" @click="onGoHistory" v-has="1">查看历史</el-button>
             </div>
         </el-form>
         <div class="container">

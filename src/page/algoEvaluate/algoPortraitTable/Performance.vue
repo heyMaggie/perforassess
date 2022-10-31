@@ -42,7 +42,9 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button>
-                <el-button type="plain" @click="downLoad"><img class="iconImg" src="../../../assets/icon/xiazai.png" />导出列表</el-button>
+                <el-button type="plain" @click="downLoad" v-has="4"
+                    ><img class="iconImg" src="../../../assets/icon/xiazai.png" />导出列表</el-button
+                >
             </div>
         </el-form>
         <div class="table-container">

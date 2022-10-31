@@ -17,7 +17,6 @@
 import MenuTree from '../../components/MentTree.vue';
 import { roleType } from '../../utils/roleMenuList.js';
 import { roleAuthMenu } from '@/api/index';
-
 export default {
     components: {
         MenuTree
@@ -25,25 +24,28 @@ export default {
     data() {
         return {
             activeIndex: 'dashboard',
-            menuList: []
+            menuList: [],
+            metaList: [] //组件权限表
         };
     },
     computed: {},
-    created() {
+
+    beforeCreate() {
         let params = { oper_type: 1 };
         roleAuthMenu(params).then((res) => {
             if (res.code == 200) {
                 let role_auth = JSON.parse(res.role_auth).list;
                 let allMenuList = this.doubleCircul(role_auth, roleType());
                 this.menuList = JSON.parse(JSON.stringify(allMenuList));
-                // this.memuCircul(this.menuList);
-                sessionStorage.setItem('allMenuList', JSON.stringify(allMenuList));
+                this.memuCircul(this.menuList);
+                sessionStorage.setItem('metaList', JSON.stringify(this.metaList));
             } else {
                 this.$router.push('/404');
                 this.menuList = [];
             }
         });
     },
+    created() {},
     mounted() {
         this.activeIndex = this.$route.path.replace('/', '');
         console.log(JSON.parse(sessionStorage.getItem('allMenuList')), '目录');
@@ -74,6 +76,9 @@ export default {
                 } else {
                     if (arr[i].children) {
                         this.memuCircul(arr[i].children);
+                    }
+                    if (arr[i].cmpt) {
+                        this.metaList.push({ name: arr[i].name, cmptList: arr[i].cmpt, index: arr[i].index });
                     }
                 }
             }

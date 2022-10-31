@@ -42,12 +42,13 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button>
-                <el-button type="plain" @click="downLoad"><img class="iconImg" src="../../../assets/icon/xiazai.png" />导出列表</el-button>
+                <el-button v-has="4" type="plain" @click="downLoad"
+                    ><img class="iconImg" src="../../../assets/icon/xiazai.png" />导出列表</el-button
+                >
             </div>
         </el-form>
         <div class="table-container">
             <!-- style="height: 695px" -->
-
             <el-table :data="tableData" size="medium " :row-style="{ height: '56px' }" height="695px"
                 ><el-empty description="暂无数据" slot="empty" :image="require('../../../assets/img/empty.png')"></el-empty>
                 <el-table-column prop="user_id" label="用户ID"> </el-table-column>

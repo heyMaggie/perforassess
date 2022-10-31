@@ -39,7 +39,9 @@
             </div>
             <div class="button-right">
                 <el-button type="primary" @click="onSubmit">确定</el-button
-                ><el-button type="plain" @click="downLoad"><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button>
+                ><el-button type="plain" @click="downLoad" v-has="5"
+                    ><img class="iconImg" src="../../assets/icon/xiazai.png" />下载报告</el-button
+                >
             </div>
         </el-form>
         <div class="container" id="resultsHuiZongTableId">

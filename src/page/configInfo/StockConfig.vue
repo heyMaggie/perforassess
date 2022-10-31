@@ -17,12 +17,13 @@
                         :auto-upload="false"
                         accept=".xml"
                         class="upload-demo first"
+                        v-has="3"
                     >
                         <el-button size="medium" type="text" slot="trigger"
                             ><img src="../../assets/icon/upDt.png" class="icon-button" />股票信息上传</el-button
                         ></el-upload
                     >
-                    <el-button type="text" size="medium" @click="exportFile"
+                    <el-button type="text" size="medium" @click="exportFile" v-has="4"
                         ><img src="../../assets/icon/downDt.png" class="icon-button" />股票信息导出</el-button
                     >
                 </div>
@@ -32,7 +33,7 @@
                 <el-input v-model="sec_id" class="selectInput" placeholder="请输入股票ID" @input="filterTable" maxlength="6"
                     ><i slot="prefix" class="el-icon-search"
                 /></el-input>
-                <el-button type="primary" icon="el-icon-plus" @click="openEditDaiolg(1)">新增股票</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="openEditDaiolg(1)" v-has="2">新增股票</el-button>
             </div>
             <div class="table-box">
                 <el-table
