@@ -144,7 +144,7 @@
                                             >
                                                 <div class="number">
                                                     <span class="symbol">{{ sonItem.profit_rate > 0 ? '+' : ' ' }}</span
-                                                    >{{ Number(sonItem.profit_rate).toFixed(1) }}<span class="unit">%</span>
+                                                    >{{ Number(sonItem.profit_rate).toFixed(2) }}<span class="unit">%</span>
                                                 </div>
                                             </el-badge>
                                         </div>
