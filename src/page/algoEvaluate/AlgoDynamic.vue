@@ -30,8 +30,8 @@
             </div>
         </el-form>
         <div class="container">
-            <div class="card radarCard" id="radar"></div>
-            <div class="card" id="dashboardMain1"></div>
+            <div class="card radarCard" id="algoDyRadar"></div>
+            <div class="card" id="algoDyMain1"></div>
             <div class="card grade-lump">
                 <div class="score">
                     <div class="number">{{ compositeScore }}</div>
@@ -50,7 +50,7 @@
                     <div class="explain" :title="item.desc">{{ item.desc }}</div>
                 </div>
             </div>
-            <div class="card" id="dashboardMain2"></div>
+            <div class="card" id="algoDyMain2"></div>
             <div class="card">
                 <div class="card-title">资金占比</div>
                 <div class="blur-card" id="pie1"></div>
@@ -275,7 +275,7 @@ export default {
                     }
                 ]
             };
-            var myChart = echarts.init(document.getElementById('radar'));
+            var myChart = echarts.init(document.getElementById('algoDyRadar'));
             option && myChart.setOption(option);
             myChart.resize();
         },
@@ -298,8 +298,8 @@ export default {
             }
 
             let lineObj = {
-                dashboardMain1: { name: '实时绩效', color: '#83BDFF' },
-                dashboardMain2: { name: '实时完成度', color: '#FCE75F' }
+                algoDyMain1: { name: '实时绩效', color: '#83BDFF' },
+                algoDyMain2: { name: '实时完成度', color: '#FCE75F' }
             };
             let option = {
                 title: {
@@ -861,8 +861,8 @@ export default {
                         this.getPieChart('pie1', marketRateList); //资金占比
                         this.getPieChart('pie4', volTypeList); //交易量
                         this.getRadarChart(radarList); //雷达图
-                        this.generateChart(res.assess_line.point, 'dashboardMain1');
-                        this.generateChart(res.progress_line.point, 'dashboardMain2');
+                        this.generateChart(res.assess_line.point, 'algoDyMain1');
+                        this.generateChart(res.progress_line.point, 'algoDyMain2');
                         this.getSemicircle(); //买卖方向
                         this.getStripChart(); //股价类型
                     } else {
@@ -870,8 +870,8 @@ export default {
                     }
                 })
                 .catch((erro) => {
-                    this.generateChart([], 'dashboardMain1');
-                    this.generateChart([], 'dashboardMain2');
+                    this.generateChart([], 'algoDyMain1');
+                    this.generateChart([], 'algoDyMain2');
                     this.getPieChart('pie1', []); //资金占比
                     this.getPieChart('pie4', []); //交易量
                     this.getSemicircle();
