@@ -108,7 +108,8 @@ export default {
             algoTypeList: [],
             algoList: [],
             mulitAnalyList: [],
-            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法绩效分析', '算法稳定性分析']
+            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法绩效分析', '算法稳定性分析'],
+            cross_day: false
         };
     },
     created() {
@@ -177,6 +178,7 @@ export default {
                 .then((res) => {
                     if (res.code == 200) {
                         list = res.list ? res.list : [];
+                        this.cross_day = res.cross_day;
                         this.mulitAnalyList = res.list ? res.list : [];
                         this.mulitAnalyList.forEach((item) => {
                             item.startValue = item.composite_score / 20;
@@ -195,9 +197,10 @@ export default {
         generateChart(list, type) {
             let isNull = list.length ? false : true;
             let seriesList = [];
+            let xDataList = !this.cross_day ? fiexdDate : this.getCrossDateTime();
             function singelLine(params) {
                 let lineObj = { name: '', data: [] };
-                fiexdDate.forEach((item, i) => {
+                xDataList.forEach((item, i) => {
                     lineObj.name = params.algo_name;
                     lineObj.data[i] = '';
                     params.data.forEach((subitem) => {
@@ -284,7 +287,7 @@ export default {
                 },
                 grid: {
                     left: '5px',
-                    right: '15px',
+                    right: '20px',
                     bottom: '30px',
                     top: '60px',
                     containLabel: true
@@ -292,7 +295,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: fiexdDate,
+                    data: xDataList,
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -301,7 +304,7 @@ export default {
                         }
                     },
                     axisLabel: {
-                        interval: 29,
+                        interval: !this.cross_day ? 29 : null,
                         color: '#000'
                         // rotate: 30,
                     },
@@ -540,6 +543,24 @@ export default {
                     resolve(true);
                 });
             });
+        }, // 获取跨天数的X轴
+        getCrossDateTime() {
+            let xDataList = [];
+            let startDate = dayjs(this.timeRange[0]).format('YYYYMMDD');
+            let endDate = dayjs(this.timeRange[1]).format('YYYYMMDD');
+            let diffData = dayjs(this.timeRange[1]).diff(this.timeRange[0], 'day') + 1; //两个日期之间相差的天数
+            let nextDate = startDate;
+            for (let i = 0; i < diffData; i++) {
+                if (nextDate === startDate) {
+                    xDataList.push(dayjs(nextDate).format('MM/DD'));
+                }
+                if (nextDate < endDate) {
+                    nextDate = dayjs(nextDate).add(1, 'day').format('YYYYMMDD');
+                    xDataList.push(dayjs(nextDate).format('MM/DD'));
+                }
+            }
+            console.log(xDataList, 'xDataList');
+            return xDataList;
         }
     }
 };

@@ -23,10 +23,20 @@
                         <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item>
+                    <el-date-picker
+                        v-model="searchForm.timeRange"
+                        type="daterange"
+                        range-separator="-"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                    >
+                    </el-date-picker>
+                </el-form-item>
             </div>
             <div class="button-right">
-                <el-button type="primary" @click="onSubmit">确定</el-button
-                ><el-button type="plain" @click="onGoHistory" v-has="1">查看历史</el-button>
+                <el-button type="primary" @click="onSubmit">确定</el-button>
+                <!-- <el-button type="plain" @click="onGoHistory" v-has="1">查看历史</el-button> -->
             </div>
         </el-form>
         <div class="container">
@@ -94,7 +104,8 @@ export default {
                 provider: '',
                 algo_type: '',
                 algo_id: '',
-                user_id: localStorage.getItem('ms_username')
+                user_id: localStorage.getItem('ms_username'),
+                timeRange: [new Date(), new Date()] //筛选时间范围 默认当天
             },
             providerList: [],
             algoTypeList: [],
@@ -111,7 +122,8 @@ export default {
             volType: [], //交易量
             assessLine: [], //绩效
             progressLine: [], //完成度
-            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法绩效分析', '算法稳定性分析']
+            titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法绩效分析', '算法稳定性分析'],
+            cross_day: false
         };
     },
     created() {
@@ -283,13 +295,14 @@ export default {
             list = !list ? [] : list;
             let yDataList = [];
             let isNull;
-            yDataList.length = fiexdDate.length;
+            let xDataList = !this.cross_day ? fiexdDate : this.getCrossDateTime();
+            yDataList.length = xDataList.length;
             if (!list.length) {
                 isNull = true;
             } else {
                 isNull = false;
                 list.forEach((params) => {
-                    fiexdDate.forEach((item, i) => {
+                    xDataList.forEach((item, i) => {
                         if (params.time_point == item) {
                             yDataList[i] = params.score;
                         }
@@ -334,7 +347,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: fiexdDate,
+                    data: xDataList,
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -343,7 +356,7 @@ export default {
                         }
                     },
                     axisLabel: {
-                        interval: 29,
+                        interval: !this.cross_day ? 29 : null,
                         color: '#000'
                         // rotate: 30,
                     },
@@ -813,9 +826,10 @@ export default {
             option && myChart.setOption(option, true);
         },
         getDynamicData() {
-            let today = dayjs().format('YYYY-MM-DD');
+            let today = dayjs(this.searchForm.timeRange[0]).format('YYYY-MM-DD');
+            let today2 = dayjs(this.searchForm.timeRange[1]).format('YYYY-MM-DD');
             let start_time = new Date(`${today} 00:00`).getTime() / 1000;
-            let end_time = new Date(`${today} 23:59`).getTime() / 1000;
+            let end_time = new Date(`${today2} 23:59`).getTime() / 1000;
             let query = { algo_name: this.searchForm.algo_id, user_id: localStorage.getItem('ms_username'), start_time, end_time };
             this.dimensionalityList = [];
             let radarList = [];
@@ -831,6 +845,7 @@ export default {
                         this.priceType = res.price_type; //股价类型
                         this.assessLine = res.assess_line;
                         this.progressLine = res.progress_line;
+                        this.cross_day = res.cross_day;
                         //5个维度升序
                         if (res.dimension && res.dimension.length) {
                             this.dimension = res.dimension.sort((a, b) => {
@@ -903,6 +918,24 @@ export default {
                 user_id: localStorage.getItem('ms_username')
             };
             this.getOptionList(query, 'algoList', 'algo_name');
+        },
+        // 获取跨天数的X轴
+        getCrossDateTime() {
+            let xDataList = [];
+            let startDate = dayjs(this.timeRange[0]).format('YYYYMMDD');
+            let endDate = dayjs(this.timeRange[1]).format('YYYYMMDD');
+            let diffData = dayjs(this.timeRange[1]).diff(this.timeRange[0], 'day') + 1; //两个日期之间相差的天数
+            let nextDate = startDate;
+            for (let i = 0; i < diffData; i++) {
+                if (nextDate === startDate) {
+                    xDataList.push(dayjs(nextDate).format('MM/DD'));
+                }
+                if (nextDate < endDate) {
+                    nextDate = dayjs(nextDate).add(1, 'day').format('YYYYMMDD');
+                    xDataList.push(dayjs(nextDate).format('MM/DD'));
+                }
+            }
+            return xDataList;
         }
     }
 };
