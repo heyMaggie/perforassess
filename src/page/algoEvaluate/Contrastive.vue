@@ -433,7 +433,7 @@ export default {
                             }
                         ],
                         center: ['50%', '50%'],
-                        radius: 100,
+                        radius: 95,
                         startAngle: 90,
                         splitNumber: 3,
                         orient: 'horizontal', // 图例列表的布局朝向,默认'horizontal'为横向,'c'为纵向.
@@ -593,6 +593,7 @@ export default {
             .radar {
                 margin-right: 12px;
                 width: 367px;
+                padding-right: 12px;
             }
             .bulue-card {
                 background: #fafbff;
