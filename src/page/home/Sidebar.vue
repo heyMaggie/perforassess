@@ -31,11 +31,13 @@ export default {
     computed: {},
 
     beforeCreate() {
-        let params = { oper_type: 1 };
+        let user_type = sessionStorage.getItem('user_type') / 1;
+        let params = { oper_type: 1, user_type };
         roleAuthMenu(params).then((res) => {
             if (res.code == 200) {
                 let role_auth = JSON.parse(res.role_auth).list;
                 let allMenuList = this.doubleCircul(role_auth, roleType());
+                sessionStorage.setItem('allMenuList', JSON.stringify(allMenuList));
                 this.menuList = JSON.parse(JSON.stringify(allMenuList));
                 this.memuCircul(this.menuList);
                 sessionStorage.setItem('metaList', JSON.stringify(this.metaList));

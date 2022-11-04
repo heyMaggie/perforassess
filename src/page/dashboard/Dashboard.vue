@@ -48,7 +48,7 @@
                     <div class="medium-blue-card" id="pie2"></div>
                 </div>
                 <div class="card">
-                    <div class="card-title line-img">厂商总数</div>
+                    <div class="card-title line-img">厂商数量</div>
                     <el-tooltip :content="`厂商总数量：${summaryObj.total_provider_cnt}`" placement="top">
                         <img class="query-icon" src="../../assets/icon/query.png"
                     /></el-tooltip>

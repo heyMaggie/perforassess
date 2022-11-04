@@ -64,31 +64,29 @@ router.beforeEach((to, from, next) => {
     const role = sessionStorage.getItem('role');
     const token = sessionStorage.getItem('token');
     const metaList = JSON.parse(sessionStorage.getItem('metaList'));
-    // 没有登陆
+    // 没有登录
     if (!token && to.fullPath != '/login') {
         next('/login');
     } else {
-        if (to.meta.isAdmin) {
-            // 如果是管理员权限则可进入
-            // role == 3 ? next() :;
-            if (role == 3) {
-                next();
-                metaList.forEach((item) => {
-                    if (item.index == to.fullPath.replace('/', '')) {
-                        to.meta.cmpt = item.cmptList;
-                    }
-                });
-            } else {
-                next('/403');
+        // 如果是管理员权限则可进入
+        next();
+        metaList.forEach((item) => {
+            if (item.index == to.fullPath.replace('/', '')) {
+                to.meta.cmpt = item.cmptList;
+                return;
             }
-        } else {
-            next();
-            metaList.forEach((item) => {
-                if (item.index == to.fullPath.replace('/', '')) {
-                    to.meta.cmpt = item.cmptList;
-                }
-            });
-        }
+        });
+        // role == 3 ? next() :;
+        // if (role == 3) {
+        //     next();
+        //     metaList.forEach((item) => {
+        //         if (item.index == to.fullPath.replace('/', '')) {
+        //             to.meta.cmpt = item.cmptList;
+        //         }
+        //     });
+        // } else {
+        //     next('/403');
+        // }
     }
 });
 

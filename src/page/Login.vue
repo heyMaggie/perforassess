@@ -69,6 +69,7 @@ export default {
                             sessionStorage.setItem('login_expire', res.expire);
                             sessionStorage.setItem('token', res.token);
                             sessionStorage.setItem('role', res.role);
+                            sessionStorage.setItem('user_type', res.user_type);
                             this.$router.push('/dashboard');
                             // 不记住密码
                             if (!this.checkedPass) {

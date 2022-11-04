@@ -274,7 +274,8 @@ export default {
             // });
         },
         // 递归获取初始化控件目录，用于展示前端
-        circulControl(arr) {
+        circulControl(arr = []) {
+            if (!arr || !arr.length) return;
             arr.forEach((fitem, findex) => {
                 if (fitem.auth == 1) {
                     this.isCheckTreeKeys.push(fitem.index);
