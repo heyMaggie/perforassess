@@ -63,7 +63,7 @@ router.beforeEach((to, from, next) => {
     document.title = `绩效评估平台`;
     const role = sessionStorage.getItem('role');
     const token = sessionStorage.getItem('token');
-    const metaList = JSON.parse(sessionStorage.getItem('metaList'));
+    const metaList = JSON.parse(sessionStorage.getItem('metaList')) || [];
     // 没有登录
     if (!token && to.fullPath != '/login') {
         next('/login');

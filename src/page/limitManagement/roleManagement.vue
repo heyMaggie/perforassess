@@ -25,7 +25,7 @@
                         background: '#F2F3F5 !important'
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
-                    <el-table-column type="index" label="ID"> </el-table-column>
+                    <el-table-column prop="id" label="ID" width="80"> </el-table-column>
                     <el-table-column prop="role_id" label="角色ID" width="100"> </el-table-column>
                     <el-table-column prop="role_name" label="角色名称" width="150"> </el-table-column>
                     <el-table-column prop="role_desc" label="权限" :show-overflow-tooltip="true"> </el-table-column>
@@ -117,14 +117,14 @@ export default {
     data() {
         return {
             role_name: '',
-            pageObj: { page: 1, limit: 12 },
+            pageObj: { page: 1, limit: 11 },
             pageTotal: 0,
             tableData: [],
             marketType: dict.marketType,
             sharesType: dict.sharesType,
             dialogFormVisible: false,
             editForm: {
-                role_id: '',
+                role_id: null,
                 role_name: ''
             },
             oper_type: null, //1-新增2-修改3-删除
@@ -195,8 +195,8 @@ export default {
                 let rowData = JSON.parse(JSON.stringify(rowItem));
                 this.editForm = rowData;
                 // console.log(rowData);
-                this.localTreeData(JSON.parse(rowData.role_auth));
                 this.$nextTick(() => {
+                    this.localTreeData(JSON.parse(rowData.role_auth));
                     this.$refs.menuTree.setCheckedKeys(this.isCheckTreeKeys);
                 });
             } else {
@@ -207,7 +207,7 @@ export default {
                     this.$refs.menuTree.setCheckedKeys(this.isCheckTreeKeys);
                 });
             }
-
+            // console.log(this.editForm.role_name, this.isCheckTreeKeys, this.treelogData);
             this.dialogFormVisible = true;
         },
         closeEdit() {
@@ -220,24 +220,42 @@ export default {
             let params = {
                 oper_type: this.oper_type,
                 ...this.editForm,
+                role_id: this.editForm.role_id / 1,
                 role_auth: JSON.stringify(this.treelogData)
             };
-            console.log(this.treelogData, JSON.stringify(this.treelogData));
+            let tipsStr = '';
+            if (this.oper_type == 1) {
+                tipsStr = '此操作会新增一个角色的用户权限, 是否继续?';
+            } else {
+                tipsStr = '此操作会更新所有绑定该角色的用户权限, 是否继续?';
+            }
+            // console.log(this.treelogData, JSON.stringify(this.treelogData));
             this.$refs['roleFormName'].validate((valid) => {
                 if (valid) {
-                    authRoleModifyApi(params)
-                        .then((res) => {
-                            if (res.code == 200) {
-                                this.$message.success(this.editTypeStr + '成功');
-                                this.getTableData(this.pageObj);
-                                this.closeEdit();
-                            } else {
-                                this.$message.error(this.editTypeStr + '失败');
-                            }
+                    this.$confirm(tipsStr, '确定提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        cancelButtonClass: 'is-plain',
+                        closeOnClickModal: false,
+                        closeOnPressEscape: false,
+                        type: 'warning'
+                    })
+                        .then(() => {
+                            authRoleModifyApi(params)
+                                .then((res) => {
+                                    if (res.code == 200) {
+                                        this.$message.success(this.editTypeStr + '成功');
+                                        this.getTableData(this.pageObj);
+                                        this.closeEdit();
+                                    } else {
+                                        this.$message.error(this.editTypeStr + '失败');
+                                    }
+                                })
+                                .catch((error) => {
+                                    // this.$message.error(this.editTypeStr + '失败');
+                                });
                         })
-                        .catch((error) => {
-                            // this.$message.error(this.editTypeStr + '失败');
-                        });
+                        .catch(() => {});
                 } else {
                     return false;
                 }
@@ -296,15 +314,22 @@ export default {
             // });
         },
         // 递归获取初始化控件目录，用于展示前端
-        circulControl(arr = []) {
+        circulControl(arr = [], level) {
             if (!arr || !arr.length) return;
             arr.forEach((fitem, findex) => {
+                // 加上层级 index
+                if (!fitem.index) {
+                    // fitem.index = level ? `${level}-${findex}` : findex;
+                    fitem.index = fitem.name;
+                }
                 if (fitem.auth == 1) {
                     this.isCheckTreeKeys.push(fitem.index);
                 }
+                // 第二层 页面
                 if (fitem.children && fitem.children.length) {
                     this.circulControl(fitem.children);
                 } else if (fitem['cmpt']) {
+                    // 第三层 页面或者按钮
                     fitem['cmpt'].forEach((cmitem, cmindex) => {
                         cmitem.index = `${fitem.name}-${cmitem.name}-${cmindex}`;
                     });
@@ -346,6 +371,8 @@ export default {
                             if (res.code == 200) {
                                 this.$message.success('删除成功');
                                 this.getTableData(this.pageObj);
+                            } else if (res.code == 360) {
+                                this.$message.error(res.msg);
                             } else {
                                 this.$message.error('删除失败');
                             }
@@ -359,7 +386,7 @@ export default {
         //
         handleCheckChange(data, checked, indeterminate) {
             // console.log(data, checked, indeterminate);
-            console.log(this.$refs.menuTree.getCheckedKeys(), 'this.$refs.menuTree');
+            // console.log(this.$refs.menuTree.getCheckedKeys(), 'this.$refs.menuTree');
             // this.$refs.menuTree
         },
         // 从本地数据初始化树形

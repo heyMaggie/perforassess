@@ -25,7 +25,7 @@
                         background: '#F2F3F5 !important'
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
-                    <el-table-column type="index" label="ID"> </el-table-column>
+                    <el-table-column prop="id" label="ID" width="80"> </el-table-column>
                     <el-table-column prop="user_id" label="用户ID"> </el-table-column>
                     <el-table-column prop="user_name" label="用户名称">
                         <template slot-scope="scope"
@@ -143,7 +143,7 @@ export default {
         };
         return {
             user_name: '',
-            pageObj: { page: 1, limit: 12 },
+            pageObj: { page: 1, limit: 11 },
             pageTotal: 0,
             tableData: [],
             marketType: dict.marketType,
@@ -152,7 +152,7 @@ export default {
             editForm: {
                 user_id: '',
                 user_name: '',
-                role: {},
+                role: '',
                 oldPassword: '',
                 newPassword: '',
                 verifyPassword: ''
@@ -230,9 +230,9 @@ export default {
             let oper_type = this.oper_type;
             let { user_name, user_id, role, newPassword } = this.editForm;
             let password = newPassword ? md5(newPassword) : '';
-            let params = { oper_type, user_name, user_id, role_id: role.role_id, role_name: role.role_name, password };
             this.$refs[editFormName].validate((valid) => {
                 if (valid) {
+                    let params = { oper_type, user_name, user_id, role_id: role.role_id, role_name: role.role_name, password };
                     authUserModifyApi(params)
                         // authUserModifyApi({ ...this.editForm, oper_type, password: md5(this.editForm.newPassword) })
                         .then((res) => {
@@ -240,6 +240,8 @@ export default {
                                 this.$message.success(this.editTypeStr + '成功');
                                 this.closeEdit();
                                 this.getTableData(this.pageObj);
+                            } else if (res.code == 320) {
+                                this.$message.error('用户id已存在!');
                             } else {
                                 this.$message.error(this.editTypeStr + '失败');
                             }

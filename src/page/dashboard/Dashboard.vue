@@ -183,9 +183,8 @@
                 <div class="card">
                     <div class="card-title">
                         <span>算法绩效</span>
-                        <span class="more" @click="goMoreAlgo" v-if="algoContrastList.length"
-                            >查看更多<span class="icon el-icon-arrow-right"></span
-                        ></span>
+                        <!-- <span class="more" @click="goMoreAlgo" v-if="algoContrastList.length" -->
+                        <span class="more" @click="goMoreAlgo" v-if="false">查看更多<span class="icon el-icon-arrow-right"></span></span>
                     </div>
                     <div class="dashboardMain1" id="dashboardMain1"></div>
                 </div>
