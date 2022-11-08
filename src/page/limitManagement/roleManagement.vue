@@ -29,12 +29,21 @@
                     <el-table-column prop="role_id" label="角色ID" width="100"> </el-table-column>
                     <el-table-column prop="role_name" label="角色名称" width="150"> </el-table-column>
                     <el-table-column prop="role_desc" label="权限" :show-overflow-tooltip="true"> </el-table-column>
-                    <el-table-column prop="status" label="状态" width="100"> </el-table-column>
+                    <el-table-column prop="status" label="状态" width="100">
+                        <template slot-scope="scope">
+                            {{ scope.row.status | tableDic('limitStatus') }}
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="create_time" label="创建时间" width="200"> </el-table-column>
                     <el-table-column label="操作" width="100">
+                        <!--  v-if="scope.row.status == 1" -->
                         <template slot-scope="scope">
-                            <el-button @click="openEditDaiolg(2, scope.row)" type="text" size="small">修改</el-button>
-                            <el-button @click="removeConfig(scope.row)" type="text" size="small">删除</el-button>
+                            <el-button @click="openEditDaiolg(2, scope.row)" type="text" size="small" :disabled="scope.row.status != 1"
+                                >修改</el-button
+                            >
+                            <el-button @click="removeConfig(scope.row)" type="text" size="small" :disabled="scope.row.status != 1"
+                                >删除</el-button
+                            >
                         </template>
                     </el-table-column>
                 </el-table>
@@ -63,9 +72,10 @@
                     <el-col :span="11"
                         ><el-form-item label="角色ID" prop="role_id">
                             <el-input
-                                v-model.number.trim="editForm.role_id"
+                                v-model.trim="editForm.role_id"
                                 :disabled="oper_type == 2"
                                 placeholder="请输入角色ID"
+                                oninput="value=value.replace(/[^\d]/g,'')"
                             ></el-input> </el-form-item
                     ></el-col>
                     <el-col :span="2"><div>&nbsp;</div></el-col>
@@ -102,7 +112,7 @@
 </template>
 
 <script>
-import { authRoleListApi, authRoleModifyApi, authRoleAuthApi } from '@/api/index';
+import { authRoleListApi, authRoleModifyApi, authRoleAuthApi, roleAuthMenu } from '@/api/index';
 export default {
     data() {
         return {
@@ -125,22 +135,34 @@ export default {
                 role_id: [{ required: true, message: '请输入角色代码', trigger: 'blur' }],
                 role_name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }]
             },
-            treelogData: [],
+            addLimitList: [], // 新增时的权限列表
+            treelogData: [], // 权限列表
             defaultProps: {
                 children: 'children',
                 label: 'name'
             }
         };
     },
+    beforeCreate() {
+        let user_type = sessionStorage.getItem('user_type') / 1;
+        let params = { oper_type: 1, user_type };
+        roleAuthMenu(params).then((res) => {
+            if (res.code == 200) {
+                this.addLimitList = JSON.parse(res.role_auth).list;
+            } else {
+                this.addLimitList = [];
+            }
+        });
+    },
     created() {
-        this.localTreeData();
-        this.getTableData();
+        this.getTableData(); //获取列表
         this.changeCss();
     },
+
     methods: {
         getTableData(pageObj = { page: 1, limit: this.pageObj.limit }) {
             this.uploading = true;
-            authRoleListApi({ ...pageObj, role_name: this.role_name })
+            authRoleListApi({ ...pageObj, role_name: this.role_name, scene: 1 })
                 .then((res) => {
                     if (res.code == 200) {
                         this.tableData = res.list;
@@ -170,18 +192,18 @@ export default {
             this.oper_type = type;
             if (type == 2) {
                 this.editTypeStr = '修改角色';
+                let rowData = JSON.parse(JSON.stringify(rowItem));
+                this.editForm = rowData;
+                // console.log(rowData);
+                this.localTreeData(JSON.parse(rowData.role_auth));
                 this.$nextTick(() => {
-                    let rowData = JSON.parse(JSON.stringify(rowItem));
-                    this.editForm = rowData;
-                    this.treelogData = JSON.parse(rowData.role_auth);
-                    this.circulControl(this.treelogData);
                     this.$refs.menuTree.setCheckedKeys(this.isCheckTreeKeys);
                 });
             } else {
-                this.localTreeData();
+                // this.localTreeData(this.addLimitList);
                 this.editTypeStr = '新增角色';
                 this.$nextTick(() => {
-                    this.localTreeData();
+                    this.localTreeData(this.addLimitList);
                     this.$refs.menuTree.setCheckedKeys(this.isCheckTreeKeys);
                 });
             }
@@ -306,23 +328,33 @@ export default {
         },
         // 删除
         removeConfig(rowItem) {
-            console.log(rowItem);
             let params = {
                 oper_type: 3,
                 role_id: rowItem.role_id
             };
-            authRoleModifyApi(params)
-                .then((res) => {
-                    if (res.code == 200) {
-                        this.$message.success('删除成功');
-                        this.getTableData(this.pageObj);
-                    } else {
-                        this.$message.error('删除失败');
-                    }
+            this.$confirm('此操作将删除所选角色, 是否继续?', '删除提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                cancelButtonClass: 'is-plain',
+                closeOnClickModal: false,
+                closeOnPressEscape: false,
+                type: 'warning'
+            })
+                .then(() => {
+                    authRoleModifyApi(params)
+                        .then((res) => {
+                            if (res.code == 200) {
+                                this.$message.success('删除成功');
+                                this.getTableData(this.pageObj);
+                            } else {
+                                this.$message.error('删除失败');
+                            }
+                        })
+                        .catch((error) => {
+                            // this.$message.error(this.editTypeStr + '失败');
+                        });
                 })
-                .catch((error) => {
-                    // this.$message.error(this.editTypeStr + '失败');
-                });
+                .catch(() => {});
         },
         //
         handleCheckChange(data, checked, indeterminate) {
@@ -331,10 +363,10 @@ export default {
             // this.$refs.menuTree
         },
         // 从本地数据初始化树形
-        localTreeData() {
+        localTreeData(list = []) {
             this.treelogData = [];
             this.isCheckTreeKeys = [];
-            this.treelogData = JSON.parse(sessionStorage.getItem('allMenuList'));
+            this.treelogData = list;
             this.circulControl(this.treelogData);
         }
     }

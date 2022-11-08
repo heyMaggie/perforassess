@@ -33,13 +33,22 @@
                             {{ scope.row.user_name }}
                         </template></el-table-column
                     >
+                    <el-table-column prop="role_id" label="角色ID"> </el-table-column>
                     <el-table-column prop="role_name" label="角色"> </el-table-column>
-                    <el-table-column prop="status" label="状态"> </el-table-column>
+                    <el-table-column prop="status" label="状态">
+                        <template slot-scope="scope">
+                            {{ scope.row.status | tableDic('limitStatus') }}
+                        </template></el-table-column
+                    >
                     <el-table-column prop="create_time" label="创建时间"> </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button @click="openEditDaiolg(2, scope.row)" type="text" size="small">修改</el-button>
-                            <el-button @click="removeConfig(scope.row)" type="text" size="small">删除</el-button>
+                            <el-button @click="openEditDaiolg(2, scope.row)" type="text" size="small" :disabled="scope.row.status != 1"
+                                >修改</el-button
+                            >
+                            <el-button @click="removeConfig(scope.row)" type="text" size="small" :disabled="scope.row.status != 1"
+                                >删除</el-button
+                            >
                         </template>
                     </el-table-column>
                 </el-table>
@@ -245,32 +254,41 @@ export default {
         },
         // 删除
         removeConfig(rowItem) {
-            console.log(rowItem);
             let params = {
                 oper_type: 3,
                 user_id: rowItem.user_id
             };
-            // authUserModifyApi({ ...this.editForm, password: md5(this.editForm.newPassword) })
-            authUserModifyApi(params)
-                .then((res) => {
-                    if (res.code == 200) {
-                        this.$message.success('删除成功');
-                        this.getTableData(this.pageObj);
-                    } else {
-                        this.$message.error('删除失败');
-                    }
+            this.$confirm('此操作将删除所选用户, 是否继续?', '删除提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                cancelButtonClass: 'is-plain',
+                closeOnClickModal: false,
+                closeOnPressEscape: false,
+                type: 'warning'
+            })
+                .then(() => {
+                    authUserModifyApi(params)
+                        .then((res) => {
+                            if (res.code == 200) {
+                                this.$message.success('删除成功');
+                                this.getTableData(this.pageObj);
+                            } else {
+                                this.$message.error('删除失败');
+                            }
+                        })
+                        .catch((error) => {
+                            // this.$message.error(this.editTypeStr + '失败');
+                        });
                 })
-                .catch((error) => {
-                    // this.$message.error(this.editTypeStr + '失败');
-                });
+                .catch(() => {});
         },
         // 获取角色列表
         getRoleList(pageObj = { page: 1, limit: 1000 }) {
-            authRoleListApi({ ...pageObj, role_name: '' })
+            authRoleListApi({ ...pageObj, role_name: '', scene: 2 })
                 .then((res) => {
                     if (res.code == 200) {
                         this.optionRoleList = res.list;
-                        console.log(this.optionRoleList);
+                        // console.log(this.optionRoleList);
                     }
                 })
                 .catch(() => {

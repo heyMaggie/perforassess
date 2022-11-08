@@ -32,12 +32,12 @@ export default {
 
     beforeCreate() {
         let user_type = sessionStorage.getItem('user_type') / 1;
-        let params = { oper_type: 1, user_type };
+        let params = { oper_type: 3, user_type };
         roleAuthMenu(params).then((res) => {
             if (res.code == 200) {
                 let role_auth = JSON.parse(res.role_auth).list;
                 let allMenuList = this.doubleCircul(role_auth, roleType());
-                sessionStorage.setItem('allMenuList', JSON.stringify(allMenuList));
+                // sessionStorage.setItem('allMenuList', JSON.stringify(allMenuList));
                 this.menuList = JSON.parse(JSON.stringify(allMenuList));
                 this.memuCircul(this.menuList);
                 sessionStorage.setItem('metaList', JSON.stringify(this.metaList));
@@ -50,7 +50,6 @@ export default {
     created() {},
     mounted() {
         this.activeIndex = this.$route.path.replace('/', '');
-        console.log(JSON.parse(sessionStorage.getItem('allMenuList')), '目录');
     },
     methods: {
         // 递归获取控件目录

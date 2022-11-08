@@ -26,5 +26,9 @@ window.dict = {
         { key: 1, value: '普通用户' },
         { key: 2, value: '算法厂商' },
         { key: 3, value: '管理员' }
+    ],
+    limitStatus: [
+        { key: 1, value: '正常' },
+        { key: 2, value: '作废' }
     ]
 };
