@@ -79,7 +79,8 @@ export default {
         getAlgoRankingList(pageObj = { page: 1, pageNum: 5 }) {
             this.pageObj = pageObj;
             let time = Date.parse(new Date()) / 1000;
-            let query = { date: time, page: pageObj.page, limit: pageObj.pageNum, rank_type: 1 };
+            let user_id = localStorage.getItem('ms_username');
+            let query = { date: time, page: pageObj.page, limit: pageObj.pageNum, rank_type: 1, user_id };
             algoRankingApi(query)
                 .then((res) => {
                     if (res.code == 200) {

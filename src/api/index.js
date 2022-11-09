@@ -1,4 +1,5 @@
 import request from './request';
+import request2 from './request2';
 // 五个维度列表
 export const fiveDimensionsApi = (query) => {
     return request({
@@ -223,60 +224,60 @@ export const childFixApi = (query) => {
 };
 // 获取绩效平台目录
 export const roleAuthMenu = (query) => {
-    return request({
+    return request2({
         // url: '/algo-assess/v1/auth/rolelist',
-        url: 'http://192.168.2.27:8888/algo-assess/v1/auth/role-auth',
+        url: '/algo-assess/v1/auth/role-auth',
         method: 'post',
         data: query
     });
 };
 // 1. 系统用户列表   /algo-assess/v1/auth/user-list
 export const authUserListApi = (query) => {
-    return request({
-        url: 'http://192.168.2.27:8888/algo-assess/v1/auth/user-list',
+    return request2({
+        url: '/algo-assess/v1/auth/user-list',
         method: 'post',
         data: query
     });
 }; // 2. 系统用户修改   /algo-assess/v1/auth/user-modify
 export const authUserModifyApi = (query) => {
-    return request({
-        url: 'http://192.168.2.27:8888/algo-assess/v1/auth/user-modify',
+    return request2({
+        url: '/algo-assess/v1/auth/user-modify',
         method: 'post',
         data: query
     });
 }; // 3. 角色列表      /algo-assess/v1/auth/rolelist
 export const authRoleListApi = (query) => {
-    return request({
-        url: 'http://192.168.2.27:8888/algo-assess/v1/auth/rolelist',
+    return request2({
+        url: '/algo-assess/v1/auth/rolelist',
         method: 'post',
         data: query
     });
 }; // 4. 角色修改      /algo-assess/v1/auth/role-modify
 export const authRoleModifyApi = (query) => {
-    return request({
-        url: 'http://192.168.2.27:8888/algo-assess/v1/auth/role-modify',
+    return request2({
+        url: '/algo-assess/v1/auth/role-modify',
         method: 'post',
         data: query
     });
 }; // 5. 角色权限      /algo-assess/v1/auth/role-auth
 export const authRoleAuthApi = (query) => {
-    return request({
-        url: 'http://192.168.2.27:8888/algo-assess/v1/auth/role-auth',
+    return request2({
+        url: '/algo-assess/v1/auth/role-auth',
         method: 'post',
         data: query
     });
 }; // 6. 密码校验      /algo-assess/v1/auth/check-password
 export const checkPasswordApi = (query) => {
-    return request({
-        url: 'http://192.168.2.27:8888/algo-assess/v1/auth/check-password',
+    return request2({
+        url: '/algo-assess/v1/auth/check-password',
         method: 'post',
         data: query
     });
 };
 // 7. 左边菜单栏      /algo-assess/v1/auth/check-password
 export const userAuthListApi = (query) => {
-    return request({
-        url: 'http://192.168.2.27:8888/algo-assess/v1/auth/user-auth',
+    return request2({
+        url: '/algo-assess/v1/auth/user-auth',
         method: 'post',
         data: query
     });
