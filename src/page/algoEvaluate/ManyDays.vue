@@ -96,23 +96,29 @@ export default {
     },
     watch: {
         'searchForm.provider'(newV, oldV) {
-            this.searchForm.algo_type = '';
-            this.searchForm.algo_id = '';
-            this.algoTypeList = [];
-            this.algoList = [];
+            if (oldV) {
+                this.searchForm.algo_type = '';
+                this.searchForm.algo_id = '';
+                this.algoTypeList = [];
+                this.algoList = [];
+            }
         },
         'searchForm.algo_type'(newV, oldV) {
-            // if (!newV) {
-            this.searchForm.algo_id = '';
-            this.algoList = [];
-            // }
+            if (oldV) {
+                this.searchForm.algo_id = '';
+                this.algoList = [];
+            }
         }
     },
     mounted() {},
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
-            this.getAnalyseAlgoData();
+            if (!this.searchForm.algo_id) {
+                this.$message.error('请选择需要查询的算法！');
+                return;
+            }
+            this.getAnalyseAlgoData(true);
         },
         onDownLoad() {
             console.log('onDownLoad!');
@@ -144,7 +150,7 @@ export default {
             };
             this.getOptionList(query, 'algoList', 'algo_name');
         },
-        getAnalyseAlgoData() {
+        getAnalyseAlgoData(isSubmit = false) {
             let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
             let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
             let start_time = new Date(`${today} 00:00`).getTime() / 1000;
@@ -162,6 +168,12 @@ export default {
                     if (res.code == 200) {
                         list = res.data;
                         this.cross_day = res.cross_day;
+                        // 首次进来赋值
+                        if (!isSubmit) {
+                            this.searchForm.provider = res.provider;
+                            this.searchForm.algo_type = res.algo_type_name;
+                            this.searchForm.algo_id = res.algo_name;
+                        }
                         if (!list.length) {
                             this.generateChart([], 'manyMain1');
                             this.generateChart([], 'manyMain2');

@@ -158,6 +158,10 @@ export default {
         },
         onSubmit() {
             console.log(this.searchForm);
+            if (!this.searchForm.algo_id) {
+                this.$message.error('请选择需要查询的算法！');
+                return;
+            }
             this.getDynamicData(true);
         },
         getRadarChart(radarList) {

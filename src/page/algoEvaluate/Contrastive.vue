@@ -132,7 +132,11 @@ export default {
     methods: {
         onSubmit() {
             console.log('submit!', this.searchForm);
-            this.getMulitAnalyseData();
+            if (!this.searchForm.algo_id_list.length) {
+                this.$message.error('请选择对比算法！');
+                return;
+            }
+            this.getMulitAnalyseData(true);
         },
         downLoad() {
             this.createPDF('对比分析');
@@ -162,7 +166,7 @@ export default {
                 this.searchForm.algo_id_list.splice(-1);
             }
         },
-        getMulitAnalyseData() {
+        getMulitAnalyseData(isSubmit = false) {
             let today = dayjs(this.timeRange[0]).format('YYYY-MM-DD');
             let today2 = dayjs(this.timeRange[1]).format('YYYY-MM-DD');
             let start_time = new Date(`${today} 00:00`).getTime() / 1000;
@@ -177,6 +181,10 @@ export default {
             mulitAnalyseApi(query)
                 .then((res) => {
                     if (res.code == 200) {
+                        if (!isSubmit) {
+                            this.searchForm.algo_type = res.algo_type_name;
+                            this.searchForm.algo_id_list = res.algo_name;
+                        }
                         list = res.list ? res.list : [];
                         this.cross_day = res.cross_day;
                         this.mulitAnalyList = res.list ? res.list : [];
