@@ -94,7 +94,7 @@ import dayjs from 'dayjs';
 import html2Canvas from 'html2canvas';
 import JsPDF from 'jspdf';
 export default {
-    name: 'contrastive66t',
+    name: 'contrastive',
     data() {
         return {
             searchForm: {

@@ -150,7 +150,7 @@ import dayjs from 'dayjs';
 import fiexdDate from '../../utils/fixeddate';
 
 export default {
-    name: 'baseform',
+    name: 'userPortrait',
     data() {
         return {
             searchForm: {

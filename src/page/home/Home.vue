@@ -23,7 +23,17 @@ import vTags from './Tags.vue';
 export default {
     data() {
         return {
-            tagsList: []
+            tagsList: [
+                'algoDynamic',
+                'economy',
+                'completeness',
+                'riskDegree',
+                'performance',
+                'stability',
+                'manyDays',
+                'contrastive',
+                'userPortrait'
+            ]
         };
     },
     components: {

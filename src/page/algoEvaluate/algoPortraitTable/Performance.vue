@@ -82,7 +82,7 @@ import dayjs from 'dayjs';
 import { export2Excel } from '../../../utils/exportExcel';
 
 export default {
-    name: 'Performance',
+    name: 'performance',
     data() {
         return {
             searchForm: {

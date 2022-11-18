@@ -97,7 +97,7 @@ import { dynamicApi, optionListApi } from '@/api/index';
 import fiexdDate from '../../utils/fixeddate';
 const dayjs = require('dayjs');
 export default {
-    name: 'baseform',
+    name: 'algoDynamic',
     data() {
         return {
             searchForm: {
