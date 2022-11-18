@@ -97,7 +97,7 @@
                                     <div class="number empty-number">—</div>
                                 </div>
                                 <div class="blue-mincard">
-                                    <div class="tit"><img src="../../assets/icon/2bb.png" />交易量</div>
+                                    <div class="tit"><img src="../../assets/icon/2bb.png" />交易总额</div>
                                     <div class="number empty-number">—</div>
                                 </div>
                                 <div class="blue-mincard">
@@ -1062,7 +1062,7 @@ export default {
     }
     .showBorder {
         .card {
-            margin-right: 12px;
+            margin-right: 0.75rem;
             width: 163px;
             height: 158px;
             padding-top: 12px;
