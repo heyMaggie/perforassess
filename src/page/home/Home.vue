@@ -34,3 +34,13 @@ export default {
     created() {}
 };
 </script>
+
+<style scoped lang="less">
+/deep/ input::-webkit-outer-spin-button,
+/deep/ input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+/deep/ input[type='number'] {
+    -moz-appearance: textfield;
+}
+</style>

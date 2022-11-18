@@ -137,16 +137,18 @@ export default {
     },
     watch: {
         'searchForm.provider'(newV, oldV) {
-            this.searchForm.algo_type = '';
-            this.searchForm.algo_id = '';
-            this.algoTypeList = [];
-            this.algoList = [];
+            if (oldV) {
+                this.searchForm.algo_type = '';
+                this.searchForm.algo_id = '';
+                this.algoTypeList = [];
+                this.algoList = [];
+            }
         },
         'searchForm.algo_type'(newV, oldV) {
-            // if (!newV) {
-            this.searchForm.algo_id = '';
-            this.algoList = [];
-            // }
+            if (oldV) {
+                this.searchForm.algo_id = '';
+                this.algoList = [];
+            }
         }
     },
     mounted() {},
@@ -156,7 +158,7 @@ export default {
         },
         onSubmit() {
             console.log(this.searchForm);
-            this.getDynamicData();
+            this.getDynamicData(true);
         },
         getRadarChart(radarList) {
             console.log(radarList, 'radarList');
@@ -825,7 +827,7 @@ export default {
             myChart.clear();
             option && myChart.setOption(option, true);
         },
-        getDynamicData() {
+        getDynamicData(isSubmit = false) {
             let today = dayjs(this.searchForm.timeRange[0]).format('YYYY-MM-DD');
             let today2 = dayjs(this.searchForm.timeRange[1]).format('YYYY-MM-DD');
             let start_time = new Date(`${today} 00:00`).getTime() / 1000;
@@ -846,6 +848,12 @@ export default {
                         this.assessLine = res.assess_line;
                         this.progressLine = res.progress_line;
                         this.cross_day = res.cross_day;
+                        // 首次进来赋值
+                        if (!isSubmit) {
+                            this.searchForm.provider = res.provider;
+                            this.searchForm.algo_type = res.algo_type_name;
+                            this.searchForm.algo_id = res.algo_name;
+                        }
                         //5个维度升序
                         if (res.dimension && res.dimension.length) {
                             this.dimension = res.dimension.sort((a, b) => {

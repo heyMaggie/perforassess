@@ -59,7 +59,7 @@
                 <el-table-column prop="profit_rate" label="收益率">
                     <template slot-scope="scope"> {{ scope.row.profit_rate | toFixedNum(2) }}% </template>
                 </el-table-column>
-                <el-table-column prop="withdraw_rate" label="回撤比率">
+                <el-table-column prop="withdraw_rate" label="回撤比例">
                     <template slot-scope="scope"> {{ scope.row.withdraw_rate | toFixedNum(2) }}% </template>
                 </el-table-column>
                 <el-table-column prop="create_time" width="250" label="创建时间"> </el-table-column>

@@ -5,7 +5,7 @@
             class="sidebar-el-menu apiview"
             :default-active="activeIndex"
             router
-            :default-openeds="['dashboard', '2', '2-2', '3', '4', '5']"
+            :default-openeds="['dashboard', '2', '2-2', '3', '4', '5', '6']"
         >
             <!-- 引入组件 -->
             <menu-tree :menuData="menuList"></menu-tree>

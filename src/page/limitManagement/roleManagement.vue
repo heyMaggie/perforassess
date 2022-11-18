@@ -73,9 +73,10 @@
                         ><el-form-item label="角色ID" prop="role_id">
                             <el-input
                                 v-model.trim="editForm.role_id"
+                                type="number"
                                 :disabled="oper_type == 2"
                                 placeholder="请输入角色ID"
-                                oninput="value=value.replace(/[^\d]/g,'')"
+                                :controls="false"
                             ></el-input> </el-form-item
                     ></el-col>
                     <el-col :span="2"><div>&nbsp;</div></el-col>
@@ -247,6 +248,8 @@ export default {
                                         this.$message.success(this.editTypeStr + '成功');
                                         this.getTableData(this.pageObj);
                                         this.closeEdit();
+                                    } else if (res.code == 320) {
+                                        this.$message.error(res.msg);
                                     } else {
                                         this.$message.error(this.editTypeStr + '失败');
                                     }
@@ -314,7 +317,7 @@ export default {
             // });
         },
         // 递归获取初始化控件目录，用于展示前端
-        circulControl(arr = [], level) {
+        circulControl(arr = []) {
             if (!arr || !arr.length) return;
             arr.forEach((fitem, findex) => {
                 // 加上层级 index
