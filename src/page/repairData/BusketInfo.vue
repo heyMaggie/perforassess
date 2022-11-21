@@ -57,7 +57,7 @@
                     <el-table-column prop="algoId" label="母单ID"> </el-table-column>
                     <el-table-column prop="algorithmId" label="算法ID"> </el-table-column>
                     <!-- <el-table-column prop="sec_name" label="证券代码"> </el-table-column> -->
-                    <el-table-column prop="secId" label="证券ID"> </el-table-column>
+                    <el-table-column prop="secId" label="证券代码"> </el-table-column>
                     <el-table-column prop="algoOrderQty" label="订单数量"> </el-table-column>
                     <el-table-column prop="transTime" label="交易时间"> </el-table-column>
                     <el-table-column prop="startTime" label="母单开始时间"> </el-table-column>

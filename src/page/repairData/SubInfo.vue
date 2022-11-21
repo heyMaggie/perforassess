@@ -51,23 +51,50 @@
                     <el-table-column prop="id" width="80" label="序号"> </el-table-column>
                     <el-table-column prop="childOrderId" label="订单ID"> </el-table-column>
                     <el-table-column prop="algoOrderId" label="母单ID"> </el-table-column>
-                    <el-table-column prop="algorithmType" label="算法类型"> </el-table-column>
+                    <el-table-column prop="algorithmType" label="算法类型">
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.algorithmType | tableDic('algorithmType') }}</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="algorithmId" label="算法ID"> </el-table-column>
-                    <el-table-column prop="userId" label="用户ID" width="120"> </el-table-column>
-                    <el-table-column prop="usecurityId" label="证券ID"> </el-table-column>
+                    <el-table-column prop="userId" label="用户ID"> </el-table-column>
+                    <!-- <el-table-column prop="usecurityId" label="证券ID"> </el-table-column> -->
                     <el-table-column prop="securityId" label="证券代码"> </el-table-column>
-                    <el-table-column prop="tradeSide" label="买卖方向"> </el-table-column>
+                    <el-table-column prop="tradeSide" label="买卖方向">
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.tradeSide | tableDic('dealDirection') }}</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="orderQty" label="委托订单数量" width="110"> </el-table-column>
-                    <el-table-column prop="price" label="委托订单价格" width="110"> </el-table-column>
-                    <el-table-column prop="orderType" label="订单类型"> </el-table-column>
-                    <el-table-column prop="lastPx" label="成交价格"> </el-table-column>
+                    <el-table-column prop="price" label="委托订单价格" width="110">
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.price.toFixed(2) }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="orderType" label="订单类型" width="200" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.orderType | tableDic('orderListType') }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="lastPx" label="成交价格">
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.lastPx.toFixed(2) }}</span>
+                        </template></el-table-column
+                    >
                     <el-table-column prop="lastQty" label="成交数量"> </el-table-column>
                     <el-table-column prop="comQty" label="累计成交数量" width="110"> </el-table-column>
-                    <el-table-column prop="arrivedPrice" label="到达价格"> </el-table-column>
+                    <el-table-column prop="arrivedPrice" label="到达价格">
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.arrivedPrice.toFixed(2) }}</span>
+                        </template></el-table-column
+                    >
                     <el-table-column prop="totalFee" label="手续费"> </el-table-column>
-                    <el-table-column prop="ordStatus" label="订单状态 "> </el-table-column>
+                    <el-table-column prop="ordStatus" label="订单状态 " width="100" show-overflow-tooltip>
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.ordStatus | tableDic('orderStatus') }}</span>
+                        </template></el-table-column
+                    >
                     <el-table-column prop="transactAt" label="交易时间" width="150"> </el-table-column>
-                    <el-table-column prop="procStatus" label="处理状态"> </el-table-column>
                     <el-table-column prop="createTime" label="创建时间" width="150"> </el-table-column>
                 </el-table>
                 <el-pagination

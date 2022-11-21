@@ -30,5 +30,34 @@ window.dict = {
     limitStatus: [
         { key: 1, value: '正常' },
         { key: 2, value: '作废' }
+    ],
+    algorithmType: [
+        { key: 1, value: '日内回转' },
+        { key: 2, value: '智能委托' }
+    ],
+    dealDirection: [
+        { key: 0, value: '未知' },
+        { key: 1, value: '买' },
+        { key: 2, value: '卖' }
+    ],
+    orderListType: [
+        { key: 1, value: '限价委托' },
+        { key: 2, value: '本方最优' },
+        { key: 3, value: '对手方最优' },
+        { key: 4, value: '市价立即成交剩余撤销' },
+        { key: 5, value: '市价全额成交或撤销' },
+        { key: 6, value: '市价最优五档全额成交剩余撤销' },
+        { key: 7, value: '限价全额成交或撤销(期权用）' }
+    ],
+    orderStatus: [
+        { key: 0, value: '总线接收' },
+        { key: 1, value: '总线拒绝' },
+        { key: 2, value: '柜台接收' },
+        { key: 3, value: '柜台拒绝' },
+        { key: 4, value: '交易所接收' },
+        { key: 5, value: '交易所拒绝' },
+        { key: 6, value: '部分成交' },
+        { key: 7, value: '完全成交' },
+        { key: 8, value: '撤单' }
     ]
 };
