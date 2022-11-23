@@ -61,7 +61,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :pageId-sizes="[10, 20, 30, 40]"
-                    :current-pageId="pageObj.pageId"
+                    :current-page="pageObj.pageId"
                     :pageId-size="pageObj.pageNum"
                     layout=" ->, prev, pager, next, total, jumper"
                     :page-count="maxCount"
@@ -95,8 +95,8 @@ export default {
                 .then((res) => {
                     if (res.code == 200) {
                         this.tableData = res.data;
-                        this.maxCount = Math.ceil(res.total / this.pageObj.pageNum);
                         this.pageObj = pageObj;
+                        this.maxCount = Math.ceil(res.total / this.pageObj.pageNum);
                     }
                 })
                 .catch(() => {
