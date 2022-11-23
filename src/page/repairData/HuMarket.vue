@@ -64,7 +64,7 @@
                     :current-pageId="pageObj.pageId"
                     :pageId-size="pageObj.pageNum"
                     layout=" ->, prev, pager, next, total, jumper"
-                    :total="pageTotal"
+                    :page-count="maxCount"
                 >
                 </el-pagination>
             </div>
@@ -79,7 +79,8 @@ export default {
         return {
             securityId: '',
             pageObj: { pageId: 1, pageNum: 12 },
-            pageTotal: 0,
+            // 最大页码
+            maxCount: 0,
             tableData: [],
             uploading: false //上传状态
         };
@@ -94,13 +95,13 @@ export default {
                 .then((res) => {
                     if (res.code == 200) {
                         this.tableData = res.data;
-                        this.pageTotal = res.total;
+                        this.maxCount = Math.ceil(res.total / this.pageObj.pageNum);
                         this.pageObj = pageObj;
                     }
                 })
                 .catch(() => {
                     this.tableData = [];
-                    this.pageTotal = 0;
+                    this.maxCount = 0;
                 })
                 .finally(() => {
                     this.uploading = false;

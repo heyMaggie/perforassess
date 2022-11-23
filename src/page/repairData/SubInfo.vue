@@ -57,7 +57,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="algorithmId" label="算法ID"> </el-table-column>
-                    <el-table-column prop="userId" label="用户ID"> </el-table-column>
+                    <el-table-column prop="userId" label="用户ID" width="120"> </el-table-column>
                     <!-- <el-table-column prop="usecurityId" label="证券ID"> </el-table-column> -->
                     <el-table-column prop="securityId" label="证券代码"> </el-table-column>
                     <el-table-column prop="tradeSide" label="买卖方向">
