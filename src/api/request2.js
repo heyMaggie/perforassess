@@ -2,8 +2,8 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 import router from '../router';
 
-window.baseURL = '';
 let nowTime = Math.round(new Date().getTime() / 1000);
+let baseURL = '';
 // process.env.NODE_ENV === 'development' 来判断是否开发环境
 if (process.env.NODE_ENV === 'development') {
     // 开发环境
