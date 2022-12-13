@@ -32,7 +32,7 @@ export default {
 
     beforeCreate() {
         let user_type = sessionStorage.getItem('user_type') / 1;
-        let params = { user_id: localStorage.getItem('ms_username'), user_type };
+        let params = { user_id: localStorage.getItem('ms_username'), user_type, chan_type: 1 };
         userAuthListApi(params).then((res) => {
             if (res.code == 200) {
                 let role_auth = JSON.parse(res.auth).list;

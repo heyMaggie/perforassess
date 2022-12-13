@@ -19,7 +19,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_name" clearable placeholder="算法" @focus="selectAlgoList">
+                    <el-select v-model="searchForm.algo_name" clearable placeholder="算法" @focus="selectAlgoList" @change="changeAlgo">
                         <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
@@ -101,7 +101,8 @@ export default {
             providerList: [],
             algoTypeList: [],
             algoList: [],
-            pageObj: { page: 1, pageNum: 10 }
+            pageObj: { page: 1, pageNum: 10 },
+            isInvert: true //是否是反选
         };
     },
     created() {
@@ -115,16 +116,18 @@ export default {
     },
     watch: {
         'searchForm.provider'(newV, oldV) {
-            this.searchForm.algo_type = '';
-            this.searchForm.algo_name = '';
-            this.algoTypeList = [];
-            this.algoList = [];
+            if (oldV && this.isInvert) {
+                this.searchForm.algo_type = '';
+                this.searchForm.algo_name = '';
+                this.algoTypeList = [];
+                this.algoList = [];
+            }
         },
         'searchForm.algo_type'(newV, oldV) {
-            // if (!newV) {
-            this.searchForm.algo_name = '';
-            this.algoList = [];
-            // }
+            if (oldV && this.isInvert) {
+                this.searchForm.algo_name = '';
+                this.algoList = [];
+            }
         }
     },
     methods: {
@@ -158,8 +161,13 @@ export default {
         },
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
-                if (res.code == 200) {
+                if (type == 'multiType') {
+                    this.searchForm.provider = res.provider[0];
+                    this.searchForm.algo_type = res.algo_type[0];
+                    this.isInvert = false;
+                } else {
                     this[type] = res[list];
+                    this.isInvert = true;
                 }
             });
         },
@@ -213,6 +221,14 @@ export default {
         handleCurrentChange(val) {
             let pageObj = { page: val / 1, pageNum: 10 };
             this.getTableData(pageObj);
+        },
+        changeAlgo(value) {
+            let query = {
+                choose_type: 9,
+                algo_name: value,
+                user_id: localStorage.getItem('ms_username')
+            };
+            this.getOptionList(query, 'multiType');
         }
     }
 };

@@ -19,7 +19,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList">
+                    <el-select v-model="searchForm.algo_id" clearable placeholder="算法" @focus="selectAlgoList" @change="changeAlgo">
                         <el-option v-for="item in algoList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
@@ -123,7 +123,8 @@ export default {
             assessLine: [], //绩效
             progressLine: [], //完成度
             titleList: ['算法经济性分析', '算法完成度分析', '算法风险度分析', '算法绩效分析', '算法稳定性分析'],
-            cross_day: false
+            cross_day: false,
+            isInvert: true //是否是反选
         };
     },
     created() {
@@ -137,7 +138,7 @@ export default {
     },
     watch: {
         'searchForm.provider'(newV, oldV) {
-            if (oldV) {
+            if (oldV && this.isInvert) {
                 this.searchForm.algo_type = '';
                 this.searchForm.algo_id = '';
                 this.algoTypeList = [];
@@ -145,7 +146,7 @@ export default {
             }
         },
         'searchForm.algo_type'(newV, oldV) {
-            if (oldV) {
+            if (oldV && this.isInvert) {
                 this.searchForm.algo_id = '';
                 this.algoList = [];
             }
@@ -908,7 +909,14 @@ export default {
         getOptionList(query, type, list) {
             optionListApi(query).then((res) => {
                 if (res.code == 200) {
-                    this[type] = res[list];
+                    if (type == 'multiType') {
+                        this.searchForm.provider = res.provider[0];
+                        this.searchForm.algo_type = res.algo_type[0];
+                        this.isInvert = false;
+                    } else {
+                        this[type] = res[list];
+                        this.isInvert = true;
+                    }
                 }
             });
         },
@@ -930,6 +938,14 @@ export default {
                 user_id: localStorage.getItem('ms_username')
             };
             this.getOptionList(query, 'algoList', 'algo_name');
+        },
+        changeAlgo(value) {
+            let query = {
+                choose_type: 9,
+                algo_name: value,
+                user_id: localStorage.getItem('ms_username')
+            };
+            this.getOptionList(query, 'multiType');
         },
         // 获取跨天数的X轴
         getCrossDateTime() {
