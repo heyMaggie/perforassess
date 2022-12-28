@@ -73,7 +73,8 @@
             :before-close="closeEdit"
         >
             <el-form :model="editForm" label-position="top" ref="editFormName" :rules="rules">
-                <el-form-item label="用户ID（*ID名称只能为字母或字母与数字的组合）" prop="user_id">
+                <el-form-item label="" prop="user_id">
+                    <span slot="label">用户ID<span class="labTip">（*ID名称只能为数字、字母或字母与数字的组合）</span></span>
                     <el-input v-model.trim="editForm.user_id" :disabled="oper_type == 2" placeholder="请输入用户ID"></el-input>
                 </el-form-item>
                 <el-form-item label="用户名称" prop="user_name">
@@ -108,7 +109,7 @@ import { authUserListApi, authUserModifyApi, authRoleListApi, checkPasswordApi }
 
 export default {
     data() {
-        var verifyPass = (rule, value, callback) => {
+        let verifyPass = (rule, value, callback) => {
             if (!value && this.editForm.newPassword) {
                 callback(new Error('请再次确认设置密码！'));
             } else if (value != this.editForm.newPassword) {
@@ -117,14 +118,14 @@ export default {
                 callback();
             }
         };
-        var newPassvali = (rule, value, callback) => {
+        let newPassvali = (rule, value, callback) => {
             if (value && !this.editForm.oldPassword) {
                 callback(new Error('请先输入原密码！'));
             } else {
                 callback();
             }
         };
-        var oldPassvali = (rule, value, callback) => {
+        let oldPassvali = (rule, value, callback) => {
             let params = {
                 user_id: this.editForm.user_id,
                 ori_passwd: md5(value)
@@ -137,6 +138,14 @@ export default {
                         callback(new Error('原密码错误，请重新输入！'));
                     }
                 });
+            } else {
+                callback();
+            }
+        };
+        let regularIdVali = (rule, value, callback) => {
+            let reg = /^[A-Za-z0-9]+$/;
+            if (!value.match(reg)) {
+                callback(new Error('用户ID只能为数字、字母或字母与数字的组合'));
             } else {
                 callback();
             }
@@ -161,8 +170,11 @@ export default {
             editTypeStr: null, //1-新增2-修改
             uploading: false, //上传状态
             rules: {
-                user_id: [{ required: true, message: '请输入角色代码', trigger: 'blur' }],
-                user_name: [{ required: true, message: '请输入角色名称', trigger: 'change' }],
+                user_id: [
+                    { required: true, message: '请输入用户ID', trigger: 'blur' },
+                    { require: false, validator: regularIdVali }
+                ],
+                user_name: [{ required: true, message: '请输入用户名称', trigger: 'change' }],
                 role: [{ required: true, message: '请选择角色', trigger: 'blur' }],
                 oldPassword: [{ validator: oldPassvali, trigger: 'blur' }],
                 verifyPassword: [{ validator: verifyPass, trigger: 'blur' }]
@@ -390,6 +402,10 @@ export default {
         .circlePurple {
             background: linear-gradient(200deg, #8c60ff 0%, #6732ff 100%);
         }
+    }
+    .labTip {
+        color: #999;
+        font-size: 14px;
     }
 }
 </style>

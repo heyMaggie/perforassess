@@ -70,7 +70,8 @@
             <el-form :model="editForm" label-position="top" ref="roleFormName" :rules="roleRules">
                 <el-row>
                     <el-col :span="11"
-                        ><el-form-item label="角色ID" prop="role_id">
+                        ><el-form-item label="" prop="role_id">
+                            <span slot="label"> 角色ID<span class="labTip">（*只允许输入数字）</span></span>
                             <el-input
                                 v-model.trim="editForm.role_id"
                                 type="number"
@@ -506,5 +507,9 @@ export default {
 }
 /deep/.el-dialog {
     margin-top: 3.5vh !important;
+    .labTip {
+        color: #999;
+        font-size: 14px;
+    }
 }
 </style>
