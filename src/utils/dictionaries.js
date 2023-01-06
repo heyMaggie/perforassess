@@ -29,7 +29,7 @@ window.dict = {
     ],
     limitStatus: [
         { key: 1, value: '正常' },
-        { key: 2, value: '作废' }
+        { key: 3, value: '禁用' }
     ],
     algorithmType: [
         { key: 1, value: '日内回转' },

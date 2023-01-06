@@ -35,7 +35,7 @@ export default {
         let params = { user_id: localStorage.getItem('ms_username'), user_type, chan_type: 1 };
         userAuthListApi(params).then((res) => {
             if (res.code == 200) {
-                let role_auth = JSON.parse(res.auth).list;
+                let role_auth = JSON.parse(res.auth);
                 let allMenuList = this.doubleCircul(role_auth, roleType());
                 // sessionStorage.setItem('allMenuList', JSON.stringify(allMenuList));
                 this.menuList = JSON.parse(JSON.stringify(allMenuList));

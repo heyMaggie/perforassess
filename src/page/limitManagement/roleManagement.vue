@@ -29,11 +29,11 @@
                     <el-table-column prop="role_id" label="角色ID" width="100"> </el-table-column>
                     <el-table-column prop="role_name" label="角色名称" width="150"> </el-table-column>
                     <el-table-column prop="role_desc" label="权限" :show-overflow-tooltip="true"> </el-table-column>
-                    <el-table-column prop="status" label="状态" width="100">
+                    <!-- <el-table-column prop="status" label="状态" width="100">
                         <template slot-scope="scope">
                             {{ scope.row.status | tableDic('limitStatus') }}
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column prop="create_time" label="创建时间" width="200"> </el-table-column>
                     <el-table-column label="操作" width="100">
                         <!--  v-if="scope.row.status == 1" -->
@@ -349,6 +349,10 @@ export default {
                     fitem.auth = 1;
                 } else {
                     fitem.auth = 0;
+                }
+                if (fitem.cmpt) {
+                    delete fitem.children;
+                    // console.log(fitem, '删除children');
                 }
                 if (fitem.children && fitem.children.length) {
                     this.circulTreeChange(fitem.children, list);

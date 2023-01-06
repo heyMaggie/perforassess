@@ -35,7 +35,7 @@
                     >
                     <el-table-column prop="role_id" label="角色ID"> </el-table-column>
                     <el-table-column prop="role_name" label="角色"> </el-table-column>
-                    <el-table-column prop="status" label="状态">
+                    <el-table-column prop="status" label="用户状态">
                         <template slot-scope="scope">
                             {{ scope.row.status | tableDic('limitStatus') }}
                         </template></el-table-column
@@ -43,12 +43,8 @@
                     <el-table-column prop="create_time" label="创建时间"> </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button @click="openEditDaiolg(2, scope.row)" type="text" size="small" :disabled="scope.row.status != 1"
-                                >修改</el-button
-                            >
-                            <el-button @click="removeConfig(scope.row)" type="text" size="small" :disabled="scope.row.status != 1"
-                                >删除</el-button
-                            >
+                            <el-button @click="openEditDaiolg(2, scope.row)" type="text" size="small">修改</el-button>
+                            <el-button @click="removeConfig(scope.row)" type="text" size="small">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -79,6 +75,11 @@
                 </el-form-item>
                 <el-form-item label="用户名称" prop="user_name">
                     <el-input v-model.trim="editForm.user_name" placeholder="请输入用户名称"></el-input>
+                </el-form-item>
+                <el-form-item label="用户状态" prop="status" v-if="oper_type == 2">
+                    <el-select v-model="editForm.status" placeholder="请选择用户状态" style="width: 100%" value-key="role_name">
+                        <el-option v-for="item in userStatusList" :key="item.key" :label="item.value" :value="item.key"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="角色" prop="role">
                     <el-select v-model="editForm.role" placeholder="请选择角色" style="width: 100%" value-key="role_name">
@@ -162,6 +163,7 @@ export default {
                 user_id: '',
                 user_name: '',
                 role: '',
+                status: 1,
                 oldPassword: '',
                 newPassword: '',
                 verifyPassword: ''
@@ -176,12 +178,14 @@ export default {
                 ],
                 user_name: [{ required: true, message: '请输入用户名称', trigger: 'change' }],
                 role: [{ required: true, message: '请选择角色', trigger: 'blur' }],
+                status: [{ required: true, message: '请选择用户状态', trigger: 'change' }],
                 oldPassword: [{ validator: oldPassvali, trigger: 'blur' }],
                 verifyPassword: [{ validator: verifyPass, trigger: 'blur' }]
             },
             newPasswordCreate: [{ required: true, message: '请设置密码！', trigger: 'blur' }],
             newPasswordEdit: [{ validator: newPassvali, trigger: 'blur' }],
-            optionRoleList: [] // 角色选项
+            optionRoleList: [], // 角色选项
+            userStatusList: dict.limitStatus
         };
     },
     created() {
@@ -226,8 +230,8 @@ export default {
             if (type == 2) {
                 this.editTypeStr = '修改用户';
                 this.$nextTick(() => {
-                    let { user_name, user_id } = rowItem;
-                    this.editForm = { ...this.editForm, user_name, user_id, role: { role_name: rowItem.role_name } };
+                    let { user_name, user_id, status } = rowItem;
+                    this.editForm = { ...this.editForm, user_name, user_id, role: { role_name: rowItem.role_name }, status };
                 });
             } else {
                 this.editTypeStr = '新增用户';
@@ -240,11 +244,11 @@ export default {
         },
         submitEdit(editFormName) {
             let oper_type = this.oper_type;
-            let { user_name, user_id, role, newPassword } = this.editForm;
+            let { user_name, user_id, role, newPassword, status } = this.editForm;
             let password = newPassword ? md5(newPassword) : '';
             this.$refs[editFormName].validate((valid) => {
                 if (valid) {
-                    let params = { oper_type, user_name, user_id, role_id: role.role_id, role_name: role.role_name, password };
+                    let params = { oper_type, user_name, user_id, role_id: role.role_id, role_name: role.role_name, password, status };
                     authUserModifyApi(params)
                         // authUserModifyApi({ ...this.editForm, oper_type, password: md5(this.editForm.newPassword) })
                         .then((res) => {
