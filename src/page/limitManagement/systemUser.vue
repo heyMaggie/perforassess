@@ -259,7 +259,7 @@ export default {
                             } else if (res.code == 320) {
                                 this.$message.error('用户id已存在!');
                             } else {
-                                this.$message.error(this.editTypeStr + '失败');
+                                this.$message.error(res.msg);
                             }
                         })
                         .catch((error) => {
