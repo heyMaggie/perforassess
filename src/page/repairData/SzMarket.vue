@@ -129,6 +129,8 @@ export default {
                     if (res.code == 200) {
                         this.$message.success('上传成功');
                         this.getTableData();
+                    } else {
+                        this.$message.error(res.msg);
                         this.uploading = false;
                     }
                 })

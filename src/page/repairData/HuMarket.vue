@@ -130,6 +130,9 @@ export default {
                         this.$message.success('上传成功');
                         this.getTableData();
                         this.uploading = false;
+                    } else {
+                        this.$message.error(res.msg);
+                        this.uploading = false;
                     }
                 })
                 .catch(() => {

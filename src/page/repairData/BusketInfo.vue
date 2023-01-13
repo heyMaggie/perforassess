@@ -146,6 +146,9 @@ export default {
                         this.$message.success(res.msg);
                         this.getTableData();
                         this.uploading = false;
+                    } else {
+                        this.$message.error(res.msg);
+                        this.uploading = false;
                     }
                 })
                 .catch(() => {
