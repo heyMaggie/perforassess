@@ -1240,12 +1240,15 @@ export default {
                 font-family: SourceHanSansSC-Medium, SourceHanSansSC;
                 font-weight: 500;
                 color: #333333;
-                line-height: 80px;
+                // line-height: 80px;
                 text-align: center;
                 width: 80px;
                 height: 80px;
                 background: rgba(234, 239, 255, 0.68);
                 border-radius: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             .blue-mincard {
                 // background: red;
