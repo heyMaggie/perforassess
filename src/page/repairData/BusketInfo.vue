@@ -15,7 +15,7 @@
                         :show-file-list="false"
                         :on-change="handleUpload"
                         :auto-upload="false"
-                        accept=".xml"
+                        accept=".csv"
                         class="upload-demo"
                     >
                         <el-button size="medium" type="text" slot="trigger"
