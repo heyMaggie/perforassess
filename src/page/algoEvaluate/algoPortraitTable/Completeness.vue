@@ -9,7 +9,7 @@
         <el-form :inline="true" :model="searchForm" class="demo-form-inline search-row">
             <div class="input-area">
                 <el-form-item>
-                    <el-select v-model="searchForm.provider" clearable placeholder="厂商">
+                    <el-select v-model="searchForm.provider" clearable placeholder="厂商" @focus="getProviderList">
                         <el-option v-for="item in providerList" :key="item" :label="item" :value="item">{{ item }}</el-option>
                     </el-select>
                 </el-form-item>
@@ -213,6 +213,14 @@ export default {
                 user_id: localStorage.getItem('ms_username')
             };
             this.getOptionList(query, 'multiType');
+        },
+        getProviderList() {
+            // 获取厂商列表
+            let query = {
+                choose_type: 1,
+                user_id: localStorage.getItem('ms_username')
+            };
+            this.getOptionList(query, 'providerList', 'provider');
         }
     }
 };
