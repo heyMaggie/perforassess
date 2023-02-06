@@ -45,7 +45,14 @@
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
                     <el-table-column prop="id" width="80" label="序号"> </el-table-column>
-                    <el-table-column prop="seculityId" width="100" label="股票ID"> </el-table-column>
+                    <el-table-column prop="seculityId" width="120" label="股票ID"
+                        ><template slot-scope="scope">
+                            <span>{{ scope.row.seculityId }}</span>
+                            <span class="signTxt" :class="scope.row.fixFlag == 1 ? 'fixTxt' : 'normalTxt'">{{
+                                scope.row.fixFlag == 1 ? '修复' : '正常'
+                            }}</span>
+                        </template></el-table-column
+                    >
                     <el-table-column prop="orgiTime" width="120" label="快照时间"> </el-table-column>
                     <el-table-column prop="lastPrice" width="80" label="最新价"> </el-table-column>
                     <el-table-column prop="askPrice" label="申卖价" :show-overflow-tooltip="true"> </el-table-column>
@@ -212,6 +219,24 @@ export default {
         color: #3382ff;
         cursor: pointer;
         margin-left: 5px;
+    }
+    .signTxt {
+        display: inline-block;
+        width: 32px;
+        height: 17px;
+        line-height: 17px;
+        border-radius: 4px;
+        font-size: 12px;
+        text-align: center;
+        margin-left: 4px;
+    }
+    .normalTxt {
+        background: rgba(50, 129, 255, 0.14);
+        color: #3281ff;
+    }
+    .fixTxt {
+        background: rgba(250, 211, 55, 0.14);
+        color: #fad337;
     }
 }
 </style>

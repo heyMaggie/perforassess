@@ -49,7 +49,14 @@
                     }"
                     ><el-empty description="暂无数据" slot="empty" :image="require('../../assets/img/empty.png')"></el-empty>
                     <el-table-column prop="id" width="80" label="序号"> </el-table-column>
-                    <el-table-column prop="childOrderId" label="订单ID"> </el-table-column>
+                    <el-table-column prop="childOrderId" label="订单ID" width="120">
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.childOrderId }}</span>
+                            <span class="signTxt" :class="scope.row.fixFlag == 1 ? 'fixTxt' : 'normalTxt'">{{
+                                scope.row.fixFlag == 1 ? '修复' : '正常'
+                            }}</span>
+                        </template></el-table-column
+                    >
                     <el-table-column prop="algoOrderId" label="母单ID"> </el-table-column>
                     <el-table-column prop="algorithmType" label="算法类型">
                         <template slot-scope="scope">
@@ -176,7 +183,7 @@ export default {
             formData.append('key', file.name);
             childFixApi(formData)
                 .then((res) => {
-                    if (res.code == 0) {
+                    if (res.code == 200) {
                         this.$message.success(res.msg);
                         this.getTableData();
                         this.uploading = false;
@@ -262,6 +269,24 @@ export default {
         color: #3382ff;
         cursor: pointer;
         margin-left: 5px;
+    }
+    .signTxt {
+        display: inline-block;
+        width: 32px;
+        height: 17px;
+        line-height: 17px;
+        border-radius: 4px;
+        font-size: 12px;
+        text-align: center;
+        margin-left: 4px;
+    }
+    .normalTxt {
+        background: rgba(50, 129, 255, 0.14);
+        color: #3281ff;
+    }
+    .fixTxt {
+        background: rgba(250, 211, 55, 0.14);
+        color: #fad337;
     }
 }
 </style>
