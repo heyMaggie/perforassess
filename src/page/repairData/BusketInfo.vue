@@ -22,6 +22,9 @@
                             ><img src="../../assets/icon/upDt.png" class="icon-button" />母单信息上传</el-button
                         ></el-upload
                     >
+                    <el-button type="text" size="medium" @click="downLoadModel" v-has="4"
+                        ><img src="../../assets/icon/downDt.png" class="icon-button" />母单信息导出</el-button
+                    >
                 </div>
             </div>
             <div class="title">母单信息</div>
@@ -161,6 +164,9 @@ export default {
                 .catch(() => {
                     this.uploading = false;
                 });
+        },
+        downLoadModel() {
+            window.location.href = `${window.baseURL}/algo-assess/v1/assess/template-export?export_type=2`;
         }
     }
 };
